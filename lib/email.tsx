@@ -6,7 +6,9 @@ import { OverdueReminderEmail } from "@/emails/OverdueReminderEmail";
 import { ContractEmail } from "@/emails/ContractEmail";
 import React from "react";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 const fromEmail = process.env.RESEND_FROM_EMAIL || "noreply@getpaidly.co";
 
 export async function sendInvoiceEmail(params: {
@@ -32,7 +34,7 @@ export async function sendInvoiceEmail(params: {
     }) as any,
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: `${params.businessName || params.freelancerName} via Paidly <${fromEmail}>`,
     to: params.to,
     subject: `Invoice ${params.invoiceNumber} from ${params.businessName || params.freelancerName}`,
@@ -58,7 +60,7 @@ export async function sendPaymentConfirmation(params: {
     }) as any,
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: `Paidly <${fromEmail}>`,
     to: params.to,
     subject: `Payment received for ${params.invoiceNumber}`,
@@ -90,7 +92,7 @@ export async function sendInvoiceReminder(params: {
     }) as any,
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: `${params.businessName || params.freelancerName} via Paidly <${fromEmail}>`,
     to: params.to,
     subject: `Reminder: Invoice ${params.invoiceNumber} is ${params.daysOverdue} days overdue`,
@@ -118,7 +120,7 @@ export async function sendContractEmail(params: {
     }) as any,
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: `${params.businessName || params.freelancerName} via Paidly <${fromEmail}>`,
     to: params.to,
     subject: `Contract for Signature: ${params.contractTitle}`,
@@ -203,7 +205,7 @@ export async function sendContractSignedEmail(params: {
     </html>
   `;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: `Paidly <${fromEmail}>`,
     to: params.to,
     subject: `${params.clientName} signed your contract`,
