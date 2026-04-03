@@ -27,7 +27,8 @@ interface Contract {
   start_date: string;
   end_date: string | null;
   sent_at: string | null;
-  signed_at: string | null;
+  client_signed_at: string | null;
+  client_signature_url: string | null;
   created_at: string;
   clients: {
     name: string;
@@ -175,7 +176,11 @@ export default function ContractDetailPage() {
   const timeline = [
     { label: "Created", date: contract.created_at, active: true },
     { label: "Sent", date: contract.sent_at, active: !!contract.sent_at },
-    { label: "Signed", date: contract.signed_at, active: !!contract.signed_at },
+    {
+      label: "Signed",
+      date: contract.client_signed_at,
+      active: !!contract.client_signed_at,
+    },
   ];
 
   return (
@@ -199,10 +204,145 @@ export default function ContractDetailPage() {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* LEFT: Contract Content */}
         <div className="lg:col-span-2">
-          <div
-            className="bg-white rounded-xl p-8 shadow-lg"
-            dangerouslySetInnerHTML={{ __html: contract.content }}
-          />
+          <div className="bg-white rounded-xl p-8 shadow-lg">
+            <div dangerouslySetInnerHTML={{ __html: contract.content }} />
+
+            {/* Signature Section — shown after signing */}
+            {contract.client_signed_at && (
+              <div
+                style={{
+                  marginTop: "48px",
+                  paddingTop: "24px",
+                  borderTop: "2px solid #e5e7eb",
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "600",
+                    marginBottom: "24px",
+                    color: "#0f0f0f",
+                  }}
+                >
+                  Digital Signatures
+                </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "48px",
+                  }}
+                >
+                  {/* Freelancer side */}
+                  <div style={{ flex: 1 }}>
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        color: "#6b7280",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      Contractor
+                    </p>
+                    <div
+                      style={{
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "8px",
+                        padding: "16px",
+                        background: "#f9fafb",
+                        minHeight: "60px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p style={{ fontSize: "14px", color: "#374151" }}>
+                        Signed by {contract.clients?.name || "Contractor"} via
+                        Paidly
+                      </p>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        color: "#6b7280",
+                        marginTop: "8px",
+                      }}
+                    >
+                      Awaiting freelancer signature
+                    </p>
+                  </div>
+
+                  {/* Client side */}
+                  <div style={{ flex: 1 }}>
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        color: "#6b7280",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      Client
+                    </p>
+                    <div
+                      style={{
+                        border: "1px solid #10b981",
+                        borderRadius: "8px",
+                        padding: "16px",
+                        background: "#f0fdf4",
+                        minHeight: "60px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      {contract.client_signature_url ? (
+                        <img
+                          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/documents/${contract.client_signature_url}`}
+                          alt="Client signature"
+                          style={{
+                            maxHeight: "50px",
+                            maxWidth: "200px",
+                            objectFit: "contain",
+                          }}
+                        />
+                      ) : (
+                        <p
+                          style={{
+                            fontSize: "20px",
+                            fontFamily: "cursive",
+                            color: "#374151",
+                          }}
+                        >
+                          {contract.clients?.name}
+                        </p>
+                      )}
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          background: "#10b981",
+                          color: "white",
+                          padding: "2px 8px",
+                          borderRadius: "20px",
+                          marginLeft: "12px",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        ✓ Signed
+                      </span>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        color: "#6b7280",
+                        marginTop: "8px",
+                      }}
+                    >
+                      Signed on {formatDate(contract.client_signed_at)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* RIGHT: Actions Panel */}
@@ -331,14 +471,14 @@ export default function ContractDetailPage() {
                     <Download size={18} />
                     Download PDF
                   </button>
-                  {contract.signed_at && (
+                  {contract.client_signed_at && (
                     <div className="bg-[#052e16] border border-[#10b981]/30 rounded-lg p-3 text-center">
                       <CheckCircle
                         size={16}
                         className="text-[#10b981] mx-auto mb-1"
                       />
                       <p className="text-xs text-[#10b981]">
-                        Signed on {formatDate(contract.signed_at)}
+                        Signed on {formatDate(contract.client_signed_at)}
                       </p>
                     </div>
                   )}

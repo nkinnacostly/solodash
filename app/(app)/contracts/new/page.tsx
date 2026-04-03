@@ -10,6 +10,7 @@ import { ArrowLeft, Loader2, ChevronRight } from "lucide-react";
 import { contractTemplates, ContractTemplate } from "@/lib/contract-templates";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
+import UpgradeModal from "@/components/UpgradeModal";
 
 const contractSchema = z.object({
   clientId: z.string().optional(),
@@ -45,6 +46,7 @@ export default function NewContractPage() {
   const [sendLoading, setSendLoading] = useState(false);
   const [clients, setClients] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const supabase = createClient();
 
@@ -145,6 +147,10 @@ export default function NewContractPage() {
       const result = await response.json();
 
       if (!response.ok) {
+        if (response.status === 403) {
+          setShowUpgradeModal(true);
+          return;
+        }
         throw new Error(result.error || "Failed to create contract");
       }
 
@@ -551,5 +557,14 @@ export default function NewContractPage() {
         </form>
       )}
     </div>
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        reason="You've reached your 1 contract limit for this month"
+        feature="contracts"
+      />
+    </>
   );
 }

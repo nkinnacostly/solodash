@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import {  createPublicClient } from "@/lib/supabase/server";
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ invoice_id: string }> }
 ) {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { invoice_id } = await params;
 
     const { data: invoice, error } = await supabase
