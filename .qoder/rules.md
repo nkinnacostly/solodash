@@ -1,8 +1,8 @@
-# SoloDash — Qodo AI Rules
+# Paidly — Qodo AI Rules
 
 ## Project Identity
 
-- App name: SoloDash (domain: solodash.co)
+- App name: Paidly (domain: getpaidly.co)
 - Product: Freelancer admin SaaS — invoicing, contracts, earnings, tax export
 - Target market: African freelancers (Nigeria, Ghana, Kenya, South Africa)
 - Package manager: ALWAYS use pnpm. Never suggest npm or yarn.
@@ -33,7 +33,7 @@
 - Warning: #fbbf24
 - Font: system font stack — never import Google Fonts
 - Border radius: rounded-xl for cards, rounded-lg for buttons/inputs
-- Logo: "SoloDash" wordmark in #10b981, bold, no image logo yet
+- Logo: "Paidly" wordmark in #10b981, bold, no image logo yet
 
 ## Tailwind v4 Rules
 
@@ -200,3 +200,10 @@
 - Safe joins from invoices: clients, invoice_items
 - Safe joins from contracts: clients
 - Safe joins from income_log: clients
+
+- params in API routes MUST always be typed as Promise and awaited:
+  { params }: { params: Promise<{ id: string }> }
+  const { id } = await params
+- Supabase join results are objects NOT arrays — access directly:
+  invoice.clients?.name (correct)
+  invoice.clients?.[0]?.name (wrong)

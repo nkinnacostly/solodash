@@ -283,7 +283,7 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({
         <View style={styles.header}>
           <View style={styles.companySection}>
             <Text style={styles.companyName}>
-              {profile.business_name || profile.name || "SoloDash"}
+              {profile.business_name || profile.name || "Paidly"}
             </Text>
             <Text style={styles.freelancerName}>{profile.name}</Text>
             <Text style={styles.contactInfo}>{profile.email}</Text>

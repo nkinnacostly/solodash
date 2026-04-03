@@ -157,7 +157,7 @@ export default function Home() {
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <a href="/" className="text-xl font-bold text-[#10b981]">
-            SoloDash
+            Paidly
           </a>
 
           {/* Desktop Nav */}
@@ -230,7 +230,7 @@ export default function Home() {
             <span className="text-[#10b981]">Keep building.</span>
           </h1>
           <p className="hero-subheadline text-lg sm:text-xl text-[#a1a1aa] max-w-2xl mx-auto mb-8">
-            SoloDash handles your invoices, contracts, and taxes — so you can
+            Paidly handles your invoices, contracts, and taxes — so you can
             focus on the work that actually pays.
           </p>
           <div className="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
@@ -284,7 +284,7 @@ export default function Home() {
               <div className="problem-before bg-[#18181b] border border-[#27272a] rounded-xl p-6 transition-colors">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-red-500">
                   <X size={20} />
-                  Before SoloDash
+                  Before Paidly
                 </h3>
                 <ul className="space-y-3 text-[#a1a1aa]">
                   <li className="flex items-start gap-3">
@@ -312,7 +312,7 @@ export default function Home() {
               <div className="problem-after bg-[#18181b] border border-[#10b981]/30 rounded-xl p-6 transition-colors">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-[#10b981]">
                   <Check size={20} />
-                  With SoloDash
+                  With Paidly
                 </h3>
                 <ul className="space-y-3 text-white">
                   <li className="flex items-start gap-3">
@@ -652,7 +652,7 @@ export default function Home() {
                 </div>
                 <p className="text-[#a1a1aa] mb-4 leading-relaxed">
                   "I used to spend hours on invoices and chasing payments.
-                  SoloDash cut that down to minutes. My clients actually pay
+                  Paidly cut that down to minutes. My clients actually pay
                   faster now."
                 </p>
                 <div className="text-sm text-[#a1a1aa]">
@@ -741,9 +741,9 @@ export default function Home() {
       <footer className="border-t border-[#27272a] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <span className="text-lg font-bold text-[#10b981]">SoloDash</span>
+            <span className="text-lg font-bold text-[#10b981]">Paidly</span>
             <span className="text-sm text-[#a1a1aa]">
-              © 2026 SoloDash. Built for freelancers.
+              © 2026 Paidly. Built for freelancers.
             </span>
           </div>
 

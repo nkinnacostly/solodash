@@ -7,7 +7,7 @@ export default function PrivacyPolicy() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0f0f0f]/90 backdrop-blur-md border-b border-[#27272a]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold text-[#10b981]">
-            SoloDash
+            Paidly
           </Link>
           <div className="hidden md:flex items-center gap-6">
             <Link
@@ -46,13 +46,13 @@ export default function PrivacyPolicy() {
                 1. Introduction
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                SoloDash ("we," "our," or "us") is committed to protecting your
+                Paidly ("we," "our," or "us") is committed to protecting your
                 privacy. This Privacy Policy explains how we collect, use,
                 disclose, and safeguard your information when you use our SaaS
-                platform at solodash.co (the "Service").
+                platform at getpaidly.co (the "Service").
               </p>
               <p className="text-[#a1a1aa] leading-relaxed">
-                By using SoloDash, you agree to the collection and use of
+                By using Paidly, you agree to the collection and use of
                 information in accordance with this policy. If you do not agree
                 with the terms of this Privacy Policy, please do not access the
                 Service.
@@ -135,7 +135,7 @@ export default function PrivacyPolicy() {
               <p className="text-[#a1a1aa] leading-relaxed">
                 We retain your data for as long as your account is active or as
                 needed to provide the Service. You may request deletion of your
-                data at any time by contacting us at hello@solodash.co.
+                data at any time by contacting us at hello@getpaidly.co.
               </p>
             </section>
 
@@ -145,7 +145,7 @@ export default function PrivacyPolicy() {
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
                 Payment processing is handled by Flutterwave, a third-party
-                payment gateway. When clients pay invoices through SoloDash,
+                payment gateway. When clients pay invoices through Paidly,
                 payment details are processed directly by Flutterwave and are
                 not stored on our servers.
               </p>
@@ -200,7 +200,7 @@ export default function PrivacyPolicy() {
                 8. Third-Party Services
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                SoloDash integrates with the following third-party services:
+                Paidly integrates with the following third-party services:
               </p>
               <ul className="list-disc pl-6 text-[#a1a1aa] space-y-2">
                 <li>
@@ -252,10 +252,10 @@ export default function PrivacyPolicy() {
               <p className="text-[#a1a1aa] leading-relaxed">
                 To exercise any of these rights, contact us at{" "}
                 <a
-                  href="mailto:hello@solodash.co"
+                  href="mailto:hello@getpaidly.co"
                   className="text-[#10b981] hover:underline"
                 >
-                  hello@solodash.co
+                  hello@getpaidly.co
                 </a>
                 . We will respond within 30 days.
               </p>
@@ -279,7 +279,7 @@ export default function PrivacyPolicy() {
                 11. Children's Privacy
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed">
-                SoloDash is not intended for individuals under the age of 18. We
+                Paidly is not intended for individuals under the age of 18. We
                 do not knowingly collect personal information from children. If
                 you believe we have collected data from a child, please contact
                 us immediately.
@@ -310,19 +310,19 @@ export default function PrivacyPolicy() {
                 <p>
                   <strong className="text-white">Email:</strong>{" "}
                   <a
-                    href="mailto:hello@solodash.co"
+                    href="mailto:hello@getpaidly.co"
                     className="text-[#10b981] hover:underline"
                   >
-                    hello@solodash.co
+                    hello@getpaidly.co
                   </a>
                 </p>
                 <p>
                   <strong className="text-white">Website:</strong>{" "}
                   <a
-                    href="https://solodash.co"
+                    href="https://getpaidly.co"
                     className="text-[#10b981] hover:underline"
                   >
-                    solodash.co
+                    getpaidly.co
                   </a>
                 </p>
               </div>
@@ -335,9 +335,9 @@ export default function PrivacyPolicy() {
       <footer className="border-t border-[#27272a] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <span className="text-lg font-bold text-[#10b981]">SoloDash</span>
+            <span className="text-lg font-bold text-[#10b981]">Paidly</span>
             <span className="text-sm text-[#a1a1aa]">
-              © 2026 SoloDash. Built for freelancers.
+              © 2026 Paidly. Built for freelancers.
             </span>
           </div>
 

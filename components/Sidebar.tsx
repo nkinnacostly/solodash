@@ -60,7 +60,7 @@ export default function Sidebar({ profile }: SidebarProps) {
       {/* Logo */}
       <div className="px-6 py-6">
         <Link href="/dashboard" className="text-xl font-bold text-[#10b981]">
-          SoloDash
+          Paidly
         </Link>
       </div>
 

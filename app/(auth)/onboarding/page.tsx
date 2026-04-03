@@ -186,7 +186,7 @@ export default function OnboardingPage() {
     <div className="w-full max-w-lg">
       {/* Logo */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-[#10b981]">SoloDash</h1>
+        <h1 className="text-3xl font-bold text-[#10b981]">Paidly</h1>
       </div>
 
       {/* Card */}

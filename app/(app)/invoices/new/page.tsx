@@ -7,6 +7,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/components/ui/Toast";
 import {
   ArrowLeft,
   Plus,
@@ -206,12 +207,13 @@ export default function NewInvoicePage() {
       }
 
       if (status === "draft") {
+        toast.success("Draft saved");
         router.push("/invoices");
       } else {
         router.push(`/invoices/${result.invoice.id}`);
       }
     } catch (err: any) {
-      setError(err.message || "Failed to create invoice");
+      toast.error("Failed to save", err.message || "Failed to create invoice");
     } finally {
       setLoading(false);
     }
@@ -564,7 +566,7 @@ export default function NewInvoicePage() {
               <div className="flex justify-between items-start mb-8">
                 <div>
                   <h3 className="text-2xl font-bold text-[#10b981]">
-                    SoloDash
+                    Paidly
                   </h3>
                   <p className="text-sm text-gray-500 mt-1">Invoice</p>
                 </div>
@@ -677,4 +679,5 @@ export default function NewInvoicePage() {
       </div>
     </div>
   );
+}
 }

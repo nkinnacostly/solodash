@@ -7,7 +7,7 @@ export default function TermsOfService() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0f0f0f]/90 backdrop-blur-md border-b border-[#27272a]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold text-[#10b981]">
-            SoloDash
+            Paidly
           </Link>
           <div className="hidden md:flex items-center gap-6">
             <Link
@@ -46,14 +46,14 @@ export default function TermsOfService() {
                 1. Agreement to Terms
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                By accessing or using SoloDash (the "Service"), operated by
-                SoloDash ("we," "our," or "us"), you agree to be bound by these
+                By accessing or using Paidly (the "Service"), operated by
+                Paidly ("we," "our," or "us"), you agree to be bound by these
                 Terms of Service ("Terms"). If you disagree with any part of
                 these terms, you may not access the Service.
               </p>
               <p className="text-[#a1a1aa] leading-relaxed">
                 These Terms apply to all visitors, users, and others who access
-                or use the Service at solodash.co.
+                or use the Service at getpaidly.co.
               </p>
             </section>
 
@@ -62,7 +62,7 @@ export default function TermsOfService() {
                 2. Description of Service
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                SoloDash is a SaaS platform that provides freelance business
+                Paidly is a SaaS platform that provides freelance business
                 management tools, including but not limited to:
               </p>
               <ul className="list-disc pl-6 text-[#a1a1aa] space-y-2">
@@ -82,7 +82,7 @@ export default function TermsOfService() {
                 3.1 Account Creation
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                To use SoloDash, you must create an account by providing
+                To use Paidly, you must create an account by providing
                 accurate and complete information. You must be at least 18 years
                 old to use this Service.
               </p>
@@ -205,7 +205,7 @@ export default function TermsOfService() {
                 6.1 Ownership
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                You retain all rights to the content you create using SoloDash,
+                You retain all rights to the content you create using Paidly,
                 including invoices, contracts, and client data. We do not claim
                 ownership of your content.
               </p>
@@ -224,7 +224,7 @@ export default function TermsOfService() {
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed">
                 You are responsible for the accuracy of the information you
-                enter into the Service. SoloDash does not verify the correctness
+                enter into the Service. Paidly does not verify the correctness
                 of invoice amounts, contract terms, or client details.
               </p>
             </section>
@@ -234,7 +234,7 @@ export default function TermsOfService() {
                 7. Payment Processing
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                SoloDash integrates with Flutterwave and Paystack to facilitate
+                Paidly integrates with Flutterwave and Paystack to facilitate
                 payments. By using these payment features, you agree to their
                 respective terms of service.
               </p>
@@ -245,7 +245,7 @@ export default function TermsOfService() {
               <p className="text-[#a1a1aa] leading-relaxed">
                 Transaction fees may apply and will be clearly disclosed at the
                 point of payment. These fees are charged by the payment
-                processor, not by SoloDash.
+                processor, not by Paidly.
               </p>
             </section>
 
@@ -256,7 +256,7 @@ export default function TermsOfService() {
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
                 The Service and its original content, features, and
                 functionality are and will remain the exclusive property of
-                SoloDash and its licensors. The Service is protected by
+                Paidly and its licensors. The Service is protected by
                 copyright, trademark, and other laws.
               </p>
               <p className="text-[#a1a1aa] leading-relaxed">
@@ -277,7 +277,7 @@ export default function TermsOfService() {
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
                 Upon termination, your right to use the Service will cease
                 immediately. You may request an export of your data before
-                account deletion by contacting hello@solodash.co.
+                account deletion by contacting hello@getpaidly.co.
               </p>
               <p className="text-[#a1a1aa] leading-relaxed">
                 All provisions of these Terms which by their nature should
@@ -295,7 +295,7 @@ export default function TermsOfService() {
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
                 The Service is provided on an "AS IS" and "AS AVAILABLE" basis.
-                SoloDash makes no warranties, expressed or implied, including
+                Paidly makes no warranties, expressed or implied, including
                 but not limited to:
               </p>
               <ul className="list-disc pl-6 text-[#a1a1aa] space-y-2 mb-6">
@@ -315,7 +315,7 @@ export default function TermsOfService() {
                 10.2 Limitation of Liability
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                In no event shall SoloDash, its directors, employees, or agents
+                In no event shall Paidly, its directors, employees, or agents
                 be liable for any indirect, incidental, special, consequential,
                 or punitive damages, including but not limited to:
               </p>
@@ -336,7 +336,7 @@ export default function TermsOfService() {
                 10.3 Tax Advice Disclaimer
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed">
-                SoloDash provides income tracking and export features for
+                Paidly provides income tracking and export features for
                 convenience only. We do not provide tax advice or guarantee
                 compliance with tax laws. Consult a qualified tax professional
                 for tax-related matters.
@@ -348,7 +348,7 @@ export default function TermsOfService() {
                 11. Indemnification
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed">
-                You agree to indemnify and hold harmless SoloDash and its
+                You agree to indemnify and hold harmless Paidly and its
                 officers, directors, employees, and agents from any claims,
                 liabilities, damages, losses, and expenses (including legal
                 fees) arising from your use of the Service, violation of these
@@ -433,19 +433,19 @@ export default function TermsOfService() {
                 <p>
                   <strong className="text-white">Email:</strong>{" "}
                   <a
-                    href="mailto:hello@solodash.co"
+                    href="mailto:hello@getpaidly.co"
                     className="text-[#10b981] hover:underline"
                   >
-                    hello@solodash.co
+                    hello@getpaidly.co
                   </a>
                 </p>
                 <p>
                   <strong className="text-white">Website:</strong>{" "}
                   <a
-                    href="https://solodash.co"
+                    href="https://getpaidly.co"
                     className="text-[#10b981] hover:underline"
                   >
-                    solodash.co
+                    getpaidly.co
                   </a>
                 </p>
               </div>
@@ -458,9 +458,9 @@ export default function TermsOfService() {
       <footer className="border-t border-[#27272a] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <span className="text-lg font-bold text-[#10b981]">SoloDash</span>
+            <span className="text-lg font-bold text-[#10b981]">Paidly</span>
             <span className="text-sm text-[#a1a1aa]">
-              © 2026 SoloDash. Built for freelancers.
+              © 2026 Paidly. Built for freelancers.
             </span>
           </div>
 

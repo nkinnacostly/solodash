@@ -17,6 +17,7 @@ import {
   Copy,
 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/Toast";
 
 interface Invoice {
   id: string;
@@ -62,13 +63,15 @@ export default function InvoiceDetailPage() {
   const router = useRouter();
   const params = useParams();
   const invoiceId = params.id as string;
+  const { toast } = useToast();
 
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [updating, setUpdating] = useState(false);
+  const [sendingLoading, setSendingLoading] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [markPaidLoading, setMarkPaidLoading] = useState(false);
 
   const fetchInvoice = async () => {
     setLoading(true);
@@ -108,7 +111,7 @@ export default function InvoiceDetailPage() {
   };
 
   const handleSendInvoice = async () => {
-    setUpdating(true);
+    setSendingLoading(true);
 
     try {
       const response = await fetch(`/api/invoices/${invoiceId}/send`, {
@@ -121,16 +124,17 @@ export default function InvoiceDetailPage() {
         throw new Error(data.error || "Failed to send invoice");
       }
 
+      toast.success("Invoice sent", "Email delivered to client");
       fetchInvoice();
     } catch (err: any) {
-      alert(err.message);
+      toast.error("Failed to send invoice", err.message);
     } finally {
-      setUpdating(false);
+      setSendingLoading(false);
     }
   };
 
   const handleMarkAsPaid = async () => {
-    setUpdating(true);
+    setMarkPaidLoading(true);
 
     try {
       const response = await fetch(`/api/invoices/${invoiceId}/mark-paid`, {
@@ -143,11 +147,12 @@ export default function InvoiceDetailPage() {
         throw new Error(data.error || "Failed to mark as paid");
       }
 
+      toast.success("Invoice marked as paid");
       fetchInvoice();
     } catch (err: any) {
-      alert(err.message);
+      toast.error("Failed to mark as paid", err.message);
     } finally {
-      setUpdating(false);
+      setMarkPaidLoading(false);
     }
   };
 
@@ -167,7 +172,7 @@ export default function InvoiceDetailPage() {
 
       router.push("/invoices");
     } catch (err: any) {
-      alert(err.message);
+      toast.error("Failed to delete invoice", err.message);
       setDeleteLoading(false);
     } finally {
       setShowDeleteDialog(false);
@@ -177,7 +182,7 @@ export default function InvoiceDetailPage() {
   const handleCopyPaymentLink = () => {
     const paymentLink = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/pay/${invoiceId}`;
     navigator.clipboard.writeText(paymentLink);
-    alert("Payment link copied to clipboard!");
+    toast.success("Copied", "Payment link copied to clipboard");
   };
 
   const handleShareWhatsApp = () => {
@@ -261,7 +266,7 @@ export default function InvoiceDetailPage() {
             <div className="flex justify-between items-start mb-8">
               <div>
                 <h2 className="text-3xl font-bold text-[#10b981] mb-1">
-                  SoloDash
+                  Paidly
                 </h2>
                 <p className="text-sm text-gray-500">Invoice</p>
               </div>
@@ -447,11 +452,12 @@ export default function InvoiceDetailPage() {
                 {invoice.status === "draft" && (
                   <>
                     <button
+                      type="button"
                       onClick={handleSendInvoice}
-                      disabled={updating}
+                      disabled={sendingLoading}
                       className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      {updating ? (
+                      {sendingLoading ? (
                         <Loader2 size={20} className="animate-spin" />
                       ) : (
                         <>
@@ -468,11 +474,12 @@ export default function InvoiceDetailPage() {
                       Edit Invoice
                     </Link>
                     <button
+                      type="button"
                       onClick={() => setShowDeleteDialog(true)}
-                      disabled={updating}
+                      disabled={deleteLoading}
                       className="w-full py-3 border border-[#ef4444]/30 text-[#ef4444] font-medium rounded-lg hover:bg-[#ef4444]/10 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      {updating ? (
+                      {deleteLoading ? (
                         <Loader2 size={18} className="animate-spin" />
                       ) : (
                         <Trash2 size={18} />
@@ -487,11 +494,12 @@ export default function InvoiceDetailPage() {
                   isOverdue) && (
                   <>
                     <button
+                      type="button"
                       onClick={handleMarkAsPaid}
-                      disabled={updating}
+                      disabled={markPaidLoading}
                       className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      {updating ? (
+                      {markPaidLoading ? (
                         <Loader2 size={20} className="animate-spin" />
                       ) : (
                         <>
@@ -501,11 +509,12 @@ export default function InvoiceDetailPage() {
                       )}
                     </button>
                     <button
+                      type="button"
                       onClick={handleSendInvoice}
-                      disabled={updating}
+                      disabled={sendingLoading}
                       className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      {updating ? (
+                      {sendingLoading ? (
                         <Loader2 size={20} className="animate-spin" />
                       ) : (
                         <>
@@ -515,6 +524,7 @@ export default function InvoiceDetailPage() {
                       )}
                     </button>
                     <button
+                      type="button"
                       onClick={handleCopyPaymentLink}
                       className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
                     >
@@ -522,6 +532,7 @@ export default function InvoiceDetailPage() {
                       Copy Payment Link
                     </button>
                     <button
+                      type="button"
                       onClick={handleShareWhatsApp}
                       className="w-full py-3 border border-[#25D366] text-[#25D366] font-medium rounded-lg hover:bg-[#25D366]/10 transition-colors flex items-center justify-center gap-2"
                     >
@@ -533,11 +544,17 @@ export default function InvoiceDetailPage() {
 
                 {invoice.status === "paid" && (
                   <>
-                    <button className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                    >
                       <Download size={18} />
                       Download PDF
                     </button>
-                    <button className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                    >
                       <Copy size={18} />
                       Duplicate Invoice
                     </button>
