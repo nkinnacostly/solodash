@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
-export default function BillingSuccessPage() {
+function BillingSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const txRef = searchParams.get("tx_ref");
@@ -134,5 +134,25 @@ export default function BillingSuccessPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function BillingSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+          <div className="text-center">
+            <Loader2
+              size={48}
+              className="text-[#10b981] animate-spin mx-auto mb-4"
+            />
+            <p className="text-lg text-white">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <BillingSuccessContent />
+    </Suspense>
   );
 }
