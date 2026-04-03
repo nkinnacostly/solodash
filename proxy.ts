@@ -31,7 +31,7 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms']
+  const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms', '/verify-email']
   const isPublicRoute = publicRoutes.includes(pathname)
   const isPayRoute = pathname.startsWith('/pay/')
   const isSignRoute = pathname.startsWith('/sign/')

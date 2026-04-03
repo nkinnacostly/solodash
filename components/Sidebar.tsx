@@ -10,6 +10,7 @@ import {
   TrendingUp,
   Settings2,
   LogOut,
+  Zap,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -44,15 +45,15 @@ export default function Sidebar({ profile }: SidebarProps) {
 
   // Get initials
   const getInitials = () => {
-    if (profile.name) {
-      return profile.name
+    if (profile?.name) {
+      return profile?.name
         .split(" ")
         .map((n) => n[0])
         .join("")
         .toUpperCase()
         .slice(0, 2);
     }
-    return profile.email?.slice(0, 2).toUpperCase() || "U";
+    return profile?.email?.slice(0, 2).toUpperCase() || "U";
   };
 
   return (
@@ -87,16 +88,39 @@ export default function Sidebar({ profile }: SidebarProps) {
 
       {/* Bottom Section */}
       <div className="p-4 border-t border-[#27272a]">
+        {/* Upgrade Prompt (Free users only) */}
+        {profile?.plan === "free" && (
+          <div className="mb-3 p-3 border border-[#10b981]/30 rounded-lg bg-[#10b981]/5">
+            <div className="flex items-start gap-2 mb-2">
+              <Zap size={16} className="text-[#10b981] flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[13px] font-bold text-white">
+                  Upgrade to Pro
+                </p>
+                <p className="text-[12px] text-[#a1a1aa]">
+                  Keep 100% of your payments
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/dashboard/pricing"
+              className="w-full py-2 bg-[#10b981] text-white text-sm font-medium rounded-lg hover:bg-[#059669] transition-colors flex items-center justify-center gap-1"
+            >
+              Upgrade →
+            </Link>
+          </div>
+        )}
+
         {/* Plan Badge */}
         <div className="mb-3">
           <span
             className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-              profile.plan === "pro"
+              profile?.plan === "pro"
                 ? "bg-[#10b981]/20 text-[#10b981]"
                 : "bg-[#27272a] text-[#a1a1aa]"
             }`}
           >
-            {profile.plan === "pro" ? "Pro" : "Free"}
+            {profile?.plan === "pro" ? "Pro" : "Free"}
           </span>
         </div>
 
@@ -110,9 +134,9 @@ export default function Sidebar({ profile }: SidebarProps) {
           {/* Name + Email */}
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">
-              {profile.name || "User"}
+              {profile?.name || "User"}
             </p>
-            <p className="text-xs text-[#a1a1aa] truncate">{profile.email}</p>
+            <p className="text-xs text-[#a1a1aa] truncate">{profile?.email}</p>
           </div>
         </div>
 

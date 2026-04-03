@@ -56,8 +56,8 @@ export default function SignupPage() {
 
       if (error) throw error;
 
-      router.push("/onboarding");
-      router.refresh();
+      // Redirect to verify email page with email as query param
+      router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
     } catch (err: any) {
       setError(err.message || "Failed to create account. Please try again.");
     } finally {

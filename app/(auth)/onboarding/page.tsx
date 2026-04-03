@@ -102,6 +102,14 @@ export default function OnboardingPage() {
         return;
       }
 
+      // Check if email is verified
+      if (!user.email_confirmed_at) {
+        router.push(
+          `/verify-email?email=${encodeURIComponent(user.email || "")}`,
+        );
+        return;
+      }
+
       setUser(user);
 
       // Pre-fill name from auth metadata

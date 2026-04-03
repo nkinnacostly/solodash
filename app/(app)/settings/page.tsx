@@ -483,7 +483,7 @@ export default function SettingsPage() {
               Full Name *
             </label>
             <input
-              value={profile.name || ""}
+              value={profile?.name || ""}
               onChange={(e) =>
                 setProfile((prev: any) => ({ ...prev, name: e.target.value }))
               }
@@ -498,7 +498,7 @@ export default function SettingsPage() {
               Business Name (optional)
             </label>
             <input
-              value={profile.business_name || ""}
+              value={profile?.business_name || ""}
               onChange={(e) =>
                 setProfile((prev: any) => ({
                   ...prev,
@@ -515,7 +515,7 @@ export default function SettingsPage() {
               Phone (optional)
             </label>
             <input
-              value={profile.phone || ""}
+              value={profile?.phone || ""}
               onChange={(e) =>
                 setProfile((prev: any) => ({ ...prev, phone: e.target.value }))
               }
@@ -531,7 +531,7 @@ export default function SettingsPage() {
                 Country
               </label>
               <select
-                value={profile.country || "Nigeria"}
+                value={profile?.country || "Nigeria"}
                 onChange={(e) =>
                   setProfile((prev: any) => ({
                     ...prev,
@@ -553,7 +553,7 @@ export default function SettingsPage() {
                 Timezone
               </label>
               <select
-                value={profile.timezone || "Africa/Lagos"}
+                value={profile?.timezone || "Africa/Lagos"}
                 onChange={(e) =>
                   setProfile((prev: any) => ({
                     ...prev,
@@ -577,7 +577,7 @@ export default function SettingsPage() {
                 Default Currency
               </label>
               <select
-                value={profile.currency || "NGN"}
+                value={profile?.currency || "NGN"}
                 onChange={(e) =>
                   setProfile((prev: any) => ({
                     ...prev,
@@ -599,7 +599,7 @@ export default function SettingsPage() {
                 Default Payment Terms
               </label>
               <select
-                value={profile.default_payment_terms || "Net 14"}
+                value={profile?.default_payment_terms || "Net 14"}
                 onChange={(e) =>
                   setProfile((prev: any) => ({
                     ...prev,
@@ -633,7 +633,7 @@ export default function SettingsPage() {
 
       {activeTab === "branding" && (
         <div className="space-y-6">
-          {profile.plan === "free" ? (
+          {profile?.plan === "free" ? (
             <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-12 text-center">
               <Lock size={48} className="text-[#fbbf24] mx-auto mb-4" />
               <h2 className="text-xl font-bold text-white mb-2">
