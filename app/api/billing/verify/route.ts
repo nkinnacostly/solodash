@@ -45,13 +45,13 @@ export async function POST(request: Request) {
 
     const transaction = data.data;
 
-    // Verify amount is correct ($9 or $79)
+    // Verify amount is correct (₦13,500 or ₦119,000)
     const isValidAmount =
-      transaction.amount === 9 ||
-      transaction.amount === 79 ||
-      transaction.amount >= 8.99; // Allow small rounding differences
+      transaction.amount === 13500 ||
+      transaction.amount === 119000 ||
+      transaction.amount >= 13000; // Allow some variance
 
-    if (!isValidAmount || transaction.currency !== "USD") {
+    if (!isValidAmount || transaction.currency !== "NGN") {
       return NextResponse.json(
         { error: "Invalid payment amount" },
         { status: 400 }

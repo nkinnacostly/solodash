@@ -89,8 +89,8 @@ export default function UpgradeModal({
 
         {/* Price */}
         <div className="text-center mb-6">
-          <p className="text-3xl font-bold text-white">$9/month</p>
-          <p className="text-sm text-[#a1a1aa]">or $79/year (save 30%)</p>
+          <p className="text-3xl font-bold text-white">₦13,500/month</p>
+          <p className="text-sm text-[#a1a1aa]">or ₦119,000/year (save 30%)</p>
         </div>
 
         {/* Buttons */}

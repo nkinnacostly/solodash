@@ -60,7 +60,7 @@ export default function NewContractPage() {
     resolver: zodResolver(contractSchema),
     defaultValues: {
       isNewClient: false,
-      currency: "USD",
+      currency: "NGN",
       governingLaw: "Nigeria",
       revisions: 2,
     },
@@ -171,392 +171,395 @@ export default function NewContractPage() {
   const watchClientId = watch("clientId");
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <Link
-          href="/contracts"
-          className="p-2 hover:bg-[#18181b] rounded-lg transition-colors"
-        >
-          <ArrowLeft size={20} className="text-[#a1a1aa]" />
-        </Link>
-        <h1 className="text-3xl font-bold text-white">New Contract</h1>
-      </div>
-
-      {/* Step Indicator */}
-      <div className="flex items-center gap-2 mb-8">
-        <div
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-            step === 1
-              ? "bg-[#10b981] text-white"
-              : "bg-[#18181b] text-[#a1a1aa]"
-          }`}
-        >
-          <span className="text-sm font-medium">Step 1: Template</span>
+    <>
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <Link
+            href="/contracts"
+            className="p-2 hover:bg-[#18181b] rounded-lg transition-colors"
+          >
+            <ArrowLeft size={20} className="text-[#a1a1aa]" />
+          </Link>
+          <h1 className="text-3xl font-bold text-white">New Contract</h1>
         </div>
-        <ChevronRight size={16} className="text-[#27272a]" />
-        <div
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-            step === 2
-              ? "bg-[#10b981] text-white"
-              : "bg-[#18181b] text-[#a1a1aa]"
-          }`}
-        >
-          <span className="text-sm font-medium">Step 2: Details</span>
-        </div>
-      </div>
 
-      {/* Step 1: Choose Template */}
-      {step === 1 && (
-        <div>
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
-            {contractTemplates.map((template) => (
-              <button
-                key={template.id}
-                onClick={() => handleTemplateSelect(template)}
-                className={`p-6 border-2 rounded-xl text-left transition-all ${
-                  selectedTemplate?.id === template.id
-                    ? "border-[#10b981] bg-[#10b981]/5"
-                    : "border-[#27272a] bg-[#18181b] hover:border-[#3f3f46]"
-                }`}
-              >
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {template.name}
-                </h3>
-                <p className="text-sm text-[#a1a1aa] mb-4">
-                  {template.description}
-                </p>
-                <div
-                  className={`inline-block px-3 py-1 rounded text-xs font-medium ${
+        {/* Step Indicator */}
+        <div className="flex items-center gap-2 mb-8">
+          <div
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+              step === 1
+                ? "bg-[#10b981] text-white"
+                : "bg-[#18181b] text-[#a1a1aa]"
+            }`}
+          >
+            <span className="text-sm font-medium">Step 1: Template</span>
+          </div>
+          <ChevronRight size={16} className="text-[#27272a]" />
+          <div
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+              step === 2
+                ? "bg-[#10b981] text-white"
+                : "bg-[#18181b] text-[#a1a1aa]"
+            }`}
+          >
+            <span className="text-sm font-medium">Step 2: Details</span>
+          </div>
+        </div>
+
+        {/* Step 1: Choose Template */}
+        {step === 1 && (
+          <div>
+            <div className="grid md:grid-cols-3 gap-4 mb-8">
+              {contractTemplates.map((template) => (
+                <button
+                  key={template.id}
+                  onClick={() => handleTemplateSelect(template)}
+                  className={`p-6 border-2 rounded-xl text-left transition-all ${
                     selectedTemplate?.id === template.id
-                      ? "bg-[#10b981] text-white"
-                      : "bg-[#27272a] text-[#a1a1aa]"
+                      ? "border-[#10b981] bg-[#10b981]/5"
+                      : "border-[#27272a] bg-[#18181b] hover:border-[#3f3f46]"
                   }`}
                 >
-                  {selectedTemplate?.id === template.id ? "Selected" : "Select"}
-                </div>
-              </button>
-            ))}
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    {template.name}
+                  </h3>
+                  <p className="text-sm text-[#a1a1aa] mb-4">
+                    {template.description}
+                  </p>
+                  <div
+                    className={`inline-block px-3 py-1 rounded text-xs font-medium ${
+                      selectedTemplate?.id === template.id
+                        ? "bg-[#10b981] text-white"
+                        : "bg-[#27272a] text-[#a1a1aa]"
+                    }`}
+                  >
+                    {selectedTemplate?.id === template.id
+                      ? "Selected"
+                      : "Select"}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={handleNext}
+              disabled={!selectedTemplate}
+              className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next →
+            </button>
           </div>
+        )}
 
-          <button
-            onClick={handleNext}
-            disabled={!selectedTemplate}
-            className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Next →
-          </button>
-        </div>
-      )}
-
-      {/* Step 2: Fill Details */}
-      {step === 2 && selectedTemplate && (
-        <form onSubmit={handleSubmit((data) => onSubmit(data, "draft"))}>
-          <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
-            {/* Client Selection */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Client
-              </label>
-              <div className="flex items-center gap-4 mb-3">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    checked={!watchIsNewClient}
-                    onChange={() => setValue("isNewClient", false)}
-                    className="text-[#10b981]"
-                  />
-                  <span className="text-sm text-white">Existing Client</span>
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    checked={watchIsNewClient}
-                    onChange={() => setValue("isNewClient", true)}
-                    className="text-[#10b981]"
-                  />
-                  <span className="text-sm text-white">New Client</span>
-                </label>
-              </div>
-
-              {!watchIsNewClient ? (
-                <select
-                  {...register("clientId")}
-                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
-                >
-                  <option value="">Select a client</option>
-                  {clients.map((client) => (
-                    <option key={client.id} value={client.id}>
-                      {client.name} ({client.email})
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div className="space-y-3">
-                  <input
-                    {...register("clientName")}
-                    placeholder="Client name"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-                  />
-                  <input
-                    {...register("clientEmail")}
-                    type="email"
-                    placeholder="Client email"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-                  />
-                  <input
-                    {...register("clientAddress")}
-                    placeholder="Address (optional)"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-                  />
-                </div>
-              )}
-              {errors.clientId && !watchIsNewClient && (
-                <p className="text-sm text-[#ef4444] mt-1">
-                  {errors.clientId.message}
-                </p>
-              )}
-            </div>
-
-            {/* Project Description */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Project Description
-              </label>
-              <textarea
-                {...register("projectDescription")}
-                rows={3}
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none resize-none"
-                placeholder="Brief overview of the project..."
-              />
-              {errors.projectDescription && (
-                <p className="text-sm text-[#ef4444] mt-1">
-                  {errors.projectDescription.message}
-                </p>
-              )}
-            </div>
-
-            {/* Scope of Work */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Scope of Work
-              </label>
-              <textarea
-                {...register("scopeOfWork")}
-                rows={5}
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none resize-none"
-                placeholder="Detailed description of deliverables and responsibilities..."
-              />
-              {errors.scopeOfWork && (
-                <p className="text-sm text-[#ef4444] mt-1">
-                  {errors.scopeOfWork.message}
-                </p>
-              )}
-            </div>
-
-            {/* Dates */}
-            <div className="grid md:grid-cols-2 gap-4">
+        {/* Step 2: Fill Details */}
+        {step === 2 && selectedTemplate && (
+          <form onSubmit={handleSubmit((data) => onSubmit(data, "draft"))}>
+            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+              {/* Client Selection */}
               <div>
                 <label className="block text-sm font-medium text-white mb-2">
-                  Start Date
+                  Client
                 </label>
-                <input
-                  {...register("startDate")}
-                  type="date"
-                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
-                />
-                {errors.startDate && (
+                <div className="flex items-center gap-4 mb-3">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      checked={!watchIsNewClient}
+                      onChange={() => setValue("isNewClient", false)}
+                      className="text-[#10b981]"
+                    />
+                    <span className="text-sm text-white">Existing Client</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      checked={watchIsNewClient}
+                      onChange={() => setValue("isNewClient", true)}
+                      className="text-[#10b981]"
+                    />
+                    <span className="text-sm text-white">New Client</span>
+                  </label>
+                </div>
+
+                {!watchIsNewClient ? (
+                  <select
+                    {...register("clientId")}
+                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                  >
+                    <option value="">Select a client</option>
+                    {clients.map((client) => (
+                      <option key={client.id} value={client.id}>
+                        {client.name} ({client.email})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="space-y-3">
+                    <input
+                      {...register("clientName")}
+                      placeholder="Client name"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    />
+                    <input
+                      {...register("clientEmail")}
+                      type="email"
+                      placeholder="Client email"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    />
+                    <input
+                      {...register("clientAddress")}
+                      placeholder="Address (optional)"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    />
+                  </div>
+                )}
+                {errors.clientId && !watchIsNewClient && (
                   <p className="text-sm text-[#ef4444] mt-1">
-                    {errors.startDate.message}
+                    {errors.clientId.message}
                   </p>
                 )}
               </div>
-              {selectedTemplate.type === "project" && (
+
+              {/* Project Description */}
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">
+                  Project Description
+                </label>
+                <textarea
+                  {...register("projectDescription")}
+                  rows={3}
+                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none resize-none"
+                  placeholder="Brief overview of the project..."
+                />
+                {errors.projectDescription && (
+                  <p className="text-sm text-[#ef4444] mt-1">
+                    {errors.projectDescription.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Scope of Work */}
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">
+                  Scope of Work
+                </label>
+                <textarea
+                  {...register("scopeOfWork")}
+                  rows={5}
+                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none resize-none"
+                  placeholder="Detailed description of deliverables and responsibilities..."
+                />
+                {errors.scopeOfWork && (
+                  <p className="text-sm text-[#ef4444] mt-1">
+                    {errors.scopeOfWork.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Dates */}
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    End Date
+                    Start Date
                   </label>
                   <input
-                    {...register("endDate")}
+                    {...register("startDate")}
                     type="date"
                     className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
                   />
+                  {errors.startDate && (
+                    <p className="text-sm text-[#ef4444] mt-1">
+                      {errors.startDate.message}
+                    </p>
+                  )}
+                </div>
+                {selectedTemplate.type === "project" && (
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      End Date
+                    </label>
+                    <input
+                      {...register("endDate")}
+                      type="date"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Compensation Fields */}
+              {selectedTemplate.type === "hourly" && (
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Hourly Rate
+                    </label>
+                    <input
+                      {...register("hourlyRate")}
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    />
+                    {errors.hourlyRate && (
+                      <p className="text-sm text-[#ef4444] mt-1">
+                        {errors.hourlyRate.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Estimated Hours
+                    </label>
+                    <input
+                      {...register("estimatedHours")}
+                      type="number"
+                      placeholder="0"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    />
+                  </div>
                 </div>
               )}
-            </div>
 
-            {/* Compensation Fields */}
-            {selectedTemplate.type === "hourly" && (
-              <div className="grid md:grid-cols-2 gap-4">
+              {selectedTemplate.type === "project" && (
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Project Fee
+                    </label>
+                    <input
+                      {...register("projectFee")}
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    />
+                    {errors.projectFee && (
+                      <p className="text-sm text-[#ef4444] mt-1">
+                        {errors.projectFee.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Revisions Allowed
+                    </label>
+                    <input
+                      {...register("revisions")}
+                      type="number"
+                      placeholder="2"
+                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {selectedTemplate.type === "retainer" && (
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Hourly Rate
+                    Monthly Retainer Fee
                   </label>
                   <input
-                    {...register("hourlyRate")}
+                    {...register("retainerFee")}
                     type="number"
                     step="0.01"
                     placeholder="0.00"
                     className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
                   />
-                  {errors.hourlyRate && (
+                  {errors.retainerFee && (
                     <p className="text-sm text-[#ef4444] mt-1">
-                      {errors.hourlyRate.message}
+                      {errors.retainerFee.message}
                     </p>
                   )}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Estimated Hours
-                  </label>
-                  <input
-                    {...register("estimatedHours")}
-                    type="number"
-                    placeholder="0"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-                  />
-                </div>
-              </div>
-            )}
+              )}
 
-            {selectedTemplate.type === "project" && (
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Project Fee
-                  </label>
-                  <input
-                    {...register("projectFee")}
-                    type="number"
-                    step="0.01"
-                    placeholder="0.00"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-                  />
-                  {errors.projectFee && (
-                    <p className="text-sm text-[#ef4444] mt-1">
-                      {errors.projectFee.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Revisions Allowed
-                  </label>
-                  <input
-                    {...register("revisions")}
-                    type="number"
-                    placeholder="2"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-                  />
-                </div>
-              </div>
-            )}
-
-            {selectedTemplate.type === "retainer" && (
+              {/* Currency */}
               <div>
                 <label className="block text-sm font-medium text-white mb-2">
-                  Monthly Retainer Fee
+                  Currency
+                </label>
+                <select
+                  {...register("currency")}
+                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                >
+                  <option value="NGN">NGN - Nigerian Naira</option>
+                  <option value="USD">USD - US Dollar</option>
+                  <option value="GBP">GBP - British Pound</option>
+                  <option value="EUR">EUR - Euro</option>
+                  <option value="GHS">GHS - Ghanaian Cedi</option>
+                  <option value="KES">KES - Kenyan Shilling</option>
+                  <option value="ZAR">ZAR - South African Rand</option>
+                </select>
+              </div>
+
+              {/* Payment Terms */}
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">
+                  Payment Terms
                 </label>
                 <input
-                  {...register("retainerFee")}
-                  type="number"
-                  step="0.01"
-                  placeholder="0.00"
+                  {...register("paymentTerms")}
+                  placeholder="e.g., 50% upfront, 50% on completion"
                   className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
                 />
-                {errors.retainerFee && (
+                {errors.paymentTerms && (
                   <p className="text-sm text-[#ef4444] mt-1">
-                    {errors.retainerFee.message}
+                    {errors.paymentTerms.message}
                   </p>
                 )}
               </div>
-            )}
 
-            {/* Currency */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Currency
-              </label>
-              <select
-                {...register("currency")}
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+              {/* Governing Law */}
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">
+                  Governing Law
+                </label>
+                <input
+                  {...register("governingLaw")}
+                  placeholder="e.g., Nigeria"
+                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-4 mt-6">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors"
               >
-                <option value="USD">USD - US Dollar</option>
-                <option value="GBP">GBP - British Pound</option>
-                <option value="EUR">EUR - Euro</option>
-                <option value="NGN">NGN - Nigerian Naira</option>
-                <option value="GHS">GHS - Ghanaian Cedi</option>
-                <option value="KES">KES - Kenyan Shilling</option>
-                <option value="ZAR">ZAR - South African Rand</option>
-              </select>
+                ← Back
+              </button>
+              <button
+                type="submit"
+                disabled={draftLoading}
+                className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50"
+              >
+                {draftLoading ? (
+                  <Loader2 size={20} className="animate-spin mx-auto" />
+                ) : (
+                  "Save as Draft"
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={handleSubmit((data) => onSubmit(data, "sent"))}
+                disabled={sendLoading}
+                className="flex-1 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50"
+              >
+                {sendLoading ? (
+                  <Loader2 size={20} className="animate-spin mx-auto" />
+                ) : (
+                  "Save & Send"
+                )}
+              </button>
             </div>
-
-            {/* Payment Terms */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Payment Terms
-              </label>
-              <input
-                {...register("paymentTerms")}
-                placeholder="e.g., 50% upfront, 50% on completion"
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-              />
-              {errors.paymentTerms && (
-                <p className="text-sm text-[#ef4444] mt-1">
-                  {errors.paymentTerms.message}
-                </p>
-              )}
-            </div>
-
-            {/* Governing Law */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Governing Law
-              </label>
-              <input
-                {...register("governingLaw")}
-                placeholder="e.g., Nigeria"
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex gap-4 mt-6">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors"
-            >
-              ← Back
-            </button>
-            <button
-              type="submit"
-              disabled={draftLoading}
-              className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50"
-            >
-              {draftLoading ? (
-                <Loader2 size={20} className="animate-spin mx-auto" />
-              ) : (
-                "Save as Draft"
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={handleSubmit((data) => onSubmit(data, "sent"))}
-              disabled={sendLoading}
-              className="flex-1 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50"
-            >
-              {sendLoading ? (
-                <Loader2 size={20} className="animate-spin mx-auto" />
-              ) : (
-                "Save & Send"
-              )}
-            </button>
-          </div>
-        </form>
-      )}
-    </div>
+          </form>
+        )}
+      </div>
 
       {/* Upgrade Modal */}
       <UpgradeModal

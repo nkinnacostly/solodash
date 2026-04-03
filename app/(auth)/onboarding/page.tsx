@@ -56,10 +56,10 @@ const countries = [
 ];
 
 const currencies = [
+  { code: "NGN", name: "NGN - Nigerian Naira" },
   { code: "USD", name: "USD - US Dollar" },
   { code: "GBP", name: "GBP - British Pound" },
   { code: "EUR", name: "EUR - Euro" },
-  { code: "NGN", name: "NGN - Nigerian Naira" },
   { code: "GHS", name: "GHS - Ghanaian Cedi" },
   { code: "KES", name: "KES - Kenyan Shilling" },
   { code: "ZAR", name: "ZAR - South African Rand" },
@@ -85,7 +85,7 @@ export default function OnboardingPage() {
     businessName: "",
     country: "Nigeria",
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    currency: "USD",
+    currency: "NGN",
     defaultPaymentTerms: "30",
   });
 

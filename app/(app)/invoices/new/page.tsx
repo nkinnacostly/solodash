@@ -9,20 +9,14 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
 import UpgradeModal from "@/components/UpgradeModal";
-import {
-  ArrowLeft,
-  Plus,
-  X,
-  Loader2,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { ArrowLeft, Plus, X, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 const currencies = [
+  { code: "NGN", symbol: "₦", name: "NGN" },
   { code: "USD", symbol: "$", name: "USD" },
   { code: "GBP", symbol: "£", name: "GBP" },
   { code: "EUR", symbol: "€", name: "EUR" },
-  { code: "NGN", symbol: "₦", name: "NGN" },
   { code: "GHS", symbol: "GH₵", name: "GHS" },
   { code: "KES", symbol: "KSh", name: "KES" },
   { code: "ZAR", symbol: "R", name: "ZAR" },
@@ -88,12 +82,14 @@ type InvoiceFormData = z.infer<typeof invoiceSchema> & {
 
 export default function NewInvoicePage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [clients, setClients] = useState<any[]>([]);
   const [showNewClient, setShowNewClient] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-
+  //   const [markPaidLoading, setMarkPaidLoading] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
   const supabase = createClient();
 
   const {
@@ -109,7 +105,7 @@ export default function NewInvoicePage() {
       invoiceNumber: "",
       issueDate: new Date().toISOString().split("T")[0],
       dueDate: "",
-      currency: "USD",
+      currency: "NGN",
       isNewClient: false,
       lineItems: [{ description: "", quantity: 1, rate: 0 }],
       taxRate: 0,
@@ -219,12 +215,27 @@ export default function NewInvoicePage() {
         router.push(`/invoices/${result.invoice.id}`);
       }
     } catch (err: any) {
+      setError(err.message || "Failed to create invoice");
       toast.error("Failed to save", err.message || "Failed to create invoice");
     } finally {
       setLoading(false);
     }
   };
+  const fetchProfile = async () => {
+    try {
+      const response = await fetch("/api/settings/profile");
+      const data = await response.json();
+      if (response.ok && data.profile) {
+        setProfile(data.profile);
+      }
+    } catch (err) {
+      console.error("Failed to fetch profile", err);
+    }
+  };
 
+  useEffect(() => {
+    fetchProfile();
+  }, []);
   return (
     <>
       <div className="max-w-7xl mx-auto">
@@ -574,10 +585,32 @@ export default function NewInvoicePage() {
                 {/* Preview Header */}
                 <div className="flex justify-between items-start mb-8">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#10b981]">
-                      Paidly
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">Invoice</p>
+                    {profile?.plan === "pro" && profile?.logo_url ? (
+                      <Image
+                        src={profile.logo_url || ""}
+                        alt="Logo"
+                        width={100}
+                        height={100}
+                        loading="eager"
+                        className="h-12 w-auto mb-1 object-contain"
+                      />
+                    ) : (
+                      <h2
+                        className="text-3xl font-bold mb-1"
+                        style={{
+                          color:
+                            profile?.plan === "pro" && profile?.brand_color
+                              ? profile.brand_color
+                              : "#10b981",
+                        }}
+                      >
+                        {profile?.plan === "pro" &&
+                        (profile?.business_name || profile?.name)
+                          ? profile.business_name || profile.name
+                          : "Costly"}
+                      </h2>
+                    )}
+                    <p className="text-sm text-gray-500">Invoice</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium">

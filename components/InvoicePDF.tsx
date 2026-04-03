@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   Font,
+  Image,
 } from "@react-pdf/renderer";
 
 // Currency symbol mapping
@@ -21,210 +22,221 @@ const getCurrencySymbol = (code: string): string => {
   return map[code] || code + " ";
 };
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 40,
-    fontFamily: "Helvetica",
-    fontSize: 10,
-    color: "#18181b",
-    backgroundColor: "#ffffff",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  companySection: {
-    flex: 1,
-  },
-  companyName: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#10b981",
-    marginBottom: 4,
-  },
-  freelancerName: {
-    fontSize: 11,
-    color: "#52525b",
-    marginBottom: 2,
-  },
-  contactInfo: {
-    fontSize: 9,
-    color: "#71717a",
-  },
-  invoiceSection: {
-    flex: 1,
-    alignItems: "flex-end",
-  },
-  invoiceLabel: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#a1a1aa",
-    marginBottom: 4,
-    letterSpacing: 2,
-  },
-  invoiceNumber: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  dateText: {
-    fontSize: 9,
-    color: "#52525b",
-    marginBottom: 2,
-  },
-  divider: {
-    borderBottomWidth: 2,
-    borderBottomColor: "#e4e4e7",
-    marginBottom: 20,
-  },
-  billToSection: {
-    marginBottom: 24,
-  },
-  billToLabel: {
-    fontSize: 8,
-    fontWeight: "bold",
-    color: "#71717a",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: 4,
-  },
-  clientName: {
-    fontSize: 12,
-    fontWeight: "bold",
-    marginBottom: 2,
-  },
-  clientEmail: {
-    fontSize: 10,
-    color: "#52525b",
-    marginBottom: 2,
-  },
-  clientAddress: {
-    fontSize: 10,
-    color: "#52525b",
-  },
-  table: {
-    marginBottom: 24,
-  },
-  tableHeader: {
-    flexDirection: "row",
-    backgroundColor: "#f4f4f5",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e4e4e7",
-  },
-  headerText: {
-    fontSize: 9,
-    fontWeight: "bold",
-    color: "#52525b",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  tableRow: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f4f4f5",
-  },
-  tableRowAlt: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f4f4f5",
-    backgroundColor: "#fafafa",
-  },
-  colDescription: {
-    flex: 3,
-    fontSize: 10,
-  },
-  colCenter: {
-    flex: 1,
-    fontSize: 10,
-    textAlign: "center",
-  },
-  colRight: {
-    flex: 1,
-    fontSize: 10,
-    textAlign: "right",
-  },
-  colRightBold: {
-    flex: 1,
-    fontSize: 10,
-    fontWeight: "bold",
-    textAlign: "right",
-  },
-  totalsSection: {
-    alignItems: "flex-end",
-    marginBottom: 24,
-  },
-  totalsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 6,
-    width: 280,
-  },
-  totalsLabel: {
-    fontSize: 10,
-    color: "#52525b",
-  },
-  totalsValue: {
-    fontSize: 10,
-  },
-  totalsRowTotal: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingTop: 8,
-    borderTopWidth: 2,
-    borderTopColor: "#e4e4e7",
-    width: 280,
-  },
-  totalsLabelTotal: {
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  totalsValueTotal: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#10b981",
-  },
-  notesSection: {
-    marginTop: 24,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#e4e4e7",
-  },
-  notesLabel: {
-    fontSize: 8,
-    fontWeight: "bold",
-    color: "#71717a",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: 6,
-  },
-  notesText: {
-    fontSize: 9,
-    color: "#52525b",
-    lineHeight: 1.5,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 40,
-    left: 40,
-    right: 40,
-    textAlign: "center",
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#e4e4e7",
-  },
-  footerText: {
-    fontSize: 9,
-    color: "#71717a",
-    fontStyle: "italic",
-  },
-});
+// Helper to convert hex to rgb string for PDF colors
+const hexToPdfColor = (hex: string): string => {
+  return hex; // @react-pdf/renderer accepts hex colors directly
+};
+
+const createStyles = (brandColor: string) =>
+  StyleSheet.create({
+    page: {
+      padding: 40,
+      fontFamily: "Helvetica",
+      fontSize: 10,
+      color: "#18181b",
+      backgroundColor: "#ffffff",
+    },
+    header: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: 20,
+    },
+    companySection: {
+      flex: 1,
+    },
+    logo: {
+      maxWidth: 150,
+      maxHeight: 50,
+      marginBottom: 4,
+    },
+    companyName: {
+      fontSize: 24,
+      fontWeight: "bold",
+      color: hexToPdfColor(brandColor),
+      marginBottom: 4,
+    },
+    freelancerName: {
+      fontSize: 11,
+      color: "#52525b",
+      marginBottom: 2,
+    },
+    contactInfo: {
+      fontSize: 9,
+      color: "#71717a",
+    },
+    invoiceSection: {
+      flex: 1,
+      alignItems: "flex-end",
+    },
+    invoiceLabel: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: "#a1a1aa",
+      marginBottom: 4,
+      letterSpacing: 2,
+    },
+    invoiceNumber: {
+      fontSize: 14,
+      fontWeight: "bold",
+      marginBottom: 4,
+    },
+    dateText: {
+      fontSize: 9,
+      color: "#52525b",
+      marginBottom: 2,
+    },
+    divider: {
+      borderBottomWidth: 2,
+      borderBottomColor: hexToPdfColor(brandColor),
+      marginBottom: 20,
+    },
+    billToSection: {
+      marginBottom: 24,
+    },
+    billToLabel: {
+      fontSize: 8,
+      fontWeight: "bold",
+      color: "#71717a",
+      textTransform: "uppercase",
+      letterSpacing: 1,
+      marginBottom: 4,
+    },
+    clientName: {
+      fontSize: 12,
+      fontWeight: "bold",
+      marginBottom: 2,
+    },
+    clientEmail: {
+      fontSize: 10,
+      color: "#52525b",
+      marginBottom: 2,
+    },
+    clientAddress: {
+      fontSize: 10,
+      color: "#52525b",
+    },
+    table: {
+      marginBottom: 24,
+    },
+    tableHeader: {
+      flexDirection: "row",
+      backgroundColor: "#f4f4f5",
+      paddingVertical: 8,
+      paddingHorizontal: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: "#e4e4e7",
+    },
+    headerText: {
+      fontSize: 9,
+      fontWeight: "bold",
+      color: "#52525b",
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+    },
+    tableRow: {
+      flexDirection: "row",
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: "#f4f4f5",
+    },
+    tableRowAlt: {
+      flexDirection: "row",
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: "#f4f4f5",
+      backgroundColor: "#fafafa",
+    },
+    colDescription: {
+      flex: 3,
+      fontSize: 10,
+    },
+    colCenter: {
+      flex: 1,
+      fontSize: 10,
+      textAlign: "center",
+    },
+    colRight: {
+      flex: 1,
+      fontSize: 10,
+      textAlign: "right",
+    },
+    colRightBold: {
+      flex: 1,
+      fontSize: 10,
+      fontWeight: "bold",
+      textAlign: "right",
+    },
+    totalsSection: {
+      alignItems: "flex-end",
+      marginBottom: 24,
+    },
+    totalsRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: 6,
+      width: 280,
+    },
+    totalsLabel: {
+      fontSize: 10,
+      color: "#52525b",
+    },
+    totalsValue: {
+      fontSize: 10,
+    },
+    totalsRowTotal: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingTop: 8,
+      borderTopWidth: 2,
+      borderTopColor: hexToPdfColor(brandColor),
+      width: 280,
+    },
+    totalsLabelTotal: {
+      fontSize: 12,
+      fontWeight: "bold",
+    },
+    totalsValueTotal: {
+      fontSize: 14,
+      fontWeight: "bold",
+      color: hexToPdfColor(brandColor),
+    },
+    notesSection: {
+      marginTop: 24,
+      paddingTop: 16,
+      borderTopWidth: 1,
+      borderTopColor: "#e4e4e7",
+    },
+    notesLabel: {
+      fontSize: 8,
+      fontWeight: "bold",
+      color: "#71717a",
+      textTransform: "uppercase",
+      letterSpacing: 1,
+      marginBottom: 6,
+    },
+    notesText: {
+      fontSize: 9,
+      color: "#52525b",
+      lineHeight: 1.5,
+    },
+    footer: {
+      position: "absolute",
+      bottom: 40,
+      left: 40,
+      right: 40,
+      textAlign: "center",
+      paddingTop: 16,
+      borderTopWidth: 1,
+      borderTopColor: "#e4e4e7",
+    },
+    footerText: {
+      fontSize: 9,
+      color: "#71717a",
+      fontStyle: "italic",
+    },
+  });
 
 interface InvoicePDFProps {
   invoice: {
@@ -250,6 +262,8 @@ interface InvoicePDFProps {
     email: string;
     phone: string | null;
     address: string | null;
+    logo_url: string | null;
+    brand_color: string;
   };
   lineItems: {
     description: string;
@@ -266,6 +280,8 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({
   lineItems,
 }) => {
   const currencySymbol = getCurrencySymbol(invoice.currency);
+  const brandColor = profile.brand_color || "#10b981";
+  const styles = createStyles(brandColor);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -282,9 +298,13 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.companySection}>
-            <Text style={styles.companyName}>
-              {profile.business_name || profile.name || "Paidly"}
-            </Text>
+            {profile.logo_url ? (
+              <Image style={styles.logo} src={profile.logo_url} />
+            ) : (
+              <Text style={styles.companyName}>
+                {profile.business_name || profile.name || "Paidly"}
+              </Text>
+            )}
             <Text style={styles.freelancerName}>{profile.name}</Text>
             <Text style={styles.contactInfo}>{profile.email}</Text>
             {profile.phone && (

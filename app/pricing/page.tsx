@@ -2,10 +2,45 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, X, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Check, X, ArrowRight, Loader2 } from "lucide-react";
 
 export default function PricingPage() {
+  const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
+  const [upgrading, setUpgrading] = useState(false);
+
+  const handleUpgrade = async () => {
+    setUpgrading(true);
+
+    try {
+      // Check if user is logged in
+      const response = await fetch("/api/billing/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan: isAnnual ? "annual" : "monthly",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Not logged in, redirect to signup
+          router.push("/signup?redirect=/pricing");
+          return;
+        }
+        throw new Error(data.error || "Failed to create checkout");
+      }
+
+      // Redirect to Flutterwave payment page
+      window.location.href = data.payment_link;
+    } catch (err: any) {
+      alert(err.message || "Failed to start upgrade");
+      setUpgrading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0f0f0f]">
@@ -84,6 +119,7 @@ export default function PricingPage() {
             <div className="mb-8">
               <span className="text-5xl font-bold text-white">$0</span>
               <span className="text-[#a1a1aa]">/mo</span>
+              <p className="text-xs text-[#a1a1aa] mt-1">Free forever</p>
             </div>
 
             <ul className="space-y-4 mb-8">
@@ -164,14 +200,18 @@ export default function PricingPage() {
             </p>
             <div className="mb-8">
               <span className="text-5xl font-bold text-white">
-                ${isAnnual ? "6.58" : "9"}
+                {isAnnual ? "₦130,000" : "₦15,000"}
               </span>
               <span className="text-[#a1a1aa]">/mo</span>
               {isAnnual && (
-                <p className="text-xs text-[#a1a1aa] mt-1">
-                  $79 billed annually
-                </p>
+                <>
+                  <span className="text-[#a1a1aa]">/yr</span>
+                  <p className="text-xs text-[#10b981] mt-1">Save ₦50,000</p>
+                </>
               )}
+              <p className="text-xs text-[#a1a1aa] mt-1">
+                ~$9/mo at current exchange rate
+              </p>
             </div>
 
             <ul className="space-y-4 mb-8">
@@ -235,12 +275,22 @@ export default function PricingPage() {
               </li>
             </ul>
 
-            <a
-              href="/pricing?upgrade=true"
-              className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors flex items-center justify-center gap-2"
+            <button
+              onClick={handleUpgrade}
+              disabled={upgrading}
+              className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              Upgrade to Pro <ArrowRight size={18} />
-            </a>
+              {upgrading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  Upgrade to Pro <ArrowRight size={18} />
+                </>
+              )}
+            </button>
           </div>
         </div>
 
@@ -266,8 +316,8 @@ export default function PricingPage() {
                 What payment methods do you accept?
               </h3>
               <p className="text-sm text-[#a1a1aa]">
-                Card payments via Flutterwave. All major cards accepted: Visa,
-                Mastercard, and more.
+                Card payments via Flutterwave in NGN. International cards
+                accepted.
               </p>
             </div>
 

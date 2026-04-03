@@ -51,7 +51,7 @@ export async function GET(
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("name, business_name, email, phone")
+    .select("name, business_name, email, phone, brand_color, logo_url")
     .eq("id", user.id)
     .single();
 
@@ -84,6 +84,8 @@ export async function GET(
         email: profile?.email || "",
         phone: profile?.phone || null,
         address: null,
+        logo_url: profile?.logo_url || null,
+        brand_color: profile?.brand_color || "#10b981",
       },
       lineItems:
         invoice.invoice_items?.map((item: any) => ({
@@ -126,5 +128,8 @@ export async function GET(
       { error: error.message || "Failed to generate PDF" },
       { status: 500 },
     );
+  }
+}
+   );
   }
 }

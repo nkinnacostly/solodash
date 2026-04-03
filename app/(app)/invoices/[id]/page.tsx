@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
+import Image from "next/image";
 
 interface Invoice {
   id: string;
@@ -72,6 +73,7 @@ export default function InvoiceDetailPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [markPaidLoading, setMarkPaidLoading] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
 
   const fetchInvoice = async () => {
     setLoading(true);
@@ -95,7 +97,20 @@ export default function InvoiceDetailPage() {
 
   useEffect(() => {
     fetchInvoice();
+    fetchProfile();
   }, [invoiceId]);
+
+  const fetchProfile = async () => {
+    try {
+      const response = await fetch("/api/settings/profile");
+      const data = await response.json();
+      if (response.ok && data.profile) {
+        setProfile(data.profile);
+      }
+    } catch (err) {
+      console.error("Failed to fetch profile", err);
+    }
+  };
 
   const getCurrencySymbol = (currency: string) => {
     const symbols: Record<string, string> = {
@@ -265,9 +280,31 @@ export default function InvoiceDetailPage() {
             {/* Header */}
             <div className="flex justify-between items-start mb-8">
               <div>
-                <h2 className="text-3xl font-bold text-[#10b981] mb-1">
-                  Paidly
-                </h2>
+                {profile?.plan === "pro" && profile?.logo_url ? (
+                  <Image
+                    src={profile.logo_url || ""}
+                    alt="Logo"
+                    width={100}
+                    height={100}
+                    loading="eager"
+                    className="h-12 w-auto mb-1 object-contain"
+                  />
+                ) : (
+                  <h2
+                    className="text-3xl font-bold mb-1"
+                    style={{
+                      color:
+                        profile?.plan === "pro" && profile?.brand_color
+                          ? profile.brand_color
+                          : "#10b981",
+                    }}
+                  >
+                    {profile?.plan === "pro" &&
+                    (profile?.business_name || profile?.name)
+                      ? profile.business_name || profile.name
+                      : "Costly"}
+                  </h2>
+                )}
                 <p className="text-sm text-gray-500">Invoice</p>
               </div>
               <div className="text-right">

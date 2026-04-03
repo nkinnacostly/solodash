@@ -34,8 +34,9 @@ export async function POST(request: Request) {
     }
 
     // Create Flutterwave payment
-    const amount = plan === "monthly" ? 9 : 79;
-    const txRef = `PAIDLY-SUB-${user.id}-${Date.now()}`;
+    // Using NGN as default currency for Paidly
+    const amount = plan === "monthly" ? 15000 : 130000; // ₦15,000/month or ₦130,000/year
+    const txRef = `PAIDLY-SUB-NGN-${user.id}-${Date.now()}`;
 
     const response = await fetch(
       "https://api.flutterwave.com/v3/payments",
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           tx_ref: txRef,
           amount: amount,
-          currency: "USD",
+          currency: "NGN",
           redirect_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/billing/success`,
           customer: {
             email: profile.email || user.email || "",

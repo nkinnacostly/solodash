@@ -9,6 +9,10 @@ import {
   Loader2,
   CheckCircle,
   AlertTriangle,
+  Palette,
+  Upload,
+  Trash2,
+  Lock,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
@@ -76,7 +80,7 @@ const timezones = [
   "Europe/Paris",
 ];
 
-const currencies = ["USD", "GBP", "EUR", "NGN", "GHS", "KES", "ZAR"];
+const currencies = ["NGN", "USD", "GBP", "EUR", "GHS", "KES", "ZAR"];
 const paymentTerms = ["Due on receipt", "Net 7", "Net 14", "Net 30"];
 
 export default function SettingsPage() {
@@ -106,11 +110,35 @@ export default function SettingsPage() {
   });
   const [changingPassword, setChangingPassword] = useState(false);
 
+  // Branding state
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [removingLogo, setRemovingLogo] = useState(false);
+  const [brandColor, setBrandColor] = useState("#10b981");
+  const [savingColor, setSavingColor] = useState(false);
+
+  const presetColors = [
+    "#10b981", // emerald
+    "#6366f1", // indigo
+    "#f59e0b", // amber
+    "#ef4444", // red
+    "#3b82f6", // blue
+    "#8b5cf6", // purple
+  ];
+
   const supabase = createClient();
 
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  useEffect(() => {
+    if (profile) {
+      if (profile.brand_color) setBrandColor(profile.brand_color);
+      if (profile.logo_url) setLogoPreview(profile.logo_url);
+    }
+  }, [profile]);
 
   const fetchProfile = async () => {
     const { data } = await supabase.auth.getUser();
@@ -301,6 +329,108 @@ export default function SettingsPage() {
     }
   };
 
+  const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("File too large", "Logo must be under 2MB");
+      return;
+    }
+
+    if (!file.type.match(/^image\/(png|jpeg)$/)) {
+      toast.error("Invalid file type", "Only PNG and JPG are allowed");
+      return;
+    }
+
+    setLogoFile(file);
+    setLogoPreview(URL.createObjectURL(file));
+  };
+
+  const handleUploadLogo = async () => {
+    if (!logoFile) return;
+
+    setUploadingLogo(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("logo", logoFile);
+
+      const response = await fetch("/api/settings/branding/logo", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to upload logo");
+      }
+
+      toast.success("Logo uploaded", "Your branding will appear on invoices");
+      setLogoFile(null);
+      fetchProfile();
+    } catch (err: any) {
+      toast.error("Upload failed", err.message);
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
+  const handleRemoveLogo = async () => {
+    setRemovingLogo(true);
+
+    try {
+      const response = await fetch("/api/settings/branding/logo", {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to remove logo");
+      }
+
+      toast.success("Logo removed");
+      setLogoPreview(null);
+      fetchProfile();
+    } catch (err: any) {
+      toast.error("Failed to remove", err.message);
+    } finally {
+      setRemovingLogo(false);
+    }
+  };
+
+  const handleSaveBrandColor = async () => {
+    if (!/^#[0-9A-Fa-f]{6}$/.test(brandColor)) {
+      toast.error("Invalid color", "Must be a valid hex color (#xxxxxx)");
+      return;
+    }
+
+    setSavingColor(true);
+
+    try {
+      const response = await fetch("/api/settings/branding/color", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ brand_color: brandColor }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save brand color");
+      }
+
+      toast.success("Brand color saved");
+      fetchProfile();
+    } catch (err: any) {
+      toast.error("Failed to save", err.message);
+    } finally {
+      setSavingColor(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto animate-pulse space-y-6">
@@ -312,6 +442,7 @@ export default function SettingsPage() {
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
+    { id: "branding", label: "Branding", icon: Palette },
     { id: "payment", label: "Payment", icon: CreditCard },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "account", label: "Account", icon: Shield },
@@ -446,7 +577,7 @@ export default function SettingsPage() {
                 Default Currency
               </label>
               <select
-                value={profile.currency || "USD"}
+                value={profile.currency || "NGN"}
                 onChange={(e) =>
                   setProfile((prev: any) => ({
                     ...prev,
@@ -498,6 +629,173 @@ export default function SettingsPage() {
             )}
           </button>
         </form>
+      )}
+
+      {activeTab === "branding" && (
+        <div className="space-y-6">
+          {profile.plan === "free" ? (
+            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-12 text-center">
+              <Lock size={48} className="text-[#fbbf24] mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-white mb-2">
+                Custom Branding
+              </h2>
+              <p className="text-sm text-[#a1a1aa] mb-6 max-w-md mx-auto">
+                Custom branding is a{" "}
+                <strong className="text-white">Pro feature</strong>. Upgrade to
+                Pro to add your logo and brand colors to all invoices and
+                contracts.
+              </p>
+              <a
+                href="/pricing"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+              >
+                Upgrade to Pro
+              </a>
+            </div>
+          ) : (
+            <>
+              {/* Logo Upload Section */}
+              <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+                <h2 className="text-lg font-semibold text-white">Logo</h2>
+                <p className="text-sm text-[#a1a1aa]">
+                  Upload your business logo to display on invoices and contracts
+                </p>
+
+                {logoPreview && (
+                  <div className="flex items-center gap-4">
+                    <div className="w-[120px] h-[120px] rounded-xl border border-[#27272a] overflow-hidden flex items-center justify-center bg-[#111111]">
+                      <img
+                        src={logoPreview}
+                        alt="Logo"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveLogo}
+                      disabled={removingLogo}
+                      className="px-4 py-2 border border-[#ef4444]/30 text-[#ef4444] text-sm font-medium rounded-lg hover:bg-[#ef4444]/10 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {removingLogo ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <>
+                          <Trash2 size={16} />
+                          Remove Logo
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                <div
+                  className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
+                    logoFile
+                      ? "border-[#10b981] bg-[#10b981]/5"
+                      : "border-[#27272a] hover:border-[#3f3f46]"
+                  }`}
+                >
+                  <input
+                    type="file"
+                    id="logo-upload"
+                    accept="image/png,image/jpeg"
+                    onChange={handleLogoSelect}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="logo-upload"
+                    className="cursor-pointer flex flex-col items-center"
+                  >
+                    <Upload size={32} className="text-[#a1a1aa] mb-3" />
+                    <p className="text-sm text-white font-medium mb-1">
+                      Click to upload or drag and drop
+                    </p>
+                    <p className="text-xs text-[#a1a1aa]">PNG, JPG up to 2MB</p>
+                  </label>
+                </div>
+
+                {logoFile && (
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-[#a1a1aa]">
+                      Selected: {logoFile.name}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleUploadLogo}
+                      disabled={uploadingLogo}
+                      className="px-6 py-2 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {uploadingLogo ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        "Upload Logo"
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Brand Color Section */}
+              <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+                <h2 className="text-lg font-semibold text-white">
+                  Brand Color
+                </h2>
+                <p className="text-sm text-[#a1a1aa]">
+                  Used as accent color on your invoices and contracts
+                </p>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="color"
+                      value={brandColor}
+                      onChange={(e) => setBrandColor(e.target.value)}
+                      className="w-16 h-16 rounded-lg cursor-pointer border-0 bg-transparent"
+                    />
+                    <div>
+                      <p className="text-sm text-white font-mono">
+                        {brandColor}
+                      </p>
+                      <p className="text-xs text-[#a1a1aa]">Current color</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-[#a1a1aa] mb-2">Preset colors</p>
+                    <div className="flex gap-2">
+                      {presetColors.map((color) => (
+                        <button
+                          key={color}
+                          type="button"
+                          onClick={() => setBrandColor(color)}
+                          className={`w-10 h-10 rounded-lg border-2 transition-transform hover:scale-110 ${
+                            brandColor === color
+                              ? "border-white"
+                              : "border-transparent"
+                          }`}
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleSaveBrandColor}
+                    disabled={savingColor}
+                    className="px-6 py-2 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center gap-2"
+                  >
+                    {savingColor ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      "Save Brand Color"
+                    )}
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       )}
 
       {activeTab === "payment" && (

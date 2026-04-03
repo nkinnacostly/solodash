@@ -337,12 +337,12 @@ export default function EarningsPage() {
                   <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
                     Total
                   </th>
-                  <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left py-3 text-sm font-medium text-muted">
                     % of Total
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#27272a]">
+              <tbody className="divide-y divide-border">
                 {earnings?.by_client.map((client, idx) => (
                   <tr key={idx}>
                     <td className="py-3 text-sm text-white">
