@@ -54,7 +54,7 @@ export async function GET(
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("name, business_name")
+      .select("name, business_name, flutterwave_subaccount_id, plan")
       .eq("id", invoice.user_id)
       .single();
 
@@ -79,6 +79,8 @@ export async function GET(
         name: profile?.name || "",
         business_name: profile?.business_name || null,
       },
+      subaccount_id: profile?.flutterwave_subaccount_id || null,
+      is_pro: profile?.plan === "pro",
       line_items: (lineItems || [])
         .sort((a: any, b: any) => a.sort_order - b.sort_order)
         .map((item: any) => ({

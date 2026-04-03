@@ -207,3 +207,27 @@
 - Supabase join results are objects NOT arrays — access directly:
   invoice.clients?.name (correct)
   invoice.clients?.[0]?.name (wrong)
+
+## Platform Fee / Revenue Model
+
+- Free plan: Paidly takes 5% split on every payment
+  split_type: 'percentage', split_value: 0.05
+- Pro plan: freelancer keeps 100%
+  split_type: 'percentage', split_value: 0
+- Split is handled via Flutterwave subaccount split_value
+- Always check profile.plan before setting split_value
+- This logic lives in app/api/settings/connect-bank/route.ts
+  AND must be re-evaluated on every payment in case user
+  upgraded/downgraded since connecting their bank
+- split_value on subaccount is set at creation time —
+  to handle plan changes, pass split dynamically on the
+  payment checkout config instead of relying on subaccount default
+
+## Flutterwave Test Mode Limitations
+
+- Account resolve API only accepts bank code '044' (Access Bank)
+  in test mode
+- Subaccount creation works with test mode but limited banks
+- Switch to live keys (FLW_SECRET_KEY, FLW_PUBLIC_KEY) before
+  launch for full bank support
+- Test bank verification using Access Bank (044) accounts only

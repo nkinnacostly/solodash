@@ -3,6 +3,7 @@ import { render } from "@react-email/render";
 import { InvoiceEmail } from "@/emails/InvoiceEmail";
 import { PaymentReceiptEmail } from "@/emails/PaymentReceiptEmail";
 import { OverdueReminderEmail } from "@/emails/OverdueReminderEmail";
+import { ContractEmail } from "@/emails/ContractEmail";
 import React from "react";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -93,6 +94,34 @@ export async function sendInvoiceReminder(params: {
     from: `${params.businessName || params.freelancerName} via Paidly <${fromEmail}>`,
     to: params.to,
     subject: `Reminder: Invoice ${params.invoiceNumber} is ${params.daysOverdue} days overdue`,
+    html,
+  });
+}
+
+export async function sendContractEmail(params: {
+  to: string;
+  clientName: string;
+  freelancerName: string;
+  businessName: string | null;
+  contractTitle: string;
+  signingLink: string;
+  contractType: string;
+}): Promise<void> {
+  const html = await render(
+    React.createElement(ContractEmail, {
+      clientName: params.clientName,
+      freelancerName: params.freelancerName,
+      businessName: params.businessName,
+      contractTitle: params.contractTitle,
+      signingLink: params.signingLink,
+      contractType: params.contractType,
+    }) as any,
+  );
+
+  await resend.emails.send({
+    from: `${params.businessName || params.freelancerName} via Paidly <${fromEmail}>`,
+    to: params.to,
+    subject: `Contract for Signature: ${params.contractTitle}`,
     html,
   });
 }

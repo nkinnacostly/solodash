@@ -23,6 +23,8 @@ interface Invoice {
     name: string;
     business_name: string | null;
   };
+  subaccount_id: string | null;
+  is_pro: boolean;
   line_items: {
     description: string;
     quantity: number;
@@ -83,6 +85,14 @@ export default function PayInvoicePage() {
       amount: invoice.total,
       currency: invoice.currency,
       payment_options: "card",
+      subaccounts: invoice.subaccount_id
+        ? [
+            {
+              id: invoice.subaccount_id,
+              transaction_split_ratio: invoice.is_pro ? 100 : 95,
+            },
+          ]
+        : [],
       customer: {
         email: invoice.client.email,
         name: invoice.client.name,
@@ -372,21 +382,43 @@ export default function PayInvoicePage() {
                   </h2>
                 </div>
 
-                <button
-                  onClick={handlePayment}
-                  disabled={paymentProcessing}
-                  className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {paymentProcessing ? (
-                    <Loader2 size={20} className="animate-spin" />
-                  ) : (
-                    <>Pay with Card →</>
-                  )}
-                </button>
+                {invoice.subaccount_id ? (
+                  <>
+                    <button
+                      onClick={handlePayment}
+                      disabled={paymentProcessing}
+                      className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {paymentProcessing ? (
+                        <Loader2 size={20} className="animate-spin" />
+                      ) : (
+                        <>Pay with Card →</>
+                      )}
+                    </button>
 
-                {paymentError && (
-                  <div className="mt-4 bg-[#3d0a0a] border border-[#ef4444]/30 rounded-lg p-3">
-                    <p className="text-sm text-[#ef4444]">{paymentError}</p>
+                    {paymentError && (
+                      <div className="mt-4 bg-[#3d0a0a] border border-[#ef4444]/30 rounded-lg p-3">
+                        <p className="text-sm text-[#ef4444]">{paymentError}</p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="bg-[#3d2e00] border border-[#fbbf24]/30 rounded-lg p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <XCircle
+                        size={20}
+                        className="text-[#fbbf24] mt-0.5 flex-shrink-0"
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-[#fbbf24] mb-1">
+                          Payment unavailable
+                        </p>
+                        <p className="text-xs text-[#a1a1aa]">
+                          The freelancer hasn't connected their bank account
+                          yet. Please contact them directly.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
 
