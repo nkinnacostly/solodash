@@ -129,6 +129,13 @@
 - Client components use SWR or React state for dynamic data
 - NEVER use var — use const and let only
 
+## Build Rule (MANDATORY)
+
+- ALWAYS run `pnpm build` after completing any feature implementation
+- This ensures the app compiles without errors before considering work done
+- Fix any build errors immediately before moving to the next task
+- Never leave broken code in the codebase
+
 ## Features (MVP scope — do not add extras)
 
 1. Invoicing — create, send, track, collect payment

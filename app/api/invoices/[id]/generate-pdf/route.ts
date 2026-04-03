@@ -130,6 +130,4 @@ export async function GET(
     );
   }
 }
-   );
-  }
-}
+ 
