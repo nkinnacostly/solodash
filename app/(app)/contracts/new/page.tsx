@@ -34,8 +34,6 @@ const contractSchema = z.object({
   governingLaw: z.string().default("Nigeria"),
 });
 
-type ContractFormData = z.infer<typeof contractSchema>;
-
 export default function NewContractPage() {
   const router = useRouter();
   const { toast } = useToast();
@@ -168,7 +166,6 @@ export default function NewContractPage() {
   };
 
   const watchIsNewClient = watch("isNewClient");
-  const watchClientId = watch("clientId");
 
   return (
     <>

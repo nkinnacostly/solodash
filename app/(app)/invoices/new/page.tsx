@@ -71,15 +71,6 @@ const invoiceSchema = z
     path: ["dueDate"],
   });
 
-type InvoiceFormData = z.infer<typeof invoiceSchema> & {
-  lineItems: {
-    description: string;
-    quantity: number;
-    rate: number;
-  }[];
-  taxRate: number;
-};
-
 export default function NewInvoicePage() {
   const router = useRouter();
   const { toast } = useToast();
@@ -88,7 +79,6 @@ export default function NewInvoicePage() {
   const [clients, setClients] = useState<any[]>([]);
   const [showNewClient, setShowNewClient] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  //   const [markPaidLoading, setMarkPaidLoading] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const supabase = createClient();
 
