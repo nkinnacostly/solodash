@@ -186,27 +186,24 @@ function OnboardingContent() {
     setLoading(true);
 
     try {
-      const supabase = createClient();
-
-      // UPSERT profile
-      const { error } = await supabase.from("profiles").upsert(
-        {
-          id: user.id,
+      const response = await fetch("/api/onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           name: formData.name,
-          business_name: formData.businessName || null,
+          businessName: formData.businessName,
           country: formData.country,
           timezone: formData.timezone,
           currency: formData.currency,
-          default_payment_terms: parseInt(formData.defaultPaymentTerms),
-          onboarding_completed: true,
-          updated_at: new Date().toISOString(),
-        },
-        {
-          onConflict: "id",
-        },
-      );
+          defaultPaymentTerms: formData.defaultPaymentTerms,
+        }),
+      });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save your profile");
+      }
 
       router.push("/dashboard");
       router.refresh();
