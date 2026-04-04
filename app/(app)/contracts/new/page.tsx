@@ -11,6 +11,7 @@ import { contractTemplates, ContractTemplate } from "@/lib/contract-templates";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
 import UpgradeModal from "@/components/UpgradeModal";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 const contractSchema = z.object({
   clientId: z.string().optional(),
@@ -258,41 +259,29 @@ export default function NewContractPage() {
                 <label className="block text-sm font-medium text-white mb-2">
                   Client
                 </label>
-                <div className="flex items-center gap-4 mb-3">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      checked={!watchIsNewClient}
-                      onChange={() => setValue("isNewClient", false)}
-                      className="text-[#10b981]"
-                    />
-                    <span className="text-sm text-white">Existing Client</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      checked={watchIsNewClient}
-                      onChange={() => setValue("isNewClient", true)}
-                      className="text-[#10b981]"
-                    />
-                    <span className="text-sm text-white">New Client</span>
-                  </label>
-                </div>
+                <SearchableSelect
+                  options={clients.map((client) => ({
+                    value: client.id,
+                    label: client.name,
+                    sublabel: client.email,
+                  }))}
+                  value={watchIsNewClient ? "" : watch("clientId") || ""}
+                  onChange={(selectedValue) => {
+                    setValue("clientId", selectedValue);
+                    setValue("isNewClient", false);
+                  }}
+                  placeholder="Search or select a client..."
+                  searchPlaceholder="Search clients..."
+                  allowCustom={true}
+                  onAddNew={() => {
+                    setValue("isNewClient", true);
+                  }}
+                  error={errors.clientId?.message as string | undefined}
+                />
 
-                {!watchIsNewClient ? (
-                  <select
-                    {...register("clientId")}
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
-                  >
-                    <option value="">Select a client</option>
-                    {clients.map((client) => (
-                      <option key={client.id} value={client.id}>
-                        {client.name} ({client.email})
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <div className="space-y-3">
+                {/* New Client Fields */}
+                {watchIsNewClient && (
+                  <div className="space-y-3 mt-3">
                     <input
                       {...register("clientName")}
                       placeholder="Client name"
@@ -310,11 +299,6 @@ export default function NewContractPage() {
                       className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
                     />
                   </div>
-                )}
-                {errors.clientId && !watchIsNewClient && (
-                  <p className="text-sm text-[#ef4444] mt-1">
-                    {errors.clientId.message}
-                  </p>
                 )}
               </div>
 

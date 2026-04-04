@@ -9,6 +9,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
 import UpgradeModal from "@/components/UpgradeModal";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 import { ArrowLeft, Plus, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 
@@ -252,31 +253,32 @@ export default function NewInvoicePage() {
             <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">Client</h2>
 
-              {/* Client Selection */}
+              {/* Client Selection with Searchable Dropdown */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-white mb-2">
                   Select Client
                 </label>
-                <select
-                  {...register("clientId")}
-                  onChange={(e) => {
-                    if (e.target.value === "new") {
-                      setValue("isNewClient", true);
-                    } else {
-                      setValue("isNewClient", false);
-                      setValue("clientId", e.target.value);
-                    }
+                <SearchableSelect
+                  options={clients.map((client) => ({
+                    value: client.id,
+                    label: client.name,
+                    sublabel: client.email,
+                  }))}
+                  value={showNewClient ? "" : formValues.clientId || ""}
+                  onChange={(selectedValue) => {
+                    setValue("clientId", selectedValue);
+                    setValue("isNewClient", false);
+                    setShowNewClient(false);
                   }}
-                  className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
-                >
-                  <option value="">Choose a client...</option>
-                  {clients.map((client) => (
-                    <option key={client.id} value={client.id}>
-                      {client.name} ({client.email})
-                    </option>
-                  ))}
-                  <option value="new">+ Add new client</option>
-                </select>
+                  placeholder="Search or select a client..."
+                  searchPlaceholder="Search clients..."
+                  allowCustom={true}
+                  onAddNew={() => {
+                    setValue("isNewClient", true);
+                    setShowNewClient(true);
+                  }}
+                  error={errors.clientId?.message as string | undefined}
+                />
               </div>
 
               {/* New Client Fields */}
