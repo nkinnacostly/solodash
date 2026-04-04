@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
@@ -104,6 +104,7 @@ function OnboardingContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
+  const hasShownVerifiedToast = useRef(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -164,7 +165,8 @@ function OnboardingContent() {
   // Show success toast if email was just verified
   useEffect(() => {
     const verified = searchParams.get("verified");
-    if (verified === "true") {
+    if (verified === "true" && !hasShownVerifiedToast.current) {
+      hasShownVerifiedToast.current = true;
       toast.success("Email verified! Let's set up your account 🎉");
     }
   }, [searchParams, toast]);
@@ -181,11 +183,45 @@ function OnboardingContent() {
     }
   };
 
+  // const handleSubmit = async () => {
+  //   setError(null);
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await fetch("/api/onboarding", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         name: formData.name,
+  //         businessName: formData.businessName,
+  //         country: formData.country,
+  //         timezone: formData.timezone,
+  //         currency: formData.currency,
+  //         defaultPaymentTerms: formData.defaultPaymentTerms,
+  //       }),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (!response.ok) {
+  //       throw new Error(data.error || "Failed to save your profile");
+  //     }
+
+  //     router.push("/dashboard");
+  //     router.refresh();
+  //   } catch (err: any) {
+  //     setError(err.message || "Failed to save your profile. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleSubmit = async () => {
     setError(null);
     setLoading(true);
 
     try {
+      console.log("Submitting onboarding data:", formData);
+
       const response = await fetch("/api/onboarding", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -199,7 +235,9 @@ function OnboardingContent() {
         }),
       });
 
+      console.log("Response status:", response.status);
       const data = await response.json();
+      console.log("Response data:", data);
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to save your profile");
@@ -208,12 +246,12 @@ function OnboardingContent() {
       router.push("/dashboard");
       router.refresh();
     } catch (err: any) {
+      console.error("Onboarding error:", err);
       setError(err.message || "Failed to save your profile. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
   const updateField = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,

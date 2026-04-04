@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -44,6 +44,7 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
+  const hasShownErrorToast = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -59,7 +60,8 @@ function LoginContent() {
   // Show error toast if verification failed
   useEffect(() => {
     const error = searchParams.get("error");
-    if (error === "verification_failed") {
+    if (error === "verification_failed" && !hasShownErrorToast.current) {
+      hasShownErrorToast.current = true;
       toast.error("Email verification failed. Please try again.");
     }
   }, [searchParams, toast]);
