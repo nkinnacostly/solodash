@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
@@ -108,6 +108,10 @@ export default function NewInvoicePage() {
     name: "lineItems",
   });
 
+  // Use useWatch for real-time reactivity
+  const watchedLineItems = useWatch({ control, name: "lineItems" });
+  const watchedTaxRate = useWatch({ control, name: "taxRate" });
+  const watchedCurrency = useWatch({ control, name: "currency" });
   const formValues = watch();
 
   // Fetch clients and generate invoice number
@@ -144,22 +148,23 @@ export default function NewInvoicePage() {
     setShowNewClient(isNewClient);
   }, [isNewClient]);
 
-  // Calculate totals
+  // Calculate totals using useWatch for real-time updates
   const subtotal = useMemo(() => {
-    return (
-      formValues.lineItems?.reduce(
-        (sum, item) => sum + Number(item.quantity) * Number(item.rate),
-        0,
-      ) || 0
-    );
-  }, [formValues.lineItems]);
+    return (watchedLineItems || []).reduce((sum: number, item: any) => {
+      const qty = parseFloat(String(item?.quantity)) || 0;
+      const rate = parseFloat(String(item?.rate)) || 0;
+      return sum + qty * rate;
+    }, 0);
+  }, [watchedLineItems]);
 
-  const taxRate = Number(formValues.taxRate) || 0;
+  const taxRate = parseFloat(String(watchedTaxRate)) || 0;
   const taxAmount = subtotal * (taxRate / 100);
   const total = subtotal + taxAmount;
 
   const selectedCurrency =
-    currencies.find((c) => c.code === formValues.currency) || currencies[0];
+    currencies.find(
+      (c) => c.code === (watchedCurrency || formValues.currency),
+    ) || currencies[0];
 
   const onSubmit = async (status: "draft" | "sent") => {
     setError(null);
@@ -441,10 +446,16 @@ export default function NewInvoicePage() {
 
                     <div className="col-span-2 flex items-center px-3 py-2 bg-[#0f0f0f] rounded-lg text-sm text-[#a1a1aa]">
                       {selectedCurrency.symbol}
-                      {(
-                        Number(formValues.lineItems?.[index]?.quantity || 0) *
-                        Number(formValues.lineItems?.[index]?.rate || 0)
-                      ).toFixed(2)}
+                      {(() => {
+                        const qty =
+                          parseFloat(
+                            String(watchedLineItems?.[index]?.quantity),
+                          ) || 0;
+                        const rate =
+                          parseFloat(String(watchedLineItems?.[index]?.rate)) ||
+                          0;
+                        return (qty * rate).toFixed(2);
+                      })()}
                     </div>
 
                     <div className="col-span-1 flex items-center justify-center">

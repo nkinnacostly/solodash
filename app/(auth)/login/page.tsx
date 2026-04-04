@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/components/ui/Toast";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
@@ -17,7 +18,32 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="text-3xl font-bold text-[#10b981]">Paidly</div>
+          </div>
+          <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-8 text-center">
+            <Loader2
+              size={32}
+              className="text-[#10b981] animate-spin mx-auto mb-4"
+            />
+            <p className="text-white">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { toast } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +55,14 @@ export default function LoginPage() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+
+  // Show error toast if verification failed
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (error === "verification_failed") {
+      toast.error("Email verification failed. Please try again.");
+    }
+  }, [searchParams, toast]);
 
   const onSubmit = async (data: LoginFormData) => {
     setError(null);

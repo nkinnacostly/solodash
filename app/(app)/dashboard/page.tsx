@@ -131,9 +131,11 @@ export default async function DashboardPage() {
         <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-5">
           <p className="text-sm text-[#a1a1aa] mb-2">This month</p>
           <p className="text-2xl font-bold text-white">
-            {monthlyTotal > 0
-              ? `${currencySymbol}${monthlyTotal.toLocaleString()}`
-              : "—"}
+            {currencySymbol}
+            {monthlyTotal.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </p>
         </div>
 
@@ -141,7 +143,7 @@ export default async function DashboardPage() {
         <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-5">
           <p className="text-sm text-[#a1a1aa] mb-2">Outstanding</p>
           <p className="text-2xl font-bold text-white">
-            {outstandingCount && outstandingCount > 0 ? outstandingCount : "—"}
+            {outstandingCount || 0}
           </p>
         </div>
 
@@ -149,9 +151,11 @@ export default async function DashboardPage() {
         <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-5">
           <p className="text-sm text-[#a1a1aa] mb-2">Paid this year</p>
           <p className="text-2xl font-bold text-white">
-            {yearlyTotal > 0
-              ? `${currencySymbol}${yearlyTotal.toLocaleString()}`
-              : "—"}
+            {currencySymbol}
+            {yearlyTotal.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </p>
         </div>
 
@@ -159,7 +163,7 @@ export default async function DashboardPage() {
         <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-5">
           <p className="text-sm text-[#a1a1aa] mb-2">Active contracts</p>
           <p className="text-2xl font-bold text-white">
-            {activeContracts && activeContracts > 0 ? activeContracts : "—"}
+            {activeContracts || 0}
           </p>
         </div>
       </div>

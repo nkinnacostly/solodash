@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/components/ui/Toast";
 import { Loader2, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
 const countries = [
@@ -73,7 +74,32 @@ const paymentTerms = [
 ];
 
 export default function OnboardingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-lg">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-[#10b981]">Paidly</h1>
+          </div>
+          <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-8 text-center">
+            <Loader2
+              size={32}
+              className="text-[#10b981] animate-spin mx-auto mb-4"
+            />
+            <p className="text-white">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <OnboardingContent />
+    </Suspense>
+  );
+}
+
+function OnboardingContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -134,6 +160,14 @@ export default function OnboardingPage() {
 
     fetchUser();
   }, [router]);
+
+  // Show success toast if email was just verified
+  useEffect(() => {
+    const verified = searchParams.get("verified");
+    if (verified === "true") {
+      toast.success("Email verified! Let's set up your account 🎉");
+    }
+  }, [searchParams, toast]);
 
   const handleNext = () => {
     if (step < 3) {
