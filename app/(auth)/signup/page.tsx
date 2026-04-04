@@ -48,6 +48,7 @@ export default function SignupPage() {
         email: data.email,
         password: data.password,
         options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
           data: {
             name: data.name,
           },
@@ -56,7 +57,6 @@ export default function SignupPage() {
 
       if (error) throw error;
 
-      // Redirect to verify email page with email as query param
       router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
     } catch (err: any) {
       setError(err.message || "Failed to create account. Please try again.");
@@ -74,7 +74,7 @@ export default function SignupPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/onboarding`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
         },
       });
 
@@ -87,14 +87,12 @@ export default function SignupPage() {
 
   return (
     <div className="w-full max-w-md">
-      {/* Logo */}
       <div className="text-center mb-8">
         <Link href="/" className="text-3xl font-bold text-[#10b981]">
           Paidly
         </Link>
       </div>
 
-      {/* Card */}
       <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-8">
         <h1 className="text-2xl font-bold text-white mb-2">
           Create your account
@@ -103,7 +101,6 @@ export default function SignupPage() {
           Start managing your freelance business
         </p>
 
-        {/* Google OAuth */}
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
@@ -130,7 +127,6 @@ export default function SignupPage() {
           Continue with Google
         </button>
 
-        {/* Divider */}
         <div className="relative mb-6">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-[#27272a]" />
@@ -140,9 +136,7 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {/* Email Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Full Name */}
           <div>
             <label
               htmlFor="name"
@@ -165,7 +159,6 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* Email */}
           <div>
             <label
               htmlFor="email"
@@ -188,7 +181,6 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* Password */}
           <div>
             <label
               htmlFor="password"
@@ -221,7 +213,6 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* Confirm Password */}
           <div>
             <label
               htmlFor="confirmPassword"
@@ -254,14 +245,12 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="p-3 bg-[#ef4444]/10 border border-[#ef4444]/30 rounded-lg">
               <p className="text-sm text-[#ef4444]">{error}</p>
             </div>
           )}
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -278,7 +267,6 @@ export default function SignupPage() {
           </button>
         </form>
 
-        {/* Log In Link */}
         <p className="mt-6 text-center text-sm text-[#a1a1aa]">
           Already have an account?{" "}
           <Link
