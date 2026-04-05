@@ -29,6 +29,7 @@ interface Contract {
   sent_at: string | null;
   client_signed_at: string | null;
   client_signature_url: string | null;
+  signature_signed_url: string | null;
   created_at: string;
   clients: {
     name: string;
@@ -329,9 +330,9 @@ export default function ContractDetailPage() {
                           justifyContent: "space-between",
                         }}
                       >
-                        {contract.client_signature_url ? (
+                        {contract.signature_signed_url ? (
                           <img
-                            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/documents/${contract.client_signature_url}`}
+                            src={contract.signature_signed_url}
                             alt="Client signature"
                             style={{
                               maxHeight: "50px",
@@ -339,7 +340,7 @@ export default function ContractDetailPage() {
                               objectFit: "contain",
                             }}
                           />
-                        ) : (
+                        ) : contract.client_signed_at ? (
                           <p
                             style={{
                               fontSize: "20px",
@@ -349,7 +350,7 @@ export default function ContractDetailPage() {
                           >
                             {contract.clients?.name}
                           </p>
-                        )}
+                        ) : null}
                         <span
                           style={{
                             fontSize: "11px",

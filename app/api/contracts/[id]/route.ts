@@ -40,7 +40,31 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ contract });
+    // Fetch profile separately (never join to profiles)
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("name, business_name")
+      .eq("id", user.id)
+      .single();
+
+    // Generate signed URL for signature if it exists
+    let signature_signed_url: string | null = null;
+    
+    if (contract.client_signature_url) {
+      const { data: signedUrlData } = await supabase.storage
+        .from('documents')
+        .createSignedUrl(contract.client_signature_url, 3600);
+      
+      signature_signed_url = signedUrlData?.signedUrl || null;
+    }
+
+    return NextResponse.json({ 
+      contract: { 
+        ...contract, 
+        profiles: profile,
+        signature_signed_url
+      } 
+    });
   } catch (error: any) {
     console.error("Error fetching contract:", error);
     return NextResponse.json(
