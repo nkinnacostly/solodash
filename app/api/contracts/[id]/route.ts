@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const supabase = await createClient();
@@ -27,7 +28,7 @@ export async function GET(
           email,
           address
         )
-      `
+      `,
       )
       .eq("id", id)
       .eq("user_id", user.id)
@@ -36,7 +37,7 @@ export async function GET(
     if (error || !contract) {
       return NextResponse.json(
         { error: "Contract not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -49,34 +50,48 @@ export async function GET(
 
     // Generate signed URL for signature if it exists
     let signature_signed_url: string | null = null;
-    
+
+    // if (contract.client_signature_url) {
+    //   const { data: signedUrlData } = await supabase.storage
+    //     .from('documents')
+    //     .createSignedUrl(contract.client_signature_url, 3600);
+
+    //   signature_signed_url = signedUrlData?.signedUrl || null;
+    // }
+
     if (contract.client_signature_url) {
-      const { data: signedUrlData } = await supabase.storage
-        .from('documents')
-        .createSignedUrl(contract.client_signature_url, 3600);
-      
+      // Use service role client to bypass RLS for signed URL generation
+      const adminSupabase = createPublicClient();
+      const { data: signedUrlData, error: signedUrlError } =
+        await adminSupabase.storage
+          .from("documents")
+          .createSignedUrl(contract.client_signature_url, 3600);
+
+      // console.log("Signed URL data:", signedUrlData);
+      // console.log("Signed URL error:", signedUrlError);
+
       signature_signed_url = signedUrlData?.signedUrl || null;
     }
 
-    return NextResponse.json({ 
-      contract: { 
-        ...contract, 
+    return NextResponse.json({
+      contract: {
+        ...contract,
         profiles: profile,
-        signature_signed_url
-      } 
+        signature_signed_url,
+      },
     });
   } catch (error: any) {
     console.error("Error fetching contract:", error);
     return NextResponse.json(
       { error: error.message || "Failed to fetch contract" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const supabase = await createClient();
@@ -101,7 +116,7 @@ export async function DELETE(
     if (fetchError || !contract) {
       return NextResponse.json(
         { error: "Contract not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -109,7 +124,7 @@ export async function DELETE(
     if (contract.status !== "draft") {
       return NextResponse.json(
         { error: "Only draft contracts can be deleted" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -126,7 +141,7 @@ export async function DELETE(
     console.error("Error deleting contract:", error);
     return NextResponse.json(
       { error: error.message || "Failed to delete contract" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

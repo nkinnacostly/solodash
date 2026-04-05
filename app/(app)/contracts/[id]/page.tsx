@@ -36,6 +36,10 @@ interface Contract {
     email: string;
     address: string | null;
   } | null;
+  profiles: {
+    name: string;
+    business_name: string;
+  } | null;
 }
 
 const statusColors: Record<string, string> = {
@@ -292,8 +296,8 @@ export default function ContractDetailPage() {
                         }}
                       >
                         <p style={{ fontSize: "14px", color: "#374151" }}>
-                          Signed by {contract.clients?.name || "Contractor"} via
-                          Paidly
+                          Signed by {contract.profiles?.name || "Contractor"}{" "}
+                          via Paidly
                         </p>
                       </div>
                       <p
