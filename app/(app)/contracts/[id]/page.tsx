@@ -303,7 +303,12 @@ export default function ContractDetailPage() {
                           marginTop: "8px",
                         }}
                       >
-                        Awaiting freelancer signature
+                        {contract.status === "signed" ||
+                        contract.status === "active"
+                          ? "Both parties have signed"
+                          : contract.status === "completed"
+                            ? "Contract completed"
+                            : "Awaiting your signature"}
                       </p>
                     </div>
 
