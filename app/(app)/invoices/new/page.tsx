@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
 import UpgradeModal from "@/components/UpgradeModal";
 import SearchableSelect from "@/components/ui/SearchableSelect";
+import DatePicker from "@/components/ui/DatePicker";
 import { ArrowLeft, Plus, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 
@@ -373,24 +374,21 @@ export default function NewInvoicePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Issue Date
-                  </label>
-                  <input
-                    {...register("issueDate")}
-                    type="date"
-                    className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                  <DatePicker
+                    label="Issue Date"
+                    value={formValues.issueDate}
+                    onChange={(value) => setValue("issueDate", value)}
+                    placeholder="Select issue date..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Due Date
-                  </label>
-                  <input
-                    {...register("dueDate")}
-                    type="date"
-                    className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                  <DatePicker
+                    label="Due Date"
+                    value={formValues.dueDate}
+                    onChange={(value) => setValue("dueDate", value)}
+                    placeholder="Select due date..."
+                    minDate={formValues.issueDate}
                   />
                   {errors.dueDate && (
                     <p className="mt-1 text-sm text-[#ef4444]">

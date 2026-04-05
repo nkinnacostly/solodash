@@ -12,6 +12,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
 import UpgradeModal from "@/components/UpgradeModal";
 import SearchableSelect from "@/components/ui/SearchableSelect";
+import DatePicker from "@/components/ui/DatePicker";
 
 const contractSchema = z.object({
   clientId: z.string().optional(),
@@ -341,13 +342,11 @@ export default function NewContractPage() {
               {/* Dates */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Start Date
-                  </label>
-                  <input
-                    {...register("startDate")}
-                    type="date"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                  <DatePicker
+                    label="Start Date"
+                    value={watch("startDate")}
+                    onChange={(value) => setValue("startDate", value)}
+                    placeholder="Select start date..."
                   />
                   {errors.startDate && (
                     <p className="text-sm text-[#ef4444] mt-1">
@@ -357,13 +356,12 @@ export default function NewContractPage() {
                 </div>
                 {selectedTemplate.type === "project" && (
                   <div>
-                    <label className="block text-sm font-medium text-white mb-2">
-                      End Date
-                    </label>
-                    <input
-                      {...register("endDate")}
-                      type="date"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                    <DatePicker
+                      label="End Date"
+                      value={watch("endDate") || ""}
+                      onChange={(value) => setValue("endDate", value)}
+                      placeholder="Select end date..."
+                      minDate={watch("startDate")}
                     />
                   </div>
                 )}
