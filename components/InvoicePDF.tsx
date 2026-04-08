@@ -236,6 +236,24 @@ const createStyles = (brandColor: string) =>
       color: "#71717a",
       fontStyle: "italic",
     },
+    watermark: {
+      position: "absolute",
+      top: 280,
+      left: 120,
+      opacity: 0.08,
+      transform: "rotate(-20deg)",
+    },
+    watermarkImage: {
+      width: 220,
+      height: 220,
+      objectFit: "contain" as const,
+    },
+    watermarkText: {
+      fontSize: 48,
+      fontWeight: "bold",
+      color: hexToPdfColor(brandColor),
+      textAlign: "center",
+    },
   });
 
 interface InvoicePDFProps {
@@ -264,6 +282,7 @@ interface InvoicePDFProps {
     address: string | null;
     logo_url: string | null;
     brand_color: string;
+    plan: string;
   };
   lineItems: {
     description: string;
@@ -295,6 +314,19 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        {/* Watermark — only for Pro users */}
+        {profile.plan === "pro" && (
+          <View style={styles.watermark}>
+            {profile.logo_url ? (
+              <Image style={styles.watermarkImage} src={profile.logo_url} />
+            ) : (
+              <Text style={styles.watermarkText}>
+                {profile.business_name || "Paidly"}
+              </Text>
+            )}
+          </View>
+        )}
+
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.companySection}>

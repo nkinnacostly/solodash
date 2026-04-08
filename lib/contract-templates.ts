@@ -58,7 +58,8 @@ export const contractTemplates: ContractTemplate[] = [
     ],
     content: (fields: ContractFields) => {
       const symbol = getCurrencySymbol(fields.currency);
-      const totalEstimate = (fields.hourlyRate || 0) * (fields.estimatedHours || 0);
+      const totalEstimate =
+        (fields.hourlyRate || 0) * (fields.estimatedHours || 0);
 
       return `
         <div style="font-family: system-ui, -apple-system, sans-serif; color: #1a1a1a; line-height: 1.6;">
@@ -105,22 +106,7 @@ export const contractTemplates: ContractTemplate[] = [
           <p>This Agreement shall be governed by and construed in accordance with the laws of <strong>${fields.governingLaw}</strong>. Any disputes arising under this Agreement shall be resolved through good faith negotiation before pursuing legal action.</p>
 
           <div style="margin-top: 48px; padding-top: 24px; border-top: 2px solid #e5e7eb;">
-            <p style="font-size: 14px; color: #6b7280; margin-bottom: 32px;">By signing below, both parties acknowledge that they have read, understood, and agree to the terms of this Agreement.</p>
-            
-            <div style="display: flex; justify-content: space-between; margin-top: 48px;">
-              <div style="flex: 1;">
-                <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 8px;"></div>
-                <p style="font-size: 14px;"><strong>${fields.businessName || fields.freelancerName}</strong></p>
-                <p style="font-size: 12px; color: #6b7280;">Contractor</p>
-                <p style="font-size: 12px; color: #6b7280;">Date: _________________</p>
-              </div>
-              <div style="flex: 1; margin-left: 48px;">
-                <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 8px;"></div>
-                <p style="font-size: 14px;"><strong>${fields.clientName}</strong></p>
-                <p style="font-size: 12px; color: #6b7280;">Client</p>
-                <p style="font-size: 12px; color: #6b7280;">Date: _________________</p>
-              </div>
-            </div>
+            <p style="font-size: 14px; color: #6b7280;">By signing this Agreement electronically, both parties acknowledge that they have read, understood, and agree to the terms herein.</p>
           </div>
         </div>
       `;
@@ -148,7 +134,11 @@ export const contractTemplates: ContractTemplate[] = [
     content: (fields: ContractFields) => {
       const symbol = getCurrencySymbol(fields.currency);
       const endDateStr = fields.endDate
-        ? new Date(fields.endDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+        ? new Date(fields.endDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
         : "to be agreed";
 
       return `
@@ -216,22 +206,7 @@ export const contractTemplates: ContractTemplate[] = [
           <p>This Agreement shall be governed by the laws of <strong>${fields.governingLaw}</strong>. Disputes shall first be addressed through good faith negotiation, then mediation if necessary, before pursuing legal action.</p>
 
           <div style="margin-top: 48px; padding-top: 24px; border-top: 2px solid #e5e7eb;">
-            <p style="font-size: 14px; color: #6b7280; margin-bottom: 32px;">By signing below, both parties acknowledge that they have read, understood, and agree to be bound by the terms of this Agreement.</p>
-            
-            <div style="display: flex; justify-content: space-between; margin-top: 48px;">
-              <div style="flex: 1;">
-                <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 8px;"></div>
-                <p style="font-size: 14px;"><strong>${fields.businessName || fields.freelancerName}</strong></p>
-                <p style="font-size: 12px; color: #6b7280;">Contractor</p>
-                <p style="font-size: 12px; color: #6b7280;">Date: _________________</p>
-              </div>
-              <div style="flex: 1; margin-left: 48px;">
-                <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 8px;"></div>
-                <p style="font-size: 14px;"><strong>${fields.clientName}</strong></p>
-                <p style="font-size: 12px; color: #6b7280;">Client</p>
-                <p style="font-size: 12px; color: #6b7280;">Date: _________________</p>
-              </div>
-            </div>
+            <p style="font-size: 14px; color: #6b7280;">By signing this Agreement electronically, both parties acknowledge that they have read, understood, and agree to be bound by the terms herein.</p>
           </div>
         </div>
       `;
@@ -318,22 +293,7 @@ export const contractTemplates: ContractTemplate[] = [
           <p>This Agreement shall be governed by the laws of <strong>${fields.governingLaw}</strong>. Any disputes shall first be addressed through good faith negotiation, then mediation, before pursuing legal action.</p>
 
           <div style="margin-top: 48px; padding-top: 24px; border-top: 2px solid #e5e7eb;">
-            <p style="font-size: 14px; color: #6b7280; margin-bottom: 32px;">By signing below, both parties acknowledge that they have read, understood, and agree to be bound by the terms of this Retainer Agreement.</p>
-            
-            <div style="display: flex; justify-content: space-between; margin-top: 48px;">
-              <div style="flex: 1;">
-                <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 8px;"></div>
-                <p style="font-size: 14px;"><strong>${fields.businessName || fields.freelancerName}</strong></p>
-                <p style="font-size: 12px; color: #6b7280;">Contractor</p>
-                <p style="font-size: 12px; color: #6b7280;">Date: _________________</p>
-              </div>
-              <div style="flex: 1; margin-left: 48px;">
-                <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 8px;"></div>
-                <p style="font-size: 14px;"><strong>${fields.clientName}</strong></p>
-                <p style="font-size: 12px; color: #6b7280;">Client</p>
-                <p style="font-size: 12px; color: #6b7280;">Date: _________________</p>
-              </div>
-            </div>
+            <p style="font-size: 14px; color: #6b7280;">By signing this Agreement electronically, both parties acknowledge that they have read, understood, and agree to be bound by the terms of this Retainer Agreement.</p>
           </div>
         </div>
       `;

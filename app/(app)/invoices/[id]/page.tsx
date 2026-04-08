@@ -261,9 +261,52 @@ export default function InvoiceDetailPage() {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* LEFT COLUMN: Invoice Preview */}
         <div className="lg:col-span-2">
-          <div className="relative bg-white text-gray-900 rounded-xl p-8 shadow-2xl">
+          <div className="relative bg-white text-gray-900 rounded-xl p-8 shadow-2xl overflow-hidden">
+            {/* Watermark — Pro only */}
+            {profile?.plan === "pro" && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%) rotate(-20deg)",
+                  opacity: 0.08,
+                  pointerEvents: "none",
+                  zIndex: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                {profile.logo_url ? (
+                  <img
+                    src={profile.logo_url}
+                    alt="watermark"
+                    style={{
+                      width: 220,
+                      height: 220,
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <p
+                    style={{
+                      fontSize: "64px",
+                      fontWeight: "bold",
+                      color: profile.brand_color || "#10b981",
+                      whiteSpace: "nowrap",
+                      margin: 0,
+                    }}
+                  >
+                    {profile.business_name || "Paidly"}
+                  </p>
+                )}
+              </div>
+            )}
+
             {/* Status Badge Overlay */}
-            <div className="absolute top-6 right-6">
+            <div className="absolute top-6 right-6" style={{ zIndex: 2 }}>
               <span
                 className={`px-4 py-2 text-sm font-bold rounded-full ${
                   statusColors[isOverdue ? "overdue" : invoice.status] ||
@@ -278,7 +321,10 @@ export default function InvoiceDetailPage() {
             </div>
 
             {/* Header */}
-            <div className="flex justify-between items-start mb-8">
+            <div
+              className="flex justify-between items-start mb-8"
+              style={{ position: "relative", zIndex: 1 }}
+            >
               <div>
                 {profile?.plan === "pro" && profile?.logo_url ? (
                   <Image

@@ -19,7 +19,8 @@ export async function GET(
 
   const { data: invoice, error: fetchError } = await supabase
     .from("invoices")
-    .select(`
+    .select(
+      `
       *,
       invoice_items (
         id,
@@ -34,7 +35,8 @@ export async function GET(
         email,
         address
       )
-    `)
+    `,
+    )
     .eq("id", id)
     .eq("user_id", user.id)
     .single();
@@ -51,7 +53,7 @@ export async function GET(
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("name, business_name, email, phone, brand_color, logo_url")
+    .select("name, business_name, email, phone, brand_color, logo_url, plan")
     .eq("id", user.id)
     .single();
 
@@ -86,6 +88,7 @@ export async function GET(
         address: null,
         logo_url: profile?.logo_url || null,
         brand_color: profile?.brand_color || "#10b981",
+        plan: profile?.plan || "free",
       },
       lineItems:
         invoice.invoice_items?.map((item: any) => ({
@@ -130,4 +133,3 @@ export async function GET(
     );
   }
 }
- 

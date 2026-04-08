@@ -67,10 +67,22 @@ export async function GET(
           .from("documents")
           .createSignedUrl(contract.client_signature_url, 3600);
 
-      // console.log("Signed URL data:", signedUrlData);
-      // console.log("Signed URL error:", signedUrlError);
-
       signature_signed_url = signedUrlData?.signedUrl || null;
+    }
+
+    // Generate signed URL for freelancer signature if it exists
+    let freelancer_signature_signed_url: string | null = null;
+
+    if (
+      contract.freelancer_signature_url &&
+      !contract.freelancer_signature_url.startsWith("typed:")
+    ) {
+      const adminSupabase = createPublicClient();
+      const { data: signedUrlData } = await adminSupabase.storage
+        .from("documents")
+        .createSignedUrl(contract.freelancer_signature_url, 3600);
+
+      freelancer_signature_signed_url = signedUrlData?.signedUrl || null;
     }
 
     return NextResponse.json({
@@ -78,6 +90,7 @@ export async function GET(
         ...contract,
         profiles: profile,
         signature_signed_url,
+        freelancer_signature_signed_url,
       },
     });
   } catch (error: any) {
