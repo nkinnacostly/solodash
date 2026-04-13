@@ -100,6 +100,9 @@ export default function SettingsPage() {
   const [connectingBank, setConnectingBank] = useState(false);
   const [disconnectingBank, setDisconnectingBank] = useState(false);
   const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
+  const [showDeleteAccountDialog, setShowDeleteAccountDialog] =
+    useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const [accountVerified, setAccountVerified] = useState(false);
 
   // Password change state
@@ -239,6 +242,23 @@ export default function SettingsPage() {
     } finally {
       setDisconnectingBank(false);
       setShowDisconnectDialog(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeletingAccount(true);
+    try {
+      const response = await fetch("/api/account/delete", {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+
+      await supabase.auth.signOut();
+      window.location.href = "/";
+    } catch (err: any) {
+      toast.error("Failed to delete account", err.message);
+      setDeletingAccount(false);
     }
   };
 
@@ -1115,6 +1135,7 @@ export default function SettingsPage() {
             </p>
             <button
               type="button"
+              onClick={() => setShowDeleteAccountDialog(true)}
               className="px-6 py-2 border border-[#ef4444] text-[#ef4444] font-medium rounded-lg hover:bg-[#ef4444]/10 transition-colors"
             >
               Delete Account
@@ -1134,6 +1155,18 @@ export default function SettingsPage() {
         cancelLabel="Keep Connected"
         variant="danger"
         loading={disconnectingBank}
+      />
+
+      <ConfirmDialog
+        isOpen={showDeleteAccountDialog}
+        onClose={() => setShowDeleteAccountDialog(false)}
+        onConfirm={handleDeleteAccount}
+        title="Delete your account"
+        message="This will permanently delete your account, all your invoices, contracts, earnings data, and uploaded files. This action cannot be undone."
+        confirmLabel="Yes, delete my account"
+        cancelLabel="Keep my account"
+        variant="danger"
+        loading={deletingAccount}
       />
     </div>
   );
