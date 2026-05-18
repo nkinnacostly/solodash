@@ -29,7 +29,14 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
+
+  // OAuth misconfiguration: code must be exchanged on /auth/callback, not the landing page
+  if (searchParams.has('code') && pathname !== '/auth/callback') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/auth/callback'
+    return NextResponse.redirect(url)
+  }
 
   const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms', '/verify-email', '/auth/callback']
   const isPublicRoute = publicRoutes.includes(pathname)
