@@ -15,6 +15,16 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const txRef = body.data?.tx_ref ?? "";
+    // Debug logging
+    console.log(
+      "Webhook received:",
+      JSON.stringify({
+        event: body.event,
+        tx_ref: txRef,
+        meta: body.data?.meta,
+        platform: body.data?.meta?.platform,
+      }),
+    );
 
     // ── Route based on tx_ref prefix ──────────────────────────
     // PAIDLY- → this app (invoice payments)
