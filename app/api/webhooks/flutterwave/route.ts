@@ -22,7 +22,10 @@ export async function POST(request: Request) {
     if (txRef.startsWith("topup_")) {
       return forwardToSmsApp(body);
     }
-
+    // TRADEPAD- → Tradepad app
+    if (txRef.startsWith("TRADEPAD-")) {
+      return forwardToTradepad(body, request.headers.get("verif-hash") ?? "");
+    }
     // ── Existing Paidly logic below (unchanged) ───────────────
     if (body.event === "charge.completed") {
       const supabase = await createClient();
@@ -169,5 +172,34 @@ async function forwardToSmsApp(payload: unknown) {
   }
 
   // Always return 200 to Flutterwave regardless
+  return NextResponse.json({ status: "success" });
+}
+
+// ── Forward to Tradepad Edge Function ─────────────────────────
+async function forwardToTradepad(payload: unknown, verifHash: string) {
+  try {
+    const tradepadWebhookUrl =
+      "https://xytaymcapbmswbsrntdm.supabase.co/functions/v1/flutterwave-webhook";
+
+    const res = await fetch(tradepadWebhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "verif-hash": verifHash,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error(
+        "Failed to forward to Tradepad:",
+        res.status,
+        await res.text(),
+      );
+    }
+  } catch (err) {
+    console.error("Error forwarding to Tradepad:", err);
+  }
+
   return NextResponse.json({ status: "success" });
 }
