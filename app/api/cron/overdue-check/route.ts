@@ -1,21 +1,22 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { sendInvoiceReminder } from "@/lib/email";
+import { generatePublicUrl } from "@/lib/link-tokens";
 
 export async function GET(request: NextRequest) {
-  // Verify cron secret
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = await createClient();
+  const adminSupabase = createPublicClient();
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   try {
     const today = new Date().toISOString().split("T")[0];
 
-    // Fetch all overdue invoices (sent or viewed, past due date)
-    const { data: overdueInvoices, error } = await supabase
+    const { data: overdueInvoices, error } = await adminSupabase
       .from("invoices")
       .select(`
         *,
@@ -31,33 +32,27 @@ export async function GET(request: NextRequest) {
 
     let processed = 0;
 
-    // Process each overdue invoice
     for (const invoice of overdueInvoices || []) {
       try {
-        // Update status to overdue
-        await supabase
+        await adminSupabase
           .from("invoices")
           .update({ status: "overdue", updated_at: new Date().toISOString() })
           .eq("id", invoice.id);
 
-        // Fetch profile separately
-        const { data: profile } = await supabase
+        const { data: profile } = await adminSupabase
           .from("profiles")
           .select("name, business_name, email")
           .eq("id", invoice.user_id)
           .single();
 
-        // Calculate days overdue
         const dueDate = new Date(invoice.due_date);
         const todayDate = new Date();
         const daysOverdue = Math.floor(
-          (todayDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)
+          (todayDate.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24),
         );
 
-        // Generate payment link
-        const paymentLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pay/${invoice.id}`;
+        const paymentLink = generatePublicUrl(baseUrl, "pay", invoice.id);
 
-        // Format amount
         const currencySymbols: Record<string, string> = {
           USD: "$",
           GBP: "£",
@@ -71,14 +66,12 @@ export async function GET(request: NextRequest) {
           currencySymbols[invoice.currency] || invoice.currency + " ";
         const formattedAmount = `${symbol}${Number(invoice.total).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-        // Format due date
         const formattedDueDate = dueDate.toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
         });
 
-        // Send reminder email
         if (invoice.clients?.email) {
           await sendInvoiceReminder({
             to: invoice.clients.email,
@@ -96,19 +89,19 @@ export async function GET(request: NextRequest) {
         processed++;
       } catch (invoiceError) {
         console.error(
-          `Failed to process invoice ${invoice.id}:`,
-          invoiceError
+          `[cron/overdue-check] Failed to process invoice ${invoice.id}:`,
+          invoiceError,
         );
-        // Continue with next invoice
       }
     }
 
     return NextResponse.json({ processed });
-  } catch (error: any) {
-    console.error("Overdue check cron error:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to process overdue invoices" },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to process overdue invoices";
+    console.error("[cron/overdue-check] error:", error);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

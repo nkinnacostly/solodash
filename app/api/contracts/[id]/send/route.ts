@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendContractEmail } from "@/lib/email";
+import { generatePublicUrl } from "@/lib/link-tokens";
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const supabase = await createClient();
@@ -18,7 +19,6 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Fetch contract with client
     const { data: contract, error: contractError } = await supabase
       .from("contracts")
       .select(
@@ -28,7 +28,7 @@ export async function POST(
           name,
           email
         )
-      `
+      `,
       )
       .eq("id", id)
       .eq("user_id", user.id)
@@ -37,11 +37,10 @@ export async function POST(
     if (contractError || !contract) {
       return NextResponse.json(
         { error: "Contract not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
-    // Fetch profile separately
     const { data: profile } = await supabase
       .from("profiles")
       .select("name, business_name, email")
@@ -50,7 +49,6 @@ export async function POST(
 
     const now = new Date().toISOString();
 
-    // Update contract to sent
     const { error: updateError } = await supabase
       .from("contracts")
       .update({ status: "sent", sent_at: now, updated_at: now })
@@ -58,10 +56,10 @@ export async function POST(
 
     if (updateError) throw updateError;
 
-    // Generate signing link
-    const signingLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/sign/${id}`;
+    const baseUrl =
+      process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const signingLink = generatePublicUrl(baseUrl, "sign", id);
 
-    // Send email to client (non-blocking)
     try {
       if (contract.clients?.email) {
         await sendContractEmail({
@@ -76,15 +74,13 @@ export async function POST(
       }
     } catch (emailError) {
       console.error("Failed to send contract email:", emailError);
-      // Don't block - contract is still marked as sent
     }
 
     return NextResponse.json({ success: true, signingLink });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to send contract";
     console.error("Error sending contract:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to send contract" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

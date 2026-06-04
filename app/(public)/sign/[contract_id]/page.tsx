@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import { Loader2, CheckCircle, PenTool, Type, X } from "lucide-react";
 
 interface Contract {
@@ -21,8 +21,24 @@ interface Contract {
 }
 
 export default function SignContractPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+          <Loader2 size={32} className="text-[#10b981] animate-spin" />
+        </div>
+      }
+    >
+      <SignContractContent />
+    </Suspense>
+  );
+}
+
+function SignContractContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const contractId = params.contract_id as string;
+  const linkToken = searchParams.get("token");
 
   const [contract, setContract] = useState<Contract | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,9 +60,16 @@ export default function SignContractPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
+  const signApiUrl = () => {
+    const qs = linkToken
+      ? `?token=${encodeURIComponent(linkToken)}`
+      : "";
+    return `/api/sign/${contractId}${qs}`;
+  };
+
   useEffect(() => {
     fetchContract();
-  }, [contractId]);
+  }, [contractId, linkToken]);
 
   useEffect(() => {
     if (activeTab === "draw") {
@@ -56,7 +79,7 @@ export default function SignContractPage() {
 
   const fetchContract = async () => {
     try {
-      const response = await fetch(`/api/sign/${contractId}`);
+      const response = await fetch(signApiUrl());
       const data = await response.json();
 
       if (!response.ok) {
@@ -154,7 +177,7 @@ export default function SignContractPage() {
     setSigningLoading(true);
 
     try {
-      const response = await fetch(`/api/sign/${contractId}`, {
+      const response = await fetch(signApiUrl(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -162,6 +185,7 @@ export default function SignContractPage() {
           signature_type: activeTab === "draw" ? "drawn" : "typed",
           signer_name: signerName,
           signer_email: signerEmail,
+          ...(linkToken ? { token: linkToken } : {}),
         }),
       });
 

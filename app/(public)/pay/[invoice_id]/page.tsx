@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import { Loader2, CheckCircle, XCircle, ArrowLeft } from "lucide-react";
 import Script from "next/script";
 
@@ -40,8 +40,24 @@ declare global {
 }
 
 export default function PayInvoicePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+          <Loader2 size={32} className="text-[#10b981] animate-spin" />
+        </div>
+      }
+    >
+      <PayInvoiceContent />
+    </Suspense>
+  );
+}
+
+function PayInvoiceContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const invoiceId = params.invoice_id as string;
+  const linkToken = searchParams.get("token");
 
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,11 +68,18 @@ export default function PayInvoicePage() {
 
   useEffect(() => {
     fetchInvoice();
-  }, [invoiceId]);
+  }, [invoiceId, linkToken]);
+
+  const payApiUrl = () => {
+    const qs = linkToken
+      ? `?token=${encodeURIComponent(linkToken)}`
+      : "";
+    return `/api/pay/${invoiceId}${qs}`;
+  };
 
   const fetchInvoice = async () => {
     try {
-      const response = await fetch(`/api/pay/${invoiceId}`);
+      const response = await fetch(payApiUrl());
       const data = await response.json();
 
       if (!response.ok) {

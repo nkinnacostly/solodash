@@ -12,6 +12,7 @@ import {
   Download,
   Copy,
   CheckCircle,
+  ExternalLink,
 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import SignatureModal from "@/components/SignatureModal";
@@ -74,6 +75,8 @@ export default function ContractDetailPage() {
   const [showSignModal, setShowSignModal] = useState(false);
   const [signingLoading, setSigningLoading] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [publicUrl, setPublicUrl] = useState<string | null>(null);
+  const [publicLinkLoading, setPublicLinkLoading] = useState(false);
 
   useEffect(() => {
     fetchContract();
@@ -84,6 +87,24 @@ export default function ContractDetailPage() {
       })
       .catch(() => {});
   }, [contractId]);
+
+  useEffect(() => {
+    if (!contract?.id || contract.status !== "sent") {
+      setPublicUrl(null);
+      setPublicLinkLoading(false);
+      return;
+    }
+
+    setPublicLinkLoading(true);
+    fetch(`/api/contracts/${contract.id}/public-link`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.url) setPublicUrl(data.url);
+        else setPublicUrl(null);
+      })
+      .catch(() => setPublicUrl(null))
+      .finally(() => setPublicLinkLoading(false));
+  }, [contract?.id, contract?.status]);
 
   const fetchContract = async () => {
     try {
@@ -179,9 +200,14 @@ export default function ContractDetailPage() {
   };
 
   const handleCopySigningLink = () => {
-    const signingLink = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/sign/${contractId}`;
-    navigator.clipboard.writeText(signingLink);
+    if (!publicUrl) return;
+    navigator.clipboard.writeText(publicUrl);
     toast.success("Copied", "Signing link copied to clipboard");
+  };
+
+  const handlePreviewSignPage = () => {
+    if (!publicUrl) return;
+    window.open(publicUrl, "_blank", "noopener,noreferrer");
   };
 
   const formatDate = (dateStr: string) => {
@@ -694,8 +720,22 @@ export default function ContractDetailPage() {
                   </button>
                   <button
                     type="button"
+                    onClick={handlePreviewSignPage}
+                    disabled={publicLinkLoading || !publicUrl}
+                    className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {publicLinkLoading ? (
+                      <Loader2 size={20} className="animate-spin" />
+                    ) : (
+                      <ExternalLink size={18} />
+                    )}
+                    Preview Sign Page
+                  </button>
+                  <button
+                    type="button"
                     onClick={handleCopySigningLink}
-                    className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                    disabled={publicLinkLoading || !publicUrl}
+                    className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Copy size={18} />
                     Copy Signing Link

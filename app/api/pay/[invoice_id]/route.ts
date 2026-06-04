@@ -1,13 +1,29 @@
 import { NextResponse } from "next/server";
-import {  createPublicClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/server";
+import { verifyLinkToken } from "@/lib/link-tokens";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ invoice_id: string }> }
+  { params }: { params: Promise<{ invoice_id: string }> },
 ) {
   try {
-    const supabase = createPublicClient();
     const { invoice_id } = await params;
+    const url = new URL(request.url);
+    const token = url.searchParams.get("token");
+
+    if (token) {
+      const payload = verifyLinkToken(token, invoice_id, "pay");
+      if (!payload) {
+        return NextResponse.json(
+          { error: "Invalid or expired payment link" },
+          { status: 401 },
+        );
+      }
+    } else {
+      console.warn(`[pay] Untokenized access for invoice ${invoice_id}`);
+    }
+
+    const supabase = createPublicClient();
 
     const { data: invoice, error } = await supabase
       .from("invoices")
@@ -39,17 +55,11 @@ export async function GET(
       .single();
 
     if (error || !invoice) {
-      return NextResponse.json(
-        { error: "Invoice not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
 
     if (invoice.status === "cancelled") {
-      return NextResponse.json(
-        { error: "Invoice not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
 
     const { data: profile } = await supabase
@@ -58,8 +68,17 @@ export async function GET(
       .eq("id", invoice.user_id)
       .single();
 
-    const client = invoice.clients as any;
-    const lineItems = invoice.invoice_items as any[];
+    const client = invoice.clients as {
+      name?: string;
+      email?: string;
+    } | null;
+    const lineItems = invoice.invoice_items as {
+      description: string;
+      quantity: number;
+      rate: number;
+      amount: number;
+      sort_order: number;
+    }[];
 
     const safeInvoice = {
       invoice_number: invoice.invoice_number,
@@ -82,8 +101,8 @@ export async function GET(
       subaccount_id: profile?.flutterwave_subaccount_id || null,
       is_pro: profile?.plan === "pro",
       line_items: (lineItems || [])
-        .sort((a: any, b: any) => a.sort_order - b.sort_order)
-        .map((item: any) => ({
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((item) => ({
           description: item.description,
           quantity: item.quantity,
           rate: item.rate,
@@ -96,7 +115,7 @@ export async function GET(
     console.error("Error fetching invoice:", error);
     return NextResponse.json(
       { error: "Failed to fetch invoice" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

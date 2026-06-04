@@ -1,13 +1,38 @@
 import { NextResponse } from "next/server";
 import { createPublicClient } from "@/lib/supabase/server";
+import { verifyLinkToken } from "@/lib/link-tokens";
+
+function validateSignToken(
+  token: string | null,
+  contract_id: string,
+): NextResponse | null {
+  if (token) {
+    const payload = verifyLinkToken(token, contract_id, "sign");
+    if (!payload) {
+      return NextResponse.json(
+        { error: "Invalid or expired sign link" },
+        { status: 401 },
+      );
+    }
+  } else {
+    console.warn(`[sign] Untokenized access for contract ${contract_id}`);
+  }
+  return null;
+}
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ contract_id: string }> }
+  { params }: { params: Promise<{ contract_id: string }> },
 ) {
   try {
-    const supabase = createPublicClient();
     const { contract_id } = await params;
+    const url = new URL(request.url);
+    const token = url.searchParams.get("token");
+
+    const tokenError = validateSignToken(token, contract_id);
+    if (tokenError) return tokenError;
+
+    const supabase = createPublicClient();
 
     const { data: contract, error } = await supabase
       .from("contracts")
@@ -30,14 +55,14 @@ export async function GET(
     if (error || !contract) {
       return NextResponse.json(
         { error: "Contract not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (contract.status === "cancelled") {
       return NextResponse.json(
         { error: "Contract not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -47,7 +72,10 @@ export async function GET(
       .eq("id", contract.user_id)
       .single();
 
-    const client = contract.clients as any;
+    const client = contract.clients as {
+      name?: string;
+      email?: string;
+    } | null;
 
     const safeContract = {
       id: contract.id,
@@ -70,53 +98,60 @@ export async function GET(
     console.error("Error fetching contract:", error);
     return NextResponse.json(
       { error: "Failed to fetch contract" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ contract_id: string }> }
+  { params }: { params: Promise<{ contract_id: string }> },
 ) {
   try {
-    const supabase = createPublicClient();
     const { contract_id } = await params;
+    const url = new URL(request.url);
 
     const body = await request.json();
+    const token = body.token || url.searchParams.get("token");
+
+    const tokenError = validateSignToken(token, contract_id);
+    if (tokenError) return tokenError;
+
     const { signature_data, signature_type, signer_name, signer_email } = body;
 
     if (!signature_data || !signature_type || !signer_name || !signer_email) {
       return NextResponse.json(
         { error: "All fields are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
+    const supabase = createPublicClient();
+
     const { data: contract, error: fetchError } = await supabase
       .from("contracts")
-      .select("status, client_signed_at, user_id")
+      .select("status, client_signed_at, user_id, title")
       .eq("id", contract_id)
       .single();
 
     if (fetchError || !contract) {
       return NextResponse.json(
         { error: "Contract not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (contract.status !== "sent") {
       return NextResponse.json(
         { error: "This contract cannot be signed" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (contract.client_signed_at) {
       return NextResponse.json(
         { error: "This contract has already been signed" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -125,19 +160,18 @@ export async function POST(
 
     if (signature_type === "drawn" && signature_data.startsWith("data:image")) {
       try {
-        const base64Data = signature_data.replace(/^data:image\/\w+;base64,/, "");
+        const base64Data = signature_data.replace(
+          /^data:image\/\w+;base64,/,
+          "",
+        );
         const buffer = Buffer.from(base64Data, "base64");
 
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from("documents")
-          .upload(
-            `contracts/${contract_id}/client-signature.png`,
-            buffer,
-            {
-              contentType: "image/png",
-              upsert: true,
-            }
-          );
+          .upload(`contracts/${contract_id}/client-signature.png`, buffer, {
+            contentType: "image/png",
+            upsert: true,
+          });
 
         if (uploadError) {
           console.error("Storage upload error:", uploadError);
@@ -162,7 +196,7 @@ export async function POST(
       console.error("Contract update error:", updateError);
       return NextResponse.json(
         { error: "Failed to sign contract" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -179,7 +213,7 @@ export async function POST(
           to: profile.email,
           freelancerName: profile.name || "Freelancer",
           clientName: signer_name,
-          contractTitle: "Contract",
+          contractTitle: contract.title || "Contract",
           contractLink: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/contracts/${contract_id}`,
         });
       }
@@ -188,11 +222,10 @@ export async function POST(
     }
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to sign contract";
     console.error("Sign contract error:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to sign contract" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

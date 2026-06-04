@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Download,
   Copy,
+  ExternalLink,
 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
@@ -74,6 +75,8 @@ export default function InvoiceDetailPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [markPaidLoading, setMarkPaidLoading] = useState(false);
   const [profile, setProfile] = useState<any>(null);
+  const [publicUrl, setPublicUrl] = useState<string | null>(null);
+  const [publicLinkLoading, setPublicLinkLoading] = useState(false);
 
   const fetchInvoice = async () => {
     setLoading(true);
@@ -99,6 +102,29 @@ export default function InvoiceDetailPage() {
     fetchInvoice();
     fetchProfile();
   }, [invoiceId]);
+
+  useEffect(() => {
+    if (!invoice?.id) return;
+
+    const shareable =
+      invoice.status !== "draft" && invoice.status !== "cancelled";
+
+    if (!shareable) {
+      setPublicUrl(null);
+      setPublicLinkLoading(false);
+      return;
+    }
+
+    setPublicLinkLoading(true);
+    fetch(`/api/invoices/${invoice.id}/public-link`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.url) setPublicUrl(data.url);
+        else setPublicUrl(null);
+      })
+      .catch(() => setPublicUrl(null))
+      .finally(() => setPublicLinkLoading(false));
+  }, [invoice?.id, invoice?.status]);
 
   const fetchProfile = async () => {
     try {
@@ -195,17 +221,24 @@ export default function InvoiceDetailPage() {
   };
 
   const handleCopyPaymentLink = () => {
-    const paymentLink = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/pay/${invoiceId}`;
-    navigator.clipboard.writeText(paymentLink);
+    if (!publicUrl) return;
+    navigator.clipboard.writeText(publicUrl);
     toast.success("Copied", "Payment link copied to clipboard");
   };
 
+  const handlePreviewPaymentPage = () => {
+    if (!publicUrl) return;
+    window.open(publicUrl, "_blank", "noopener,noreferrer");
+  };
+
   const handleShareWhatsApp = () => {
-    const paymentLink = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/pay/${invoiceId}`;
-    const message = `Hi! Here's your invoice ${invoice?.invoice_number}. You can view and pay here: ${paymentLink}`;
+    if (!publicUrl) return;
+    const message = `Hi! Here's your invoice ${invoice?.invoice_number}. You can view and pay here: ${publicUrl}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   };
+
+  const shareActionsDisabled = publicLinkLoading || !publicUrl;
 
   if (loading) {
     return (
@@ -608,8 +641,22 @@ export default function InvoiceDetailPage() {
                     </button>
                     <button
                       type="button"
+                      onClick={handlePreviewPaymentPage}
+                      disabled={shareActionsDisabled}
+                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {publicLinkLoading ? (
+                        <Loader2 size={18} className="animate-spin" />
+                      ) : (
+                        <ExternalLink size={18} />
+                      )}
+                      Preview Payment Page
+                    </button>
+                    <button
+                      type="button"
                       onClick={handleCopyPaymentLink}
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                      disabled={shareActionsDisabled}
+                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       <Link2 size={18} />
                       Copy Payment Link
@@ -617,7 +664,8 @@ export default function InvoiceDetailPage() {
                     <button
                       type="button"
                       onClick={handleShareWhatsApp}
-                      className="w-full py-3 border border-[#25D366] text-[#25D366] font-medium rounded-lg hover:bg-[#25D366]/10 transition-colors flex items-center justify-center gap-2"
+                      disabled={shareActionsDisabled}
+                      className="w-full py-3 border border-[#25D366] text-[#25D366] font-medium rounded-lg hover:bg-[#25D366]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       <MessageCircle size={18} />
                       Share on WhatsApp
