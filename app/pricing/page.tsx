@@ -19,7 +19,7 @@ export default function PricingPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          plan: isAnnual ? "annual" : "monthly",
+          billing_cycle: isAnnual ? "annual" : "monthly",
         }),
       });
 

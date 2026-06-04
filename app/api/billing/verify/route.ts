@@ -1,24 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient, createPublicClient } from "@/lib/supabase/server";
 
-const TX_REF_PREFIX = "PAIDLY-SUB-NGN-";
-
-/** Parse user id from PAIDLY-SUB-NGN-{userId}-{timestamp} */
-function parseUserIdFromTxRef(txRef: string): string | null {
-  if (!txRef.startsWith(TX_REF_PREFIX)) {
-    return null;
-  }
-  const rest = txRef.slice(TX_REF_PREFIX.length);
-  const lastDash = rest.lastIndexOf("-");
-  if (lastDash <= 0) {
-    return null;
-  }
-  const timestamp = rest.slice(lastDash + 1);
-  if (!/^\d+$/.test(timestamp)) {
-    return null;
-  }
-  return rest.slice(0, lastDash);
-}
+const MONTHLY_PRICE = 15000;
+const ANNUAL_PRICE = 130000;
 
 export async function POST(request: Request) {
   try {
@@ -31,111 +15,184 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { tx_ref } = body;
+    const { transaction_id, tx_ref } = await request.json();
 
-    if (!tx_ref) {
+    if (!transaction_id || !tx_ref) {
       return NextResponse.json(
-        { error: "Transaction reference is required" },
+        { error: "Missing transaction_id or tx_ref" },
         { status: 400 },
       );
     }
 
-    const txRefUserId = parseUserIdFromTxRef(tx_ref);
-    if (!txRefUserId || txRefUserId !== user.id) {
+    // 1. Validate tx_ref format and ownership
+    // Format: PAIDLY-SUB-NGN-{userId}-{timestamp}
+    const txRefPattern = /^PAIDLY-SUB-NGN-([0-9a-f-]+)-\d+$/i;
+    const match = tx_ref.match(txRefPattern);
+
+    if (!match) {
       return NextResponse.json(
-        { error: "Invalid transaction reference for this account" },
+        { error: "Invalid tx_ref format" },
         { status: 400 },
       );
     }
 
-    // Verify payment with Flutterwave
-    const response = await fetch(
-      `https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${encodeURIComponent(tx_ref)}`,
+    const txRefUserId = match[1];
+    if (txRefUserId !== user.id) {
+      console.warn(
+        `[billing/verify] tx_ref user mismatch: ${txRefUserId} vs ${user.id}`,
+      );
+      return NextResponse.json(
+        { error: "Transaction does not belong to this user" },
+        { status: 403 },
+      );
+    }
+
+    // 2. Idempotency check — has this transaction already been processed?
+    const adminSupabase = createPublicClient();
+
+    const { data: existingPayment } = await adminSupabase
+      .from("payments")
+      .select("id, status")
+      .eq("provider_payment_id", String(transaction_id))
+      .maybeSingle();
+
+    if (existingPayment) {
+      const { data: profile } = await adminSupabase
+        .from("profiles")
+        .select("plan")
+        .eq("id", user.id)
+        .single();
+
+      return NextResponse.json({
+        success: true,
+        plan: profile?.plan || "free",
+        idempotent: true,
+      });
+    }
+
+    // 3. Verify transaction with Flutterwave API
+    const verificationResponse = await fetch(
+      `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`,
       {
         method: "GET",
         headers: {
           Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
+          "Content-Type": "application/json",
         },
       },
     );
 
-    const data = await response.json();
+    const verificationData = await verificationResponse.json();
 
-    if (!response.ok || data.status !== "success") {
-      console.error("Flutterwave verification error:", data);
+    if (
+      verificationData.status !== "success" ||
+      verificationData.data?.status !== "successful"
+    ) {
       return NextResponse.json(
-        { error: "Payment verification failed" },
+        { error: "Transaction not successful" },
         { status: 400 },
       );
     }
 
-    const transaction = data.data;
+    const transaction = verificationData.data;
 
-    const plan = transaction.meta?.plan === "annual" ? "annual" : "monthly";
-    const expectedAmount = plan === "annual" ? 130000 : 15000;
-
-    const isValidAmount =
-      transaction.amount === expectedAmount &&
-      transaction.currency === "NGN";
-
-    if (!isValidAmount) {
+    // 4. Strict tx_ref match — Flutterwave's tx_ref must match ours
+    if (transaction.tx_ref !== tx_ref) {
+      console.warn(
+        `[billing/verify] tx_ref mismatch: FLW=${transaction.tx_ref} vs ours=${tx_ref}`,
+      );
       return NextResponse.json(
-        { error: "Invalid payment amount" },
+        { error: "Transaction reference mismatch" },
         { status: 400 },
       );
     }
 
-    // Plan update requires service role (profiles trigger blocks authenticated updates)
-    const adminSupabase = createPublicClient();
-    const { error: updateError } = await adminSupabase
+    // 5. Strict amount validation — EXACT amounts only
+    if (transaction.currency !== "NGN") {
+      return NextResponse.json(
+        { error: "Invalid currency" },
+        { status: 400 },
+      );
+    }
+
+    const isExactMonthly = transaction.amount === MONTHLY_PRICE;
+    const isExactAnnual = transaction.amount === ANNUAL_PRICE;
+
+    if (!isExactMonthly && !isExactAnnual) {
+      console.warn(
+        `[billing/verify] amount mismatch: paid=${transaction.amount}, expected=${MONTHLY_PRICE} or ${ANNUAL_PRICE}`,
+      );
+      return NextResponse.json(
+        {
+          error: "Incorrect payment amount",
+          expected: `${MONTHLY_PRICE} or ${ANNUAL_PRICE}`,
+          received: transaction.amount,
+        },
+        { status: 400 },
+      );
+    }
+
+    // 6. All checks passed — upgrade plan using service role
+    const { error: planUpdateError } = await adminSupabase
       .from("profiles")
       .update({
         plan: "pro",
+        updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
 
-    if (updateError) {
-      console.error("Profile update error:", updateError);
+    if (planUpdateError) {
+      console.error("[billing/verify] plan update failed:", planUpdateError);
       return NextResponse.json(
-        { error: "Failed to update plan" },
+        { error: "Failed to upgrade plan" },
         { status: 500 },
       );
     }
 
-    // Update Flutterwave subaccount split to 0% if exists
-    try {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("flutterwave_subaccount_id")
-        .eq("id", user.id)
-        .single();
+    // 7. Update subaccount split to 0% for Pro users (if subaccount exists)
+    const { data: profile } = await adminSupabase
+      .from("profiles")
+      .select("flutterwave_subaccount_id")
+      .eq("id", user.id)
+      .single();
 
-      if (profile?.flutterwave_subaccount_id) {
-        await fetch(
-          `https://api.flutterwave.com/v3/subaccounts/${profile.flutterwave_subaccount_id}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              split_type: "percentage",
-              split_value: 0,
-            }),
+    if (profile?.flutterwave_subaccount_id) {
+      fetch(
+        `https://api.flutterwave.com/v3/subaccounts/${profile.flutterwave_subaccount_id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
+            "Content-Type": "application/json",
           },
-        );
-      }
-    } catch (subaccountError) {
-      console.error("Failed to update subaccount:", subaccountError);
+          body: JSON.stringify({ split_value: 0 }),
+        },
+      ).catch((err) =>
+        console.error("[billing/verify] subaccount update failed:", err),
+      );
     }
 
-    return NextResponse.json({ success: true });
+    // 8. Record the payment for idempotency and audit
+    await adminSupabase.from("payments").insert({
+      invoice_id: null,
+      amount: transaction.amount,
+      currency: transaction.currency,
+      provider: "flutterwave",
+      provider_payment_id: String(transaction_id),
+      provider_tx_ref: tx_ref,
+      status: "success",
+      paid_at: new Date().toISOString(),
+    });
+
+    return NextResponse.json({
+      success: true,
+      plan: "pro",
+      billing_cycle: isExactAnnual ? "annual" : "monthly",
+    });
   } catch (error: unknown) {
     const message =
-      error instanceof Error ? error.message : "Failed to verify payment";
-    console.error("Verify billing error:", error);
+      error instanceof Error ? error.message : "Verification failed";
+    console.error("[billing/verify] error:", error);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

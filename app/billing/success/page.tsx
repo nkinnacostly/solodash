@@ -9,6 +9,8 @@ function BillingSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const txRef = searchParams.get("tx_ref");
+  const transactionId =
+    searchParams.get("transaction_id") ?? searchParams.get("id");
 
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading",
@@ -16,21 +18,28 @@ function BillingSuccessContent() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!txRef) {
+    if (!txRef || !transactionId) {
       setStatus("error");
-      setErrorMessage("No payment reference found");
+      setErrorMessage(
+        "Missing payment details from Flutterwave. Check your email for a receipt or contact support.",
+      );
       return;
     }
 
     verifyPayment();
-  }, [txRef]);
+  }, [txRef, transactionId]);
 
   const verifyPayment = async () => {
+    if (!txRef || !transactionId) return;
+
     try {
       const response = await fetch("/api/billing/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tx_ref: txRef }),
+        body: JSON.stringify({
+          tx_ref: txRef,
+          transaction_id: transactionId,
+        }),
       });
 
       const data = await response.json();

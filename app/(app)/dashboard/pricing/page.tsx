@@ -38,12 +38,12 @@ export default function DashboardPricingPage() {
     setLoading(true);
 
     try {
-      const plan = isAnnual ? "annual" : "monthly";
+      const billing_cycle = isAnnual ? "annual" : "monthly";
 
       const response = await fetch("/api/billing/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ billing_cycle }),
       });
 
       const data = await response.json();
