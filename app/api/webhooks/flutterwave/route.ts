@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   try {
-    // Verify webhook signature
     const verifHash = request.headers.get("verif-hash");
 
     if (verifHash !== process.env.FLW_WEBHOOK_SECRET) {
@@ -15,41 +14,33 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const txRef = body.data?.tx_ref ?? "";
-    // Debug logging
-    console.log(
-      "Webhook received:",
-      JSON.stringify({
-        event: body.event,
-        tx_ref: txRef,
-        meta: body.data?.meta,
-        platform: body.data?.meta?.platform,
-      }),
-    );
 
-    // ── Route based on tx_ref prefix ──────────────────────────
-    // PAIDLY- → this app (invoice payments)
-    // topup_  → SMS verification app
     if (txRef.startsWith("topup_")) {
       return forwardToSmsApp(body);
     }
-    // TRADEPAD- → Tradepad app
+
     if (txRef.startsWith("TRADEPAD-")) {
       return forwardToTradepad(body, request.headers.get("verif-hash") ?? "");
     }
-    // ── Existing Paidly logic below (unchanged) ───────────────
+
+    // Subscription payments are verified via /api/billing/verify
+    if (txRef.startsWith("PAIDLY-SUB-")) {
+      return NextResponse.json({ status: "success" });
+    }
+
     if (body.event === "charge.completed") {
-      const supabase = await createClient();
+      const adminSupabase = createPublicClient();
 
       const parts = txRef.split("-");
 
       if (parts[0] !== "PAIDLY" || parts.length < 3) {
-        console.error("Invalid tx_ref format:", txRef);
+        console.error("[webhook] Invalid invoice tx_ref format");
         return NextResponse.json({ status: "success" });
       }
 
       const invoiceId = parts.slice(1, -1).join("-");
 
-      const { data: invoice, error: invoiceError } = await supabase
+      const { data: invoice, error: invoiceError } = await adminSupabase
         .from("invoices")
         .select(
           `
@@ -64,7 +55,7 @@ export async function POST(request: Request) {
         .single();
 
       if (invoiceError || !invoice) {
-        console.error("Invoice not found for webhook:", invoiceId);
+        console.error("[webhook] Invoice not found");
         return NextResponse.json({ status: "success" });
       }
 
@@ -73,6 +64,19 @@ export async function POST(request: Request) {
       }
 
       const transactionId = body.data.id;
+
+      const { data: existingPayment } = await adminSupabase
+        .from("payments")
+        .select("id")
+        .eq("provider_payment_id", String(transactionId))
+        .maybeSingle();
+
+      if (existingPayment) {
+        console.log(
+          `Webhook: Transaction ${transactionId} already processed`,
+        );
+        return NextResponse.json({ status: "success", idempotent: true });
+      }
 
       const verificationResponse = await fetch(
         `https://api.flutterwave.com/v3/transactions/${transactionId}/verify`,
@@ -88,6 +92,11 @@ export async function POST(request: Request) {
       const verificationData = await verificationResponse.json();
       const flutterwaveData = verificationData.data;
 
+      if (flutterwaveData?.tx_ref !== txRef) {
+        console.warn("[webhook] Flutterwave tx_ref mismatch");
+        return NextResponse.json({ status: "success" });
+      }
+
       const isValid =
         verificationData.status === "success" &&
         flutterwaveData?.status === "successful" &&
@@ -97,12 +106,12 @@ export async function POST(request: Request) {
       const now = new Date().toISOString();
 
       if (isValid) {
-        await supabase
+        await adminSupabase
           .from("invoices")
           .update({ status: "paid", paid_at: now, updated_at: now })
           .eq("id", invoiceId);
 
-        await supabase.from("income_log").insert({
+        await adminSupabase.from("income_log").insert({
           user_id: invoice.user_id,
           invoice_id: invoice.id,
           client_id: invoice.client_id,
@@ -113,12 +122,12 @@ export async function POST(request: Request) {
           date: new Date().toISOString().split("T")[0],
         });
 
-        await supabase.from("payments").insert({
+        await adminSupabase.from("payments").insert({
           invoice_id: invoice.id,
           amount: flutterwaveData.amount,
           currency: flutterwaveData.currency,
           provider: "flutterwave",
-          provider_payment_id: transactionId,
+          provider_payment_id: String(transactionId),
           provider_tx_ref: txRef,
           status: "success",
           paid_at: now,
@@ -128,29 +137,28 @@ export async function POST(request: Request) {
           `Webhook: Invoice ${invoice.invoice_number} marked as paid`,
         );
       } else {
-        await supabase.from("payments").insert({
+        await adminSupabase.from("payments").insert({
           invoice_id: invoice.id,
           amount: flutterwaveData?.amount || 0,
           currency: flutterwaveData?.currency || invoice.currency,
           provider: "flutterwave",
-          provider_payment_id: transactionId,
+          provider_payment_id: String(transactionId),
           provider_tx_ref: txRef,
           status: "failed",
           paid_at: now,
         });
 
-        console.error("Webhook: Payment verification failed for", invoiceId);
+        console.error("[webhook] Payment verification failed");
       }
     }
 
     return NextResponse.json({ status: "success" });
   } catch (error) {
-    console.error("Webhook error:", error);
+    console.error("[webhook] error:", error);
     return NextResponse.json({ status: "success" });
   }
 }
 
-// ── Forward to SMS app Edge Function ─────────────────────────
 async function forwardToSmsApp(payload: unknown) {
   try {
     const smsWebhookUrl = process.env.SMS_APP_WEBHOOK_URL;
@@ -164,28 +172,21 @@ async function forwardToSmsApp(payload: unknown) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Forward the same secret — both apps share FLW_WEBHOOK_SECRET
         "verif-hash": process.env.FLW_WEBHOOK_SECRET!,
       },
       body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
-      console.error(
-        "Failed to forward to SMS app:",
-        res.status,
-        await res.text(),
-      );
+      console.error("Failed to forward to SMS app:", res.status);
     }
   } catch (err) {
     console.error("Error forwarding to SMS app:", err);
   }
 
-  // Always return 200 to Flutterwave regardless
   return NextResponse.json({ status: "success" });
 }
 
-// ── Forward to Tradepad Edge Function ─────────────────────────
 async function forwardToTradepad(payload: unknown, verifHash: string) {
   try {
     const tradepadWebhookUrl =
@@ -201,11 +202,7 @@ async function forwardToTradepad(payload: unknown, verifHash: string) {
     });
 
     if (!res.ok) {
-      console.error(
-        "Failed to forward to Tradepad:",
-        res.status,
-        await res.text(),
-      );
+      console.error("Failed to forward to Tradepad:", res.status);
     }
   } catch (err) {
     console.error("Error forwarding to Tradepad:", err);

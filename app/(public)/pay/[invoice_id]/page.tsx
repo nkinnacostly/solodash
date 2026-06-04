@@ -102,11 +102,17 @@ export default function PayInvoicePage() {
         description: `Payment for invoice from ${invoice.freelancer.business_name || invoice.freelancer.name}`,
         logo: "",
       },
-      callback: async (response: any) => {
-        // Close the modal immediately
+      callback: async (response: {
+        transaction_id: string;
+        tx_ref?: string;
+        close?: () => void;
+      }) => {
         if (response.close) response.close();
         setPaymentProcessing(true);
-        await verifyPayment(response.transaction_id, txRef);
+        await verifyPayment(
+          response.transaction_id,
+          response.tx_ref ?? txRef,
+        );
       },
       onclose: () => {
         if (!paymentSuccess) {
