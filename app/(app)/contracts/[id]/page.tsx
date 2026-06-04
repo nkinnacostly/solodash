@@ -17,6 +17,7 @@ import {
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import SignatureModal from "@/components/SignatureModal";
 import { useToast } from "@/components/ui/Toast";
+import { sanitizeContractHtml } from "@/lib/sanitize-html";
 
 interface Contract {
   id: string;
@@ -342,7 +343,13 @@ export default function ContractDetailPage() {
                   lineHeight: "1.8",
                   color: "#1a1a1a",
                 }}
-                dangerouslySetInnerHTML={{ __html: contract.content }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeContractHtml(
+                    contract.content ||
+                      (contract as { content_html?: string }).content_html ||
+                      ""
+                  ),
+                }}
               />
 
               {/* Document footer */}

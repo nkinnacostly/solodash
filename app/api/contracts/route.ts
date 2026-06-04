@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getTemplateById } from "@/lib/contract-templates";
+import { sanitizeContractHtml } from "@/lib/sanitize-html";
 
 export async function GET(request: Request) {
   try {
@@ -143,6 +144,8 @@ export async function POST(request: Request) {
       governingLaw: contractData.governingLaw || "Nigeria",
     });
 
+    const safeContent = sanitizeContractHtml(contractContent);
+
     // Insert contract
     const { data: contract, error: contractError } = await supabase
       .from("contracts")
@@ -152,7 +155,7 @@ export async function POST(request: Request) {
         title: `${template.name} - ${contractData.clientName}`,
         type: template.type,
         status,
-        content: contractContent,
+        content: safeContent,
         template_id: templateId,
         start_date: contractData.startDate,
         end_date: contractData.endDate || null,

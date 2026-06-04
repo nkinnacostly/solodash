@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { Loader2, CheckCircle, PenTool, Type, X } from "lucide-react";
+import { sanitizeContractHtml } from "@/lib/sanitize-html";
 
 interface Contract {
   id: string;
@@ -304,7 +305,11 @@ function SignContractContent() {
           <>
             <div
               className="bg-white rounded-xl p-10 mb-6 shadow-lg max-h-[600px] overflow-y-auto"
-              dangerouslySetInnerHTML={{ __html: contract.content }}
+              dangerouslySetInnerHTML={{
+                __html: sanitizeContractHtml(
+                  contract.content || (contract as { content_html?: string }).content_html || ""
+                ),
+              }}
             />
 
             {/* Signature Section */}
