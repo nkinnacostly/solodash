@@ -35,6 +35,7 @@ interface Invoice {
 
 const statusColors: Record<string, string> = {
   draft: "bg-[#27272a] text-[#a1a1aa]",
+  sending: "bg-[#27272a] text-[#a1a1aa]",
   sent: "bg-[#1e3a5f] text-[#60a5fa]",
   viewed: "bg-[#3d2e00] text-[#fbbf24]",
   paid: "bg-[#052e16] text-[#10b981]",
@@ -50,6 +51,29 @@ const statusTabs = [
   { label: "Paid", value: "paid" },
   { label: "Overdue", value: "overdue" },
 ];
+
+function InvoiceStatusBadge({ status }: { status: string }) {
+  if (status === "sending") {
+    return (
+      <span
+        className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full ${statusColors.sending}`}
+      >
+        <Loader2 size={12} className="animate-spin" />
+        Sending...
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
+        statusColors[status] || "bg-[#27272a] text-[#a1a1aa]"
+      }`}
+    >
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </span>
+  );
+}
 
 export default function InvoicesPage() {
   const router = useRouter();
@@ -361,15 +385,7 @@ export default function InvoicesPage() {
                       {Number(invoice.total).toLocaleString()}
                     </td>
                     <td className="py-4 px-6 text-center">
-                      <span
-                        className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
-                          statusColors[invoice.status] ||
-                          "bg-[#27272a] text-[#a1a1aa]"
-                        }`}
-                      >
-                        {invoice.status.charAt(0).toUpperCase() +
-                          invoice.status.slice(1)}
-                      </span>
+                      <InvoiceStatusBadge status={invoice.status} />
                     </td>
                     <td className="py-4 px-6">
                       <span
@@ -476,15 +492,7 @@ export default function InvoicesPage() {
                   >
                     {invoice.invoice_number}
                   </Link>
-                  <span
-                    className={`px-3 py-1 text-xs font-medium rounded-full ${
-                      statusColors[invoice.status] ||
-                      "bg-[#27272a] text-[#a1a1aa]"
-                    }`}
-                  >
-                    {invoice.status.charAt(0).toUpperCase() +
-                      invoice.status.slice(1)}
-                  </span>
+                  <InvoiceStatusBadge status={invoice.status} />
                 </div>
 
                 <p className="text-white mb-2">{invoice.clients?.name}</p>

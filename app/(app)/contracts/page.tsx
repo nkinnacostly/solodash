@@ -23,6 +23,7 @@ interface Contract {
 
 const statusColors: Record<string, string> = {
   draft: "bg-[#27272a] text-[#a1a1aa]",
+  sending: "bg-[#27272a] text-[#a1a1aa]",
   sent: "bg-[#1e3a5f] text-[#60a5fa]",
   signed: "bg-[#052e16] text-[#10b981]",
   active: "bg-[#052e16] text-[#10b981]",
@@ -34,6 +35,29 @@ const typeColors: Record<string, string> = {
   project: "bg-[#3b0764] text-[#a78bfa]",
   retainer: "bg-[#3d2e00] text-[#fbbf24]",
 };
+
+function ContractStatusBadge({ status }: { status: string }) {
+  if (status === "sending") {
+    return (
+      <span
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${statusColors.sending}`}
+      >
+        <Loader2 size={12} className="animate-spin" />
+        Sending...
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+        statusColors[status] || "bg-[#27272a] text-[#a1a1aa]"
+      }`}
+    >
+      {status}
+    </span>
+  );
+}
 
 export default function ContractsPage() {
   const router = useRouter();
@@ -263,11 +287,7 @@ export default function ContractsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span
-                        className={`inline-block px-2 py-1 rounded text-xs font-medium ${statusColors[contract.status] || "bg-[#27272a] text-[#a1a1aa]"}`}
-                      >
-                        {contract.status}
-                      </span>
+                      <ContractStatusBadge status={contract.status} />
                     </td>
                     <td className="px-6 py-4">
                       <p className="text-sm text-white font-medium">
@@ -332,11 +352,7 @@ export default function ContractsPage() {
                     >
                       {contract.type}
                     </span>
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${statusColors[contract.status]}`}
-                    >
-                      {contract.status}
-                    </span>
+                    <ContractStatusBadge status={contract.status} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">

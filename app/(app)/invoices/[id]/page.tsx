@@ -54,6 +54,7 @@ interface Invoice {
 
 const statusColors: Record<string, string> = {
   draft: "bg-[#27272a] text-[#a1a1aa]",
+  sending: "bg-[#27272a] text-[#a1a1aa]",
   sent: "bg-[#1e3a5f] text-[#60a5fa]",
   viewed: "bg-[#3d2e00] text-[#fbbf24]",
   paid: "bg-[#052e16] text-[#10b981]",
@@ -71,6 +72,9 @@ export default function InvoiceDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sendingLoading, setSendingLoading] = useState(false);
+  const [sendingPoll, setSendingPoll] = useState<ReturnType<
+    typeof setInterval
+  > | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [markPaidLoading, setMarkPaidLoading] = useState(false);
@@ -107,7 +111,9 @@ export default function InvoiceDetailPage() {
     if (!invoice?.id) return;
 
     const shareable =
-      invoice.status !== "draft" && invoice.status !== "cancelled";
+      invoice.status !== "draft" &&
+      invoice.status !== "cancelled" &&
+      invoice.status !== "sending";
 
     if (!shareable) {
       setPublicUrl(null);
@@ -165,14 +171,50 @@ export default function InvoiceDetailPage() {
         throw new Error(data.error || "Failed to send invoice");
       }
 
-      toast.success("Invoice sent", "Email delivered to client");
+      toast.success(
+        "Sending invoice...",
+        "You can navigate away — we'll update status when complete",
+      );
+
+      const interval = setInterval(async () => {
+        try {
+          const statusRes = await fetch(`/api/invoices/${invoiceId}`);
+          const statusData = await statusRes.json();
+          const currentStatus = statusData.invoice?.status;
+
+          if (currentStatus === "sent") {
+            clearInterval(interval);
+            setSendingPoll(null);
+            toast.success("Invoice sent ✓");
+            fetchInvoice();
+          } else if (currentStatus === "draft") {
+            clearInterval(interval);
+            setSendingPoll(null);
+            toast.error("Failed to send invoice", "Please try again");
+            fetchInvoice();
+          }
+        } catch {
+          // keep polling
+        }
+      }, 2000);
+
+      setSendingPoll(interval);
       fetchInvoice();
-    } catch (err: any) {
-      toast.error("Failed to send invoice", err.message);
+    } catch (err: unknown) {
+      toast.error(
+        "Failed to send invoice",
+        err instanceof Error ? err.message : "Unknown error",
+      );
     } finally {
       setSendingLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (sendingPoll) clearInterval(sendingPoll);
+    };
+  }, [sendingPoll]);
 
   const handleMarkAsPaid = async () => {
     setMarkPaidLoading(true);
@@ -565,6 +607,17 @@ export default function InvoiceDetailPage() {
 
               {/* Action Buttons */}
               <div className="space-y-3">
+                {invoice.status === "sending" && (
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full py-3 bg-[#27272a] text-[#a1a1aa] font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <Loader2 size={20} className="animate-spin" />
+                    Sending...
+                  </button>
+                )}
+
                 {invoice.status === "draft" && (
                   <>
                     <button
@@ -635,7 +688,7 @@ export default function InvoiceDetailPage() {
                       ) : (
                         <>
                           <Bell size={18} />
-                          Send Reminder
+                          Resend Invoice
                         </>
                       )}
                     </button>

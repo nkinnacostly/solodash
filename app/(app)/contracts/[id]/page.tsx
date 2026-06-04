@@ -50,6 +50,7 @@ interface Contract {
 
 const statusColors: Record<string, string> = {
   draft: "bg-[#27272a] text-[#a1a1aa]",
+  sending: "bg-[#27272a] text-[#a1a1aa]",
   sent: "bg-[#1e3a5f] text-[#60a5fa]",
   signed: "bg-[#052e16] text-[#10b981]",
   active: "bg-[#052e16] text-[#10b981]",
@@ -71,6 +72,9 @@ export default function ContractDetailPage() {
   const [contract, setContract] = useState<Contract | null>(null);
   const [loading, setLoading] = useState(true);
   const [sendingLoading, setSendingLoading] = useState(false);
+  const [sendingPoll, setSendingPoll] = useState<ReturnType<
+    typeof setInterval
+  > | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [showSignModal, setShowSignModal] = useState(false);
@@ -138,14 +142,50 @@ export default function ContractDetailPage() {
         throw new Error(data.error || "Failed to send contract");
       }
 
-      toast.success("Contract sent", "Email delivered to client");
+      toast.success(
+        "Sending contract...",
+        "You can navigate away — we'll update status when complete",
+      );
+
+      const interval = setInterval(async () => {
+        try {
+          const statusRes = await fetch(`/api/contracts/${contractId}`);
+          const statusData = await statusRes.json();
+          const currentStatus = statusData.contract?.status;
+
+          if (currentStatus === "sent") {
+            clearInterval(interval);
+            setSendingPoll(null);
+            toast.success("Contract sent ✓");
+            fetchContract();
+          } else if (currentStatus === "draft") {
+            clearInterval(interval);
+            setSendingPoll(null);
+            toast.error("Failed to send contract", "Please try again");
+            fetchContract();
+          }
+        } catch {
+          // keep polling
+        }
+      }, 2000);
+
+      setSendingPoll(interval);
       fetchContract();
-    } catch (err: any) {
-      toast.error("Failed to send", err.message);
+    } catch (err: unknown) {
+      toast.error(
+        "Failed to send",
+        err instanceof Error ? err.message : "Unknown error",
+      );
     } finally {
       setSendingLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (sendingPoll) clearInterval(sendingPoll);
+    };
+  }, [sendingPoll]);
 
   const handleDelete = async () => {
     setDeleteLoading(true);
@@ -663,6 +703,17 @@ export default function ContractDetailPage() {
 
             {/* Action Buttons */}
             <div className="space-y-3">
+              {contract.status === "sending" && (
+                <button
+                  type="button"
+                  disabled
+                  className="w-full py-3 bg-[#27272a] text-[#a1a1aa] font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Loader2 size={20} className="animate-spin" />
+                  Sending...
+                </button>
+              )}
+
               {contract.status === "draft" && (
                 <>
                   <button

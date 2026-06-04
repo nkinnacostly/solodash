@@ -1,137 +1,103 @@
-import { createClient } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
-import { sendInvoiceEmail } from "@/lib/email";
-import { generatePublicUrl } from "@/lib/link-tokens";
+import { NextResponse } from "next/server";
+import { createClient, createPublicClient } from "@/lib/supabase/server";
 import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(
-  request: NextRequest,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const supabase = await createClient();
-  const { id } = await params;
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { data: invoice, error: fetchError } = await supabase
-    .from("invoices")
-    .select(`
-      *,
-      clients (
-        name,
-        email
-      )
-    `)
-    .eq("id", id)
-    .eq("user_id", user.id)
-    .single();
-
-  if (fetchError || !invoice) {
-    return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
-  }
-
-  if (invoice.status === "sent" || invoice.status === "paid") {
-    // Allow resending (reminder)
-  } else if (invoice.status !== "draft") {
-    return NextResponse.json(
-      { error: "Cannot send invoice with status: " + invoice.status },
-      { status: 400 },
-    );
-  }
-
   try {
-    const now = new Date().toISOString();
+    const { id } = await params;
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    const { error: updateError } = await supabase
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { data: invoice, error: fetchError } = await supabase
       .from("invoices")
-      .update({
-        status: invoice.status === "draft" ? "sent" : invoice.status,
-        sent_at: now,
-        updated_at: now,
-      })
-      .eq("id", id);
-
-    if (updateError) throw updateError;
-
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("name, business_name, email")
-      .eq("id", user.id)
-      .single();
-
-    const baseUrl =
-      process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const paymentLink = generatePublicUrl(baseUrl, "pay", id);
-
-    await supabase
-      .from("invoices")
-      .update({ payment_link: paymentLink, updated_at: now })
-      .eq("id", id);
-
-    const currencySymbols: Record<string, string> = {
-      USD: "$",
-      GBP: "£",
-      EUR: "€",
-      NGN: "NGN ",
-      GHS: "GHS ",
-      KES: "KES ",
-      ZAR: "R ",
-    };
-    const symbol = currencySymbols[invoice.currency] || invoice.currency + " ";
-    const formattedAmount = `${symbol}${Number(invoice.total).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-    const dueDate = new Date(invoice.due_date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-
-    const { data: updatedInvoice } = await supabase
-      .from("invoices")
-      .select(`
-        *,
-        clients (
-          name,
-          email
-        )
-      `)
+      .select("id, status, client_id, clients(email)")
       .eq("id", id)
+      .eq("user_id", user.id)
       .single();
 
-    try {
-      if (invoice.clients?.email) {
-        await sendInvoiceEmail({
-          to: invoice.clients.email,
-          clientName: invoice.clients.name,
-          freelancerName: profile?.name || "Freelancer",
-          businessName: profile?.business_name || null,
-          invoiceNumber: invoice.invoice_number,
-          amount: formattedAmount,
-          dueDate,
-          paymentLink,
-          invoiceId: id,
-        });
-      }
-    } catch (emailError) {
-      console.error(
-        "Failed to send invoice email:",
-        errorMessage(emailError),
+    if (fetchError || !invoice) {
+      return NextResponse.json(
+        { error: "Invoice not found" },
+        { status: 404 },
       );
     }
 
+    const clientEmail = Array.isArray(invoice.clients)
+      ? invoice.clients[0]?.email
+      : (invoice.clients as { email?: string } | null)?.email;
+
+    if (!clientEmail) {
+      return NextResponse.json(
+        { error: "Client has no email address" },
+        { status: 400 },
+      );
+    }
+
+    if (invoice.status === "sending") {
+      return NextResponse.json(
+        { error: "Invoice is already being sent" },
+        { status: 409 },
+      );
+    }
+
+    if (!["draft", "sent", "viewed", "overdue"].includes(invoice.status)) {
+      return NextResponse.json(
+        { error: "This invoice cannot be sent in its current status" },
+        { status: 400 },
+      );
+    }
+
+    const adminSupabase = createPublicClient();
+    const { error: statusError } = await adminSupabase
+      .from("invoices")
+      .update({
+        status: "sending",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id);
+
+    if (statusError) {
+      console.error(
+        "[invoices/send] status update failed:",
+        errorMessage(statusError),
+      );
+      return NextResponse.json(
+        { error: "Failed to start send" },
+        { status: 500 },
+      );
+    }
+
+    const edgeUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-invoice-job`;
+
+    fetch(edgeUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ invoice_id: id }),
+    }).catch((err) => {
+      console.error("[invoices/send] edge invoke failed:", errorMessage(err));
+    });
+
     return NextResponse.json({
       success: true,
-      invoice: updatedInvoice,
+      status: "sending",
     });
   } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Failed to send invoice";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[invoices/send] error:", errorMessage(error));
+    return NextResponse.json(
+      { error: "Failed to send invoice" },
+      { status: 500 },
+    );
   }
 }
