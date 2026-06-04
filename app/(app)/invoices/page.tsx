@@ -58,18 +58,29 @@ export default function InvoicesPage() {
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(20);
+  const [pagination, setPagination] = useState<{
+    totalPages: number;
+    total: number;
+    hasMore: boolean;
+  } | null>(null);
   const [actionMenuOpen, setActionMenuOpen] = useState<string | null>(null);
   const [updating, setUpdating] = useState<string | null>(null);
-  const itemsPerPage = 20;
 
-  const fetchInvoices = async (status?: string) => {
+  const fetchInvoices = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const url = status ? `/api/invoices?status=${status}` : "/api/invoices";
-      const response = await fetch(url);
+      const params = new URLSearchParams({
+        page: String(page),
+        pageSize: String(pageSize),
+      });
+      if (statusFilter) params.set("status", statusFilter);
+      if (searchQuery) params.set("search", searchQuery);
+
+      const response = await fetch(`/api/invoices?${params}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -77,39 +88,30 @@ export default function InvoicesPage() {
       }
 
       setInvoices(data.invoices || []);
-    } catch (err: any) {
-      setError(err.message);
+      setPagination(data.pagination || null);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to fetch invoices");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchInvoices(statusFilter);
-  }, [statusFilter]);
+    fetchInvoices();
+  }, [page, pageSize, statusFilter, searchQuery]);
 
-  // Filter by search query
+  // Client name filter on current page (invoice # is filtered server-side)
   const filteredInvoices = useMemo(() => {
     if (!searchQuery) return invoices;
 
     const query = searchQuery.toLowerCase();
-    return invoices.filter(
-      (inv) =>
-        inv.invoice_number.toLowerCase().includes(query) ||
-        inv.clients?.name.toLowerCase().includes(query),
+    return invoices.filter((inv) =>
+      inv.clients?.name?.toLowerCase().includes(query),
     );
   }, [invoices, searchQuery]);
 
-  // Pagination
-  const totalPages = Math.ceil(filteredInvoices.length / itemsPerPage);
-  const paginatedInvoices = filteredInvoices.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
-
-  // Summary stats
   const stats = useMemo(() => {
-    const total = invoices.length;
+    const total = pagination?.total ?? invoices.length;
     const paid = invoices.filter((i) => i.status === "paid");
     const totalPaid = paid.reduce((sum, i) => sum + Number(i.total), 0);
     const outstanding = invoices.filter(
@@ -118,7 +120,7 @@ export default function InvoicesPage() {
     ).length;
 
     return { total, totalPaid, outstanding };
-  }, [invoices]);
+  }, [invoices, pagination]);
 
   const handleMarkAsPaid = async (invoiceId: string) => {
     setUpdating(invoiceId);
@@ -135,7 +137,7 @@ export default function InvoicesPage() {
       }
 
       // Refresh invoices
-      fetchInvoices(statusFilter);
+      fetchInvoices();
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -161,7 +163,7 @@ export default function InvoicesPage() {
       }
 
       // Refresh invoices
-      fetchInvoices(statusFilter);
+      fetchInvoices();
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -232,7 +234,7 @@ export default function InvoicesPage() {
               key={tab.value}
               onClick={() => {
                 setStatusFilter(tab.value);
-                setCurrentPage(1);
+                setPage(1);
               }}
               className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
                 statusFilter === tab.value
@@ -257,7 +259,7 @@ export default function InvoicesPage() {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              setCurrentPage(1);
+              setPage(1);
             }}
             className="w-full pl-10 pr-4 py-2 bg-[#18181b] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
           />
@@ -338,7 +340,7 @@ export default function InvoicesPage() {
                 </tr>
               </thead>
               <tbody>
-                {paginatedInvoices.map((invoice) => (
+                {filteredInvoices.map((invoice) => (
                   <tr
                     key={invoice.id}
                     className="border-b border-[#27272a] last:border-0 hover:bg-[#111111] transition-colors"
@@ -462,7 +464,7 @@ export default function InvoicesPage() {
 
           {/* Mobile Cards */}
           <div className="md:hidden space-y-3">
-            {paginatedInvoices.map((invoice) => (
+            {filteredInvoices.map((invoice) => (
               <div
                 key={invoice.id}
                 className="bg-[#18181b] border border-[#27272a] rounded-xl p-4"
@@ -526,30 +528,26 @@ export default function InvoicesPage() {
             ))}
           </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-6">
+          {pagination && pagination.totalPages > 1 && (
+            <div className="flex items-center justify-between border-t border-[#27272a] px-4 py-3 mt-6 rounded-xl bg-[#18181b]">
               <p className="text-sm text-[#a1a1aa]">
-                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                {Math.min(currentPage * itemsPerPage, filteredInvoices.length)}{" "}
-                of {filteredInvoices.length}
+                Showing page {page} of {pagination.totalPages} (
+                {pagination.total} total)
               </p>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 bg-[#18181b] border border-[#27272a] rounded-lg text-white hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#18181b] border border-[#27272a] hover:border-[#10b981] disabled:opacity-40 disabled:cursor-not-allowed text-white"
                 >
-                  <ChevronLeft size={18} />
+                  Previous
                 </button>
                 <button
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-[#18181b] border border-[#27272a] rounded-lg text-white hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => setPage((p) => p + 1)}
+                  disabled={!pagination.hasMore}
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#18181b] border border-[#27272a] hover:border-[#10b981] disabled:opacity-40 disabled:cursor-not-allowed text-white"
                 >
-                  <ChevronRight size={18} />
+                  Next
                 </button>
               </div>
             </div>

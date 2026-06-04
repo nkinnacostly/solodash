@@ -23,25 +23,28 @@ import {
 } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
 
-interface EarningsData {
-  total: number;
-  by_month: { month: number; amount: number }[];
-  by_client: {
-    client_id: string | null;
-    client_name: string;
-    count: number;
-    total: number;
-  }[];
-  entries: {
-    id: string;
-    date: string;
-    amount: number;
-    currency: string;
-    description: string;
-    type: string;
-    client_name: string | null;
-  }[];
+interface EarningsEntry {
+  id: string;
+  date: string;
+  amount: number;
   currency: string;
+  description: string;
+  type: string;
+  client_name: string | null;
+}
+
+interface EarningsStats {
+  totalEarned: number;
+  year: number;
+  currency: string;
+}
+
+interface PaginationMeta {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  hasMore: boolean;
 }
 
 const months = [
@@ -62,12 +65,25 @@ const months = [
 export default function EarningsPage() {
   const { toast } = useToast();
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [earnings, setEarnings] = useState<EarningsData | null>(null);
+  const [stats, setStats] = useState<EarningsStats | null>(null);
+  const [monthlyBreakdown, setMonthlyBreakdown] = useState<
+    { month: number; total: number }[]
+  >([]);
+  const [clientBreakdown, setClientBreakdown] = useState<
+    {
+      client_id: string | null;
+      client_name: string | null;
+      total: number;
+      invoice_count: number;
+    }[]
+  >([]);
+  const [entries, setEntries] = useState<EarningsEntry[]>([]);
+  const [pagination, setPagination] = useState<PaginationMeta | null>(null);
   const [loading, setLoading] = useState(true);
   const [showManualForm, setShowManualForm] = useState(false);
   const [manualLoading, setManualLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const perPage = 20;
+  const pageSize = 20;
 
   const [manualForm, setManualForm] = useState({
     amount: "",
@@ -78,22 +94,43 @@ export default function EarningsPage() {
   });
 
   useEffect(() => {
-    fetchEarnings();
+    setPage(1);
   }, [selectedYear]);
+
+  useEffect(() => {
+    fetchEarnings();
+  }, [page, selectedYear]);
 
   const fetchEarnings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/earnings?year=${selectedYear}`);
+      const params = new URLSearchParams({
+        page: String(page),
+        pageSize: String(pageSize),
+        year: String(selectedYear),
+        includeStats: page === 1 ? "true" : "false",
+      });
+
+      const response = await fetch(`/api/earnings?${params}`);
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to fetch earnings");
       }
 
-      setEarnings(data);
-    } catch (err: any) {
-      toast.error("Failed to load earnings", err.message);
+      setEntries(data.entries || []);
+      setPagination(data.pagination || null);
+
+      if (data.stats) {
+        setStats(data.stats);
+        setMonthlyBreakdown(data.monthlyBreakdown || []);
+        setClientBreakdown(data.clientBreakdown || []);
+      }
+    } catch (err: unknown) {
+      toast.error(
+        "Failed to load earnings",
+        err instanceof Error ? err.message : "Unknown error",
+      );
     } finally {
       setLoading(false);
     }
@@ -164,23 +201,29 @@ export default function EarningsPage() {
     return symbols[currency] || currency;
   };
 
-  const bestMonth = earnings?.by_month.reduce((max, month) =>
-    month.amount > max.amount ? month : max,
+  const currency = stats?.currency || "USD";
+  const totalEarned = stats?.totalEarned ?? 0;
+
+  const byMonth = Array.from({ length: 12 }, (_, i) => {
+    const row = monthlyBreakdown.find((m) => m.month === i + 1);
+    return { month: i + 1, amount: row?.total ?? 0 };
+  });
+
+  const byClient = clientBreakdown.map((c) => ({
+    client_id: c.client_id,
+    client_name: c.client_name || "Manual Entry",
+    count: c.invoice_count,
+    total: c.total,
+  }));
+
+  const bestMonth = byMonth.reduce(
+    (max, month) => (month.amount > max.amount ? month : max),
+    { month: 1, amount: 0 },
   );
 
-  const avgPerMonth = earnings ? earnings.total / 12 : 0;
+  const avgPerMonth = totalEarned / 12;
 
-  const paidInvoices =
-    earnings?.entries.filter((e) => e.type === "invoice_payment").length || 0;
-
-  const paginatedEntries = earnings?.entries.slice(
-    (page - 1) * perPage,
-    page * perPage,
-  );
-
-  const totalPages = earnings
-    ? Math.ceil(earnings.entries.length / perPage)
-    : 0;
+  const paidInvoices = byClient.reduce((sum, c) => sum + c.count, 0);
 
   const years = [
     new Date().getFullYear(),
@@ -244,8 +287,8 @@ export default function EarningsPage() {
             <p className="text-sm text-[#a1a1aa]">Total Earned</p>
           </div>
           <p className="text-2xl font-bold text-white">
-            {getCurrencySymbol(earnings?.currency || "USD")}
-            {earnings?.total.toLocaleString("en-US", {
+            {getCurrencySymbol(currency)}
+            {totalEarned.toLocaleString("en-US", {
               minimumFractionDigits: 2,
             }) || "0.00"}
           </p>
@@ -277,7 +320,7 @@ export default function EarningsPage() {
             <p className="text-sm text-[#a1a1aa]">Average/Month</p>
           </div>
           <p className="text-2xl font-bold text-white">
-            {getCurrencySymbol(earnings?.currency || "USD")}
+            {getCurrencySymbol(currency)}
             {avgPerMonth.toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -293,7 +336,7 @@ export default function EarningsPage() {
         </h2>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
-            data={earnings?.by_month.map((m) => ({
+            data={byMonth.map((m) => ({
               name: months[m.month - 1],
               amount: m.amount,
             }))}
@@ -303,7 +346,7 @@ export default function EarningsPage() {
             <YAxis stroke="#a1a1aa" />
             <Tooltip
               formatter={(value: any) => [
-                `${getCurrencySymbol(earnings?.currency || "USD")}${value.toLocaleString()}`,
+                `${getCurrencySymbol(currency)}${value.toLocaleString()}`,
                 "Amount",
               ]}
               contentStyle={{
@@ -319,7 +362,7 @@ export default function EarningsPage() {
       </div>
 
       {/* Income by Client */}
-      {earnings?.by_client.length! > 0 && (
+      {byClient.length > 0 && (
         <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4">
             Income by Client
@@ -343,7 +386,7 @@ export default function EarningsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {earnings?.by_client.map((client, idx) => (
+                {byClient.map((client, idx) => (
                   <tr key={idx}>
                     <td className="py-3 text-sm text-white">
                       {client.client_name || "Manual Entry"}
@@ -352,15 +395,15 @@ export default function EarningsPage() {
                       {client.count}
                     </td>
                     <td className="py-3 text-sm text-white font-medium">
-                      {getCurrencySymbol(earnings?.currency || "USD")}
+                      {getCurrencySymbol(currency)}
                       {client.total.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}
                     </td>
                     <td className="py-3 text-sm text-[#a1a1aa]">
-                      {earnings?.total
-                        ? Math.round((client.total / earnings.total) * 100)
+                      {totalEarned
+                        ? Math.round((client.total / totalEarned) * 100)
                         : 0}
                       %
                     </td>
@@ -514,7 +557,7 @@ export default function EarningsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#27272a]">
-              {paginatedEntries?.map((entry) => (
+              {entries.map((entry) => (
                 <tr key={entry.id}>
                   <td className="py-3 text-sm text-[#a1a1aa]">
                     {new Date(entry.date).toLocaleDateString("en-US", {
@@ -552,12 +595,11 @@ export default function EarningsPage() {
           </table>
         </div>
 
-        {totalPages > 1 && (
+        {pagination && pagination.totalPages > 1 && (
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#27272a]">
             <p className="text-sm text-[#a1a1aa]">
-              Showing {(page - 1) * perPage + 1}-
-              {Math.min(page * perPage, earnings?.entries.length || 0)} of{" "}
-              {earnings?.entries.length || 0}
+              Showing page {page} of {pagination.totalPages} (
+              {pagination.total} total)
             </p>
             <div className="flex gap-2">
               <button
@@ -568,8 +610,8 @@ export default function EarningsPage() {
                 Previous
               </button>
               <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
+                onClick={() => setPage((p) => p + 1)}
+                disabled={!pagination.hasMore}
                 className="px-3 py-1 text-sm border border-[#27272a] rounded-lg disabled:opacity-50 text-white hover:border-[#10b981]"
               >
                 Next
@@ -591,8 +633,8 @@ export default function EarningsPage() {
             <div>
               <p className="text-xs text-[#a1a1aa] mb-1">Total Income</p>
               <p className="text-lg font-bold text-white">
-                {getCurrencySymbol(earnings?.currency || "USD")}
-                {earnings?.total.toLocaleString("en-US", {
+                {getCurrencySymbol(currency)}
+                {totalEarned.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                 })}
               </p>
@@ -600,7 +642,7 @@ export default function EarningsPage() {
             <div>
               <p className="text-xs text-[#a1a1aa] mb-1">Clients</p>
               <p className="text-lg font-bold text-white">
-                {earnings?.by_client.length || 0}
+                {byClient.length}
               </p>
             </div>
           </div>

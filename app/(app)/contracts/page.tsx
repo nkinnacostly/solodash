@@ -41,16 +41,26 @@ export default function ContractsPage() {
   const [contracts, setContracts] = useState<Contract[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(20);
+  const [pagination, setPagination] = useState<{
+    totalPages: number;
+    total: number;
+    hasMore: boolean;
+  } | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  useEffect(() => {
-    fetchContracts();
-  }, []);
-
   const fetchContracts = async () => {
+    setLoading(true);
     try {
-      const response = await fetch("/api/contracts");
+      const params = new URLSearchParams({
+        page: String(page),
+        pageSize: String(pageSize),
+      });
+      if (filter !== "all") params.set("status", filter);
+
+      const response = await fetch(`/api/contracts?${params}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -58,12 +68,20 @@ export default function ContractsPage() {
       }
 
       setContracts(data.contracts || []);
-    } catch (err: any) {
-      toast.error("Failed to load contracts", err.message);
+      setPagination(data.pagination || null);
+    } catch (err: unknown) {
+      toast.error(
+        "Failed to load contracts",
+        err instanceof Error ? err.message : "Unknown error",
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchContracts();
+  }, [page, pageSize, filter]);
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -90,9 +108,6 @@ export default function ContractsPage() {
       setDeleteId(null);
     }
   };
-
-  const filteredContracts =
-    filter === "all" ? contracts : contracts.filter((c) => c.status === filter);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
@@ -156,7 +171,10 @@ export default function ContractsPage() {
           (status) => (
             <button
               key={status}
-              onClick={() => setFilter(status)}
+              onClick={() => {
+                setFilter(status);
+                setPage(1);
+              }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === status
                   ? "bg-[#10b981] text-white"
@@ -164,14 +182,16 @@ export default function ContractsPage() {
               }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
-              {status === "all" && ` (${contracts.length})`}
+              {status === "all" &&
+                pagination &&
+                ` (${pagination.total})`}
             </button>
           ),
         )}
       </div>
 
       {/* Contracts List */}
-      {filteredContracts.length === 0 ? (
+      {contracts.length === 0 ? (
         <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-12 text-center">
           <FileText size={48} className="text-[#27272a] mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">
@@ -223,7 +243,7 @@ export default function ContractsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#27272a]">
-                {filteredContracts.map((contract) => (
+                {contracts.map((contract) => (
                   <tr key={contract.id} className="hover:bg-[#111111]">
                     <td className="px-6 py-4">
                       <p className="text-sm font-medium text-white">
@@ -292,7 +312,7 @@ export default function ContractsPage() {
 
           {/* Mobile Cards */}
           <div className="md:hidden space-y-3">
-            {filteredContracts.map((contract) => (
+            {contracts.map((contract) => (
               <div
                 key={contract.id}
                 className="bg-[#18181b] border border-[#27272a] rounded-xl p-4"
@@ -346,6 +366,31 @@ export default function ContractsPage() {
               </div>
             ))}
           </div>
+
+          {pagination && pagination.totalPages > 1 && (
+            <div className="flex items-center justify-between border-t border-[#27272a] px-4 py-3 mt-6 rounded-xl bg-[#18181b]">
+              <p className="text-sm text-[#a1a1aa]">
+                Showing page {page} of {pagination.totalPages} (
+                {pagination.total} total)
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#18181b] border border-[#27272a] hover:border-[#10b981] disabled:opacity-40 disabled:cursor-not-allowed text-white"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setPage((p) => p + 1)}
+                  disabled={!pagination.hasMore}
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#18181b] border border-[#27272a] hover:border-[#10b981] disabled:opacity-40 disabled:cursor-not-allowed text-white"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
 

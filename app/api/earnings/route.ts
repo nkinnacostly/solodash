@@ -13,90 +13,53 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url);
-    const year = parseInt(searchParams.get("year") || new Date().getFullYear().toString());
+    const url = new URL(request.url);
+    const page = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(url.searchParams.get("pageSize") || "20", 10)),
+    );
+    const year = parseInt(
+      url.searchParams.get("year") || String(new Date().getFullYear()),
+      10,
+    );
 
-    // Fetch all income_log entries for the year
-    const { data: entries, error } = await supabase
+    const yearStart = `${year}-01-01`;
+    const yearEnd = `${year}-12-31`;
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    const { data: entries, error: entriesError, count } = await supabase
       .from("income_log")
-      .select(`
+      .select(
+        `
         id,
-        date,
         amount,
         currency,
-        description,
         type,
+        description,
+        date,
+        invoice_id,
         client_id,
         clients (
           name
         )
-      `)
+      `,
+        { count: "exact" },
+      )
       .eq("user_id", user.id)
-      .gte("date", `${year}-01-01`)
-      .lt("date", `${year + 1}-01-01`)
-      .order("date", { ascending: false });
+      .gte("date", yearStart)
+      .lte("date", yearEnd)
+      .order("date", { ascending: false })
+      .range(from, to);
 
-    if (error) {
-      console.error("Error fetching income log:", errorMessage(error));
-      return NextResponse.json(
-        { error: "Failed to fetch earnings" },
-        { status: 500 }
-      );
-    }
+    if (entriesError) throw entriesError;
 
-    // Fetch profile for default currency
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("currency")
-      .eq("id", user.id)
-      .single();
-
-    // Calculate totals
-    const total = entries.reduce((sum, entry) => sum + entry.amount, 0);
-
-    // Calculate by month
-    const byMonth = Array.from({ length: 12 }, (_, i) => ({
-      month: i + 1,
-      amount: 0,
-    }));
-
-    entries.forEach((entry) => {
-      const month = new Date(entry.date).getMonth() + 1;
-      byMonth[month - 1].amount += entry.amount;
-    });
-
-    // Calculate by client
-    const clientMap = new Map<
-      string,
-      { client_id: string | null; client_name: string; count: number; total: number }
-    >();
-
-    entries.forEach((entry) => {
-      const client = entry.clients as any;
-      const clientId = entry.client_id || "manual";
-      const clientName = client?.name || "Manual Entry";
-
-      if (!clientMap.has(clientId)) {
-        clientMap.set(clientId, {
-          client_id: entry.client_id,
-          client_name: clientName,
-          count: 0,
-          total: 0,
-        });
-      }
-
-      const existing = clientMap.get(clientId)!;
-      existing.count += 1;
-      existing.total += entry.amount;
-    });
-
-    const byClient = Array.from(clientMap.values()).sort(
-      (a, b) => b.total - a.total
-    );
-
-    // Format entries
-    const formattedEntries = entries.map((entry) => {
-      const client = entry.clients as any;
+    const formattedEntries = (entries || []).map((entry) => {
+      const client = Array.isArray(entry.clients)
+        ? entry.clients[0]
+        : entry.clients;
       return {
         id: entry.id,
         date: entry.date,
@@ -108,18 +71,107 @@ export async function GET(request: Request) {
       };
     });
 
+    const includeStats =
+      page === 1 || url.searchParams.get("includeStats") === "true";
+
+    let stats: {
+      totalEarned: number;
+      year: number;
+      currency: string;
+    } | null = null;
+    let monthlyBreakdown: { month: number; total: number }[] | null = null;
+    let clientBreakdown:
+      | {
+          client_id: string | null;
+          client_name: string | null;
+          total: number;
+          invoice_count: number;
+        }[]
+      | null = null;
+
+    if (includeStats) {
+      const { data: yearTotal, error: totalError } = await supabase.rpc(
+        "sum_income_for_year",
+        {
+          p_user_id: user.id,
+          p_year: year,
+        },
+      );
+
+      if (totalError) throw totalError;
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("currency")
+        .eq("id", user.id)
+        .single();
+
+      stats = {
+        totalEarned: Number(yearTotal ?? 0),
+        year,
+        currency: profile?.currency || "USD",
+      };
+
+      const { data: monthly, error: monthlyError } = await supabase.rpc(
+        "get_monthly_income",
+        {
+          p_user_id: user.id,
+          p_year: year,
+        },
+      );
+
+      if (monthlyError) throw monthlyError;
+
+      monthlyBreakdown = (monthly || []).map(
+        (row: { month: number; total: number }) => ({
+          month: row.month,
+          total: Number(row.total),
+        }),
+      );
+
+      const { data: byClient, error: clientError } = await supabase.rpc(
+        "get_income_by_client",
+        {
+          p_user_id: user.id,
+          p_year: year,
+        },
+      );
+
+      if (clientError) throw clientError;
+
+      clientBreakdown = (byClient || []).map(
+        (row: {
+          client_id: string | null;
+          client_name: string | null;
+          total: number;
+          invoice_count: number;
+        }) => ({
+          client_id: row.client_id,
+          client_name: row.client_name,
+          total: Number(row.total),
+          invoice_count: Number(row.invoice_count),
+        }),
+      );
+    }
+
     return NextResponse.json({
-      total,
-      by_month: byMonth,
-      by_client: byClient,
       entries: formattedEntries,
-      currency: profile?.currency || "USD",
+      stats,
+      monthlyBreakdown,
+      clientBreakdown,
+      pagination: {
+        page,
+        pageSize,
+        total: count || 0,
+        totalPages: count ? Math.ceil(count / pageSize) : 0,
+        hasMore: count ? from + pageSize < count : false,
+      },
     });
-  } catch (error: any) {
-    console.error("Error fetching earnings:", errorMessage(error));
+  } catch (error: unknown) {
+    console.error("[earnings] error:", errorMessage(error));
     return NextResponse.json(
-      { error: error.message || "Failed to fetch earnings" },
-      { status: 500 }
+      { error: "Failed to fetch earnings" },
+      { status: 500 },
     );
   }
 }

@@ -1,10 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
 
-  // Authenticate user
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
 
-  // Check plan limits
   const { data: profile } = await supabase
     .from("profiles")
     .select("plan")
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
     const startOfMonth = new Date(
       new Date().getFullYear(),
       new Date().getMonth(),
-      1
+      1,
     )
       .toISOString()
       .split("T")[0];
@@ -40,7 +39,7 @@ export async function POST(request: NextRequest) {
     if (count && count >= 3) {
       return NextResponse.json(
         { error: "Free plan limit reached. Upgrade to Pro." },
-        { status: 403 }
+        { status: 403 },
       );
     }
   }
@@ -48,7 +47,6 @@ export async function POST(request: NextRequest) {
   try {
     let clientId = body.clientId;
 
-    // Create new client if provided
     if (body.isNewClient && body.clientName && body.clientEmail) {
       const { data: newClient, error: clientError } = await supabase
         .from("clients")
@@ -68,11 +66,10 @@ export async function POST(request: NextRequest) {
     if (!clientId) {
       return NextResponse.json(
         { error: "Client is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Generate invoice number
     const { data: lastInvoice } = await supabase
       .from("invoices")
       .select("invoice_number")
@@ -90,16 +87,15 @@ export async function POST(request: NextRequest) {
       invoiceNumber = `INV-${String(nextNum).padStart(3, "0")}`;
     }
 
-    // Calculate totals
     const subtotal = body.lineItems.reduce(
-      (sum: number, item: any) => sum + Number(item.quantity) * Number(item.rate),
-      0
+      (sum: number, item: { quantity: number; rate: number }) =>
+        sum + Number(item.quantity) * Number(item.rate),
+      0,
     );
     const taxRate = Number(body.taxRate) || 0;
     const taxAmount = subtotal * (taxRate / 100);
     const total = subtotal + taxAmount;
 
-    // Create invoice
     const { data: invoice, error: invoiceError } = await supabase
       .from("invoices")
       .insert({
@@ -121,15 +117,19 @@ export async function POST(request: NextRequest) {
 
     if (invoiceError) throw invoiceError;
 
-    // Insert line items
-    const lineItemsToInsert = body.lineItems.map((item: any, index: number) => ({
-      invoice_id: invoice.id,
-      description: item.description,
-      quantity: Number(item.quantity),
-      rate: Number(item.rate),
-      amount: Number(item.quantity) * Number(item.rate),
-      sort_order: index,
-    }));
+    const lineItemsToInsert = body.lineItems.map(
+      (
+        item: { description: string; quantity: number; rate: number },
+        index: number,
+      ) => ({
+        invoice_id: invoice.id,
+        description: item.description,
+        quantity: Number(item.quantity),
+        rate: Number(item.rate),
+        amount: Number(item.quantity) * Number(item.rate),
+        sort_order: index,
+      }),
+    );
 
     const { error: itemsError } = await supabase
       .from("invoice_items")
@@ -138,54 +138,88 @@ export async function POST(request: NextRequest) {
     if (itemsError) throw itemsError;
 
     return NextResponse.json({ invoice }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "Failed to create invoice" },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to create invoice";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
 export async function GET(request: NextRequest) {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  // Authenticate user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+    const url = new URL(request.url);
+    const page = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(url.searchParams.get("pageSize") || "20", 10)),
+    );
+    const status = url.searchParams.get("status");
+    const search = url.searchParams.get("search");
 
-  // Get status filter from query params
-  const { searchParams } = new URL(request.url);
-  const statusFilter = searchParams.get("status");
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
 
-  let query = supabase
-    .from("invoices")
-    .select(`
-      *,
-      clients (
-        name,
-        email
+    let query = supabase
+      .from("invoices")
+      .select(
+        `
+        id,
+        invoice_number,
+        status,
+        total,
+        currency,
+        issue_date,
+        due_date,
+        paid_at,
+        created_at,
+        client_id,
+        clients (
+          name,
+          email
+        )
+      `,
+        { count: "exact" },
       )
-    `)
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-  if (statusFilter) {
-    query = query.eq("status", statusFilter);
-  }
+    if (status && status !== "all") {
+      query = query.eq("status", status);
+    }
 
-  const { data: invoices, error } = await query;
+    if (search) {
+      query = query.ilike("invoice_number", `%${search}%`);
+    }
 
-  if (error) {
+    const { data: invoices, error, count } = await query;
+
+    if (error) throw error;
+
+    return NextResponse.json({
+      invoices: invoices || [],
+      pagination: {
+        page,
+        pageSize,
+        total: count || 0,
+        totalPages: count ? Math.ceil(count / pageSize) : 0,
+        hasMore: count ? from + pageSize < count : false,
+      },
+    });
+  } catch (error: unknown) {
+    console.error("[invoices] error:", errorMessage(error));
     return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
+      { error: "Failed to fetch invoices" },
+      { status: 500 },
     );
   }
-
-  return NextResponse.json({ invoices });
 }

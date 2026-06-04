@@ -7,7 +7,6 @@ import { errorMessage } from "@/lib/log-redact";
 export async function GET(request: Request) {
   try {
     const supabase = await createClient();
-
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -16,30 +15,67 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { data: contracts, error } = await supabase
+    const url = new URL(request.url);
+    const page = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(url.searchParams.get("pageSize") || "20", 10)),
+    );
+    const status = url.searchParams.get("status");
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    let query = supabase
       .from("contracts")
       .select(
         `
-        *,
+        id,
+        title,
+        type,
+        status,
+        value,
+        currency,
+        start_date,
+        end_date,
+        client_signed_at,
+        freelancer_signed_at,
+        created_at,
+        client_id,
         clients (
           name,
           email
         )
-      `
+      `,
+        { count: "exact" },
       )
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-    if (error) {
-      throw error;
+    if (status && status !== "all") {
+      query = query.eq("status", status);
     }
 
-    return NextResponse.json({ contracts: contracts || [] });
-  } catch (error: any) {
-    console.error("Error fetching contracts:", errorMessage(error));
+    const { data: contracts, error, count } = await query;
+
+    if (error) throw error;
+
+    return NextResponse.json({
+      contracts: contracts || [],
+      pagination: {
+        page,
+        pageSize,
+        total: count || 0,
+        totalPages: count ? Math.ceil(count / pageSize) : 0,
+        hasMore: count ? from + pageSize < count : false,
+      },
+    });
+  } catch (error: unknown) {
+    console.error("[contracts] error:", errorMessage(error));
     return NextResponse.json(
-      { error: error.message || "Failed to fetch contracts" },
-      { status: 500 }
+      { error: "Failed to fetch contracts" },
+      { status: 500 },
     );
   }
 }
@@ -68,9 +104,12 @@ export async function POST(request: Request) {
       status = "draft",
     } = body;
 
-    // Check plan limits: free users max 1 contract/month
     const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    const monthStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+    ).toISOString();
 
     const { count: monthlyCount } = await supabase
       .from("contracts")
@@ -86,12 +125,14 @@ export async function POST(request: Request) {
 
     if (profile?.plan === "free" && (monthlyCount || 0) >= 1) {
       return NextResponse.json(
-        { error: "Free plan limit reached. Upgrade to Pro for unlimited contracts." },
-        { status: 403 }
+        {
+          error:
+            "Free plan limit reached. Upgrade to Pro for unlimited contracts.",
+        },
+        { status: 403 },
       );
     }
 
-    // Create client if new
     let finalClientId = clientId;
 
     if (isNewClient && clientName && clientEmail) {
@@ -113,17 +154,16 @@ export async function POST(request: Request) {
     if (!finalClientId) {
       return NextResponse.json(
         { error: "Client ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Get template and generate content
     const template = getTemplateById(templateId);
 
     if (!template) {
       return NextResponse.json(
         { error: "Invalid template" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -147,7 +187,6 @@ export async function POST(request: Request) {
 
     const safeContent = sanitizeContractHtml(contractContent);
 
-    // Insert contract
     const { data: contract, error: contractError } = await supabase
       .from("contracts")
       .insert({
@@ -160,7 +199,11 @@ export async function POST(request: Request) {
         template_id: templateId,
         start_date: contractData.startDate,
         end_date: contractData.endDate || null,
-        value: contractData.projectFee || contractData.retainerFee || contractData.hourlyRate || 0,
+        value:
+          contractData.projectFee ||
+          contractData.retainerFee ||
+          contractData.hourlyRate ||
+          0,
         currency: contractData.currency || "USD",
       })
       .select()
@@ -169,11 +212,10 @@ export async function POST(request: Request) {
     if (contractError) throw contractError;
 
     return NextResponse.json({ contract }, { status: 201 });
-  } catch (error: any) {
-    console.error("Error creating contract:", errorMessage(error));
-    return NextResponse.json(
-      { error: error.message || "Failed to create contract" },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    console.error("[contracts] create error:", errorMessage(error));
+    const message =
+      error instanceof Error ? error.message : "Failed to create contract";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
