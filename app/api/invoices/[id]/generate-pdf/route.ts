@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import React from "react";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function GET(
   request: NextRequest,
@@ -42,13 +43,11 @@ export async function GET(
     .single();
 
   if (fetchError || !invoice) {
-    console.log("Fetch error:", fetchError);
-    console.log("User ID:", user.id);
-    console.log("Invoice ID:", id);
-    return NextResponse.json(
-      { error: "Invoice not found", details: fetchError },
-      { status: 404 },
+    console.error(
+      "[invoices/generate-pdf] invoice not found:",
+      errorMessage(fetchError),
     );
+    return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
   }
 
   const { data: profile } = await supabase
@@ -111,7 +110,10 @@ export async function GET(
       });
 
     if (uploadError) {
-      console.error("Upload error:", uploadError);
+      console.error(
+        "[invoices/generate-pdf] upload error:",
+        errorMessage(uploadError),
+      );
     } else {
       await supabase
         .from("invoices")
@@ -126,7 +128,10 @@ export async function GET(
       },
     });
   } catch (error: any) {
-    console.error("PDF generation error:", error);
+    console.error(
+      "[invoices/generate-pdf] error:",
+      errorMessage(error),
+    );
     return NextResponse.json(
       { error: error.message || "Failed to generate PDF" },
       { status: 500 },

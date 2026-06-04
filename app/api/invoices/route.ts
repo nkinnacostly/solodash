@@ -8,9 +8,6 @@ export async function POST(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  // DEBUG - remove after fixing
-  console.log("User from API route:", user?.id);
-  console.log("Cookies:", request.cookies.getAll());
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

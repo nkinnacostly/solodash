@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generatePublicUrl } from "@/lib/link-tokens";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function GET(
   _request: Request,
@@ -38,7 +39,7 @@ export async function GET(
 
     return NextResponse.json({ url });
   } catch (error: unknown) {
-    console.error("[contracts/public-link] error:", error);
+    console.error("[contracts/public-link] error:", errorMessage(error));
     return NextResponse.json(
       { error: "Failed to generate link" },
       { status: 500 },

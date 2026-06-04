@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 import { createPublicClient } from "@/lib/supabase/server";
 
 export async function POST(
@@ -84,7 +85,10 @@ export async function POST(
           });
 
       if (uploadError) {
-        console.error("Storage upload error:", uploadError);
+        console.error(
+          "Storage upload error:",
+          errorMessage(uploadError),
+        );
         return NextResponse.json(
           { error: "Failed to upload signature" },
           { status: 500 },
@@ -118,7 +122,7 @@ export async function POST(
       .eq("id", id);
 
     if (updateError) {
-      console.error("Contract update error:", updateError);
+      console.error("Contract update error:", errorMessage(updateError));
       return NextResponse.json(
         { error: "Failed to sign contract" },
         { status: 500 },
@@ -127,7 +131,7 @@ export async function POST(
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Freelancer sign error:", error);
+    console.error("Freelancer sign error:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to sign contract" },
       { status: 500 },

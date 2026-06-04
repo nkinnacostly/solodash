@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createPublicClient } from "@/lib/supabase/server";
 import { verifyLinkToken } from "@/lib/link-tokens";
+import { errorMessage, redactUserId } from "@/lib/log-redact";
 
 function validateSignToken(
   token: string | null,
@@ -15,7 +16,9 @@ function validateSignToken(
       );
     }
   } else {
-    console.warn(`[sign] Untokenized access for contract ${contract_id}`);
+    console.warn(
+      `[sign] Untokenized access for contract ${redactUserId(contract_id)}`,
+    );
   }
   return null;
 }
@@ -95,7 +98,7 @@ export async function GET(
 
     return NextResponse.json({ contract: safeContract });
   } catch (error) {
-    console.error("Error fetching contract:", error);
+    console.error("Error fetching contract:", errorMessage(error));
     return NextResponse.json(
       { error: "Failed to fetch contract" },
       { status: 500 },
@@ -174,12 +177,18 @@ export async function POST(
           });
 
         if (uploadError) {
-          console.error("Storage upload error:", uploadError);
+          console.error(
+            "Storage upload error:",
+            errorMessage(uploadError),
+          );
         } else {
           signatureUrl = uploadData.path;
         }
       } catch (uploadErr) {
-        console.error("Failed to upload signature:", uploadErr);
+        console.error(
+          "Failed to upload signature:",
+          errorMessage(uploadErr),
+        );
       }
     }
 
@@ -193,7 +202,7 @@ export async function POST(
       .eq("id", contract_id);
 
     if (updateError) {
-      console.error("Contract update error:", updateError);
+      console.error("Contract update error:", errorMessage(updateError));
       return NextResponse.json(
         { error: "Failed to sign contract" },
         { status: 500 },
@@ -218,14 +227,17 @@ export async function POST(
         });
       }
     } catch (emailError) {
-      console.error("Failed to send notification email:", emailError);
+      console.error(
+        "Failed to send notification email:",
+        errorMessage(emailError),
+      );
     }
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Failed to sign contract";
-    console.error("Sign contract error:", error);
+    console.error("Sign contract error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

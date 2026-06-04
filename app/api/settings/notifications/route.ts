@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function PATCH(request: Request) {
   try {
@@ -32,7 +33,7 @@ export async function PATCH(request: Request) {
       .eq("id", user.id);
 
     if (updateError) {
-      console.error("Notification update error:", updateError);
+      console.error("Notification update error:", errorMessage(updateError));
       return NextResponse.json(
         { error: "Failed to update notifications" },
         { status: 500 }
@@ -41,7 +42,7 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Update notifications error:", error);
+    console.error("Update notifications error:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to update notifications" },
       { status: 500 }

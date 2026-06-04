@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function GET(request: Request) {
   try {
@@ -36,7 +37,7 @@ export async function GET(request: Request) {
       .order("date", { ascending: false });
 
     if (error) {
-      console.error("Error fetching income log:", error);
+      console.error("Error fetching income log:", errorMessage(error));
       return NextResponse.json(
         { error: "Failed to fetch earnings" },
         { status: 500 }
@@ -115,7 +116,7 @@ export async function GET(request: Request) {
       currency: profile?.currency || "USD",
     });
   } catch (error: any) {
-    console.error("Error fetching earnings:", error);
+    console.error("Error fetching earnings:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to fetch earnings" },
       { status: 500 }

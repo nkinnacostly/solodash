@@ -1,5 +1,6 @@
 import { createClient, createPublicClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { errorMessage } from "@/lib/log-redact";
 
 /** Recursively delete files under a storage prefix; log errors, never throw. */
 async function deleteStorageFolder(
@@ -13,7 +14,7 @@ async function deleteStorageFolder(
       .list(folderPath, { limit: 1000 });
 
     if (error) {
-      console.error(`[account/delete] list ${bucket}/${folderPath}:`, error);
+      console.error(`[account/delete] list failed (${bucket}):`, errorMessage(error));
       return;
     }
 
@@ -38,11 +39,14 @@ async function deleteStorageFolder(
         .from(bucket)
         .remove(filePaths);
       if (removeError) {
-        console.error(`[account/delete] remove ${bucket}:`, removeError);
+        console.error(
+          `[account/delete] remove failed (${bucket}):`,
+          errorMessage(removeError),
+        );
       }
     }
   } catch (e) {
-    console.error(`[account/delete] storage ${bucket}/${folderPath}:`, e);
+    console.error(`[account/delete] storage error (${bucket}):`, errorMessage(e));
   }
 }
 
@@ -64,7 +68,10 @@ export async function DELETE() {
     await adminSupabase.from("contracts").select("id").eq("user_id", userId);
 
   if (contractsFetchError) {
-    console.error("[account/delete] contracts fetch:", contractsFetchError);
+    console.error(
+      "[account/delete] contracts fetch:",
+      errorMessage(contractsFetchError),
+    );
   }
 
   const contractIds = (userContracts ?? []).map((c) => c.id);
@@ -86,7 +93,7 @@ export async function DELETE() {
   }
 
   const logDb = (step: string, err: unknown) =>
-    console.error(`[account/delete] db ${step}:`, err);
+    console.error(`[account/delete] db ${step}:`, errorMessage(err));
 
   // Step 2 — database (service role bypasses RLS, e.g. profiles has no DELETE policy)
   const { data: invoiceRows, error: invoicesSelectError } =
@@ -149,7 +156,10 @@ export async function DELETE() {
     await adminSupabase.auth.admin.deleteUser(userId);
 
   if (authError) {
-    console.error("[account/delete] auth delete:", authError);
+    console.error(
+      "[account/delete] auth delete:",
+      errorMessage(authError),
+    );
     return NextResponse.json(
       { error: authError.message || "Failed to delete account" },
       { status: 500 },

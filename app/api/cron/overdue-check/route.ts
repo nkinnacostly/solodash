@@ -2,6 +2,7 @@ import { createPublicClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { sendInvoiceReminder } from "@/lib/email";
 import { generatePublicUrl } from "@/lib/link-tokens";
+import { errorMessage, redactUserId } from "@/lib/log-redact";
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -89,8 +90,8 @@ export async function GET(request: NextRequest) {
         processed++;
       } catch (invoiceError) {
         console.error(
-          `[cron/overdue-check] Failed to process invoice ${invoice.id}:`,
-          invoiceError,
+          `[cron/overdue-check] Failed to process invoice ${redactUserId(invoice.id)}:`,
+          errorMessage(invoiceError),
         );
       }
     }
@@ -101,7 +102,7 @@ export async function GET(request: NextRequest) {
       error instanceof Error
         ? error.message
         : "Failed to process overdue invoices";
-    console.error("[cron/overdue-check] error:", error);
+    console.error("[cron/overdue-check] error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

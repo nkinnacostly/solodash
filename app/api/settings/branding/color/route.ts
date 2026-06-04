@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 import { NextResponse } from "next/server";
 
 export async function PATCH(request: Request) {
@@ -44,7 +45,7 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Brand color update error:", error);
+    console.error("Brand color update error:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to update brand color" },
       { status: 500 }

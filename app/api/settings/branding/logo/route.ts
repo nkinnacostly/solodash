@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ logo_url: logoUrl });
   } catch (error: any) {
-    console.error("Logo upload error:", error);
+    console.error("Logo upload error:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to upload logo" },
       { status: 500 }
@@ -127,7 +128,7 @@ export async function DELETE() {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Logo removal error:", error);
+    console.error("Logo removal error:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to remove logo" },
       { status: 500 }

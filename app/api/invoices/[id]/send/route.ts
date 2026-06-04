@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { sendInvoiceEmail } from "@/lib/email";
 import { generatePublicUrl } from "@/lib/link-tokens";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(
   request: NextRequest,
@@ -118,7 +119,10 @@ export async function POST(
         });
       }
     } catch (emailError) {
-      console.error("Failed to send invoice email:", emailError);
+      console.error(
+        "Failed to send invoice email:",
+        errorMessage(emailError),
+      );
     }
 
     return NextResponse.json({

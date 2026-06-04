@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createPublicClient } from "@/lib/supabase/server";
 import { verifyLinkToken } from "@/lib/link-tokens";
+import { errorMessage, redactUserId } from "@/lib/log-redact";
 
 export async function GET(
   request: Request,
@@ -20,7 +21,9 @@ export async function GET(
         );
       }
     } else {
-      console.warn(`[pay] Untokenized access for invoice ${invoice_id}`);
+      console.warn(
+        `[pay] Untokenized access for invoice ${redactUserId(invoice_id)}`,
+      );
     }
 
     const supabase = createPublicClient();
@@ -112,7 +115,7 @@ export async function GET(
 
     return NextResponse.json({ invoice: safeInvoice });
   } catch (error) {
-    console.error("Error fetching invoice:", error);
+    console.error("Error fetching invoice:", errorMessage(error));
     return NextResponse.json(
       { error: "Failed to fetch invoice" },
       { status: 500 },

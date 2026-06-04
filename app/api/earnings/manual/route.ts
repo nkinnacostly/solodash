@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(request: Request) {
   try {
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      console.error("Error inserting manual income:", error);
+      console.error("Error inserting manual income:", errorMessage(error));
       return NextResponse.json(
         { error: "Failed to add income" },
         { status: 500 }
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, entry });
   } catch (error: any) {
-    console.error("Error adding manual income:", error);
+    console.error("Error adding manual income:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to add income" },
       { status: 500 }

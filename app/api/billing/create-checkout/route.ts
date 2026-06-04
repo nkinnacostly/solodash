@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 const MONTHLY_PRICE = 15000;
 const ANNUAL_PRICE = 130000;
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
     const data = await response.json();
 
     if (!response.ok || data.status !== "success") {
-      console.error("Flutterwave error:", data);
+      console.error("[billing/create-checkout] Flutterwave checkout failed");
       return NextResponse.json(
         { error: "Failed to create payment" },
         { status: 500 },
@@ -87,7 +88,7 @@ export async function POST(request: Request) {
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Failed to create checkout";
-    console.error("Create checkout error:", error);
+    console.error("[billing/create-checkout] error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

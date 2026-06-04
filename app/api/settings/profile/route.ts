@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function GET(request: Request) {
   try {
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ profile });
   } catch (error: any) {
-    console.error("Get profile error:", error);
+    console.error("Get profile error:", errorMessage(error));
     return NextResponse.json(
       { error: "Failed to fetch profile" },
       { status: 500 }
@@ -78,7 +79,7 @@ export async function PATCH(request: Request) {
       .eq("id", user.id);
 
     if (updateError) {
-      console.error("Profile update error:", updateError);
+      console.error("Profile update error:", errorMessage(updateError));
       return NextResponse.json(
         { error: "Failed to update profile" },
         { status: 500 }
@@ -87,7 +88,7 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Update profile error:", error);
+    console.error("Update profile error:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to update profile" },
       { status: 500 }

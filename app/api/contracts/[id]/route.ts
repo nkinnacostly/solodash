@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 import { createPublicClient } from "@/lib/supabase/server";
 
 export async function GET(
@@ -94,7 +95,7 @@ export async function GET(
       },
     });
   } catch (error: any) {
-    console.error("Error fetching contract:", error);
+    console.error("Error fetching contract:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to fetch contract" },
       { status: 500 },
@@ -151,7 +152,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Error deleting contract:", error);
+    console.error("Error deleting contract:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to delete contract" },
       { status: 500 },

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createPublicClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(request: Request) {
   try {
@@ -72,9 +73,7 @@ export async function POST(request: Request) {
         .maybeSingle();
 
       if (existingPayment) {
-        console.log(
-          `Webhook: Transaction ${transactionId} already processed`,
-        );
+        console.log("Webhook: transaction already processed (idempotent)");
         return NextResponse.json({ status: "success", idempotent: true });
       }
 
@@ -154,7 +153,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ status: "success" });
   } catch (error) {
-    console.error("[webhook] error:", error);
+    console.error("[webhook] error:", errorMessage(error));
     return NextResponse.json({ status: "success" });
   }
 }
@@ -181,7 +180,10 @@ async function forwardToSmsApp(payload: unknown) {
       console.error("Failed to forward to SMS app:", res.status);
     }
   } catch (err) {
-    console.error("Error forwarding to SMS app:", err);
+    console.error(
+      "Error forwarding to SMS app:",
+      errorMessage(err),
+    );
   }
 
   return NextResponse.json({ status: "success" });
@@ -205,7 +207,10 @@ async function forwardToTradepad(payload: unknown, verifHash: string) {
       console.error("Failed to forward to Tradepad:", res.status);
     }
   } catch (err) {
-    console.error("Error forwarding to Tradepad:", err);
+    console.error(
+      "Error forwarding to Tradepad:",
+      errorMessage(err),
+    );
   }
 
   return NextResponse.json({ status: "success" });

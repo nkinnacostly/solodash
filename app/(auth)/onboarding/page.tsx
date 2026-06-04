@@ -220,8 +220,6 @@ function OnboardingContent() {
     setLoading(true);
 
     try {
-      console.log("Submitting onboarding data:", formData);
-
       const response = await fetch("/api/onboarding", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -235,9 +233,7 @@ function OnboardingContent() {
         }),
       });
 
-      console.log("Response status:", response.status);
       const data = await response.json();
-      console.log("Response data:", data);
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to save your profile");
@@ -246,7 +242,10 @@ function OnboardingContent() {
       router.push("/dashboard");
       router.refresh();
     } catch (err: any) {
-      console.error("Onboarding error:", err);
+      console.error(
+        "Onboarding error:",
+        err instanceof Error ? err.message : "Unknown error",
+      );
       setError(err.message || "Failed to save your profile. Please try again.");
     } finally {
       setLoading(false);

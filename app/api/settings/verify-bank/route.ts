@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { verifyBankAccount } from "@/lib/flutterwave";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(request: Request) {
   try {
@@ -32,10 +33,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log('Sending to Flutterwave:', {
-      account_number: body.account_number,
-      account_bank: body.account_bank,
-    });
     // Verify bank account
     const result = await verifyBankAccount({
       account_number,
@@ -46,7 +43,7 @@ export async function POST(request: Request) {
       account_name: result.account_name,
     });
   } catch (error: any) {
-    console.error("Bank verification error:", error);
+    console.error("Bank verification error:", errorMessage(error));
     return NextResponse.json(
       {
         error: "Could not verify account. Check your account number and bank.",

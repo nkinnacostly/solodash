@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, createPublicClient } from "@/lib/supabase/server";
+import { errorMessage, redactUserId } from "@/lib/log-redact";
 
 const MONTHLY_PRICE = 15000;
 const ANNUAL_PRICE = 130000;
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
     const txRefUserId = match[1];
     if (txRefUserId !== user.id) {
       console.warn(
-        `[billing/verify] tx_ref user mismatch: ${txRefUserId} vs ${user.id}`,
+        `[billing/verify] tx_ref user mismatch: ${redactUserId(txRefUserId)} vs ${redactUserId(user.id)}`,
       );
       return NextResponse.json(
         { error: "Transaction does not belong to this user" },
@@ -98,9 +99,7 @@ export async function POST(request: Request) {
 
     // 4. Strict tx_ref match — Flutterwave's tx_ref must match ours
     if (transaction.tx_ref !== tx_ref) {
-      console.warn(
-        `[billing/verify] tx_ref mismatch: FLW=${transaction.tx_ref} vs ours=${tx_ref}`,
-      );
+      console.warn("[billing/verify] tx_ref mismatch with Flutterwave");
       return NextResponse.json(
         { error: "Transaction reference mismatch" },
         { status: 400 },
@@ -119,9 +118,7 @@ export async function POST(request: Request) {
     const isExactAnnual = transaction.amount === ANNUAL_PRICE;
 
     if (!isExactMonthly && !isExactAnnual) {
-      console.warn(
-        `[billing/verify] amount mismatch: paid=${transaction.amount}, expected=${MONTHLY_PRICE} or ${ANNUAL_PRICE}`,
-      );
+      console.warn("[billing/verify] payment amount does not match plan price");
       return NextResponse.json(
         {
           error: "Incorrect payment amount",
@@ -142,7 +139,10 @@ export async function POST(request: Request) {
       .eq("id", user.id);
 
     if (planUpdateError) {
-      console.error("[billing/verify] plan update failed:", planUpdateError);
+      console.error(
+        "[billing/verify] plan update failed:",
+        errorMessage(planUpdateError),
+      );
       return NextResponse.json(
         { error: "Failed to upgrade plan" },
         { status: 500 },
@@ -168,7 +168,10 @@ export async function POST(request: Request) {
           body: JSON.stringify({ split_value: 0 }),
         },
       ).catch((err) =>
-        console.error("[billing/verify] subaccount update failed:", err),
+        console.error(
+          "[billing/verify] subaccount update failed:",
+          errorMessage(err),
+        ),
       );
     }
 
@@ -192,7 +195,7 @@ export async function POST(request: Request) {
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Verification failed";
-    console.error("[billing/verify] error:", error);
+    console.error("[billing/verify] error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendContractEmail } from "@/lib/email";
 import { generatePublicUrl } from "@/lib/link-tokens";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(
   request: Request,
@@ -73,14 +74,17 @@ export async function POST(
         });
       }
     } catch (emailError) {
-      console.error("Failed to send contract email:", emailError);
+      console.error(
+        "Failed to send contract email:",
+        errorMessage(emailError),
+      );
     }
 
     return NextResponse.json({ success: true, signingLink });
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Failed to send contract";
-    console.error("Error sending contract:", error);
+    console.error("Error sending contract:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

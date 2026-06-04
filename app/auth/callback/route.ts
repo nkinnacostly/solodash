@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+import { errorMessage } from '@/lib/log-redact'
 
 async function resolvePostAuthPath(
   supabase: ReturnType<typeof createServerClient>
@@ -70,7 +71,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL(path, origin))
     }
 
-    console.error('Token verify error:', verifyError)
+    console.error('[auth/callback] token verify failed:', errorMessage(verifyError))
     return NextResponse.redirect(
       new URL('/login?error=verification_failed', origin)
     )
@@ -86,7 +87,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL(path, origin))
     }
 
-    console.error('Exchange error:', exchangeError)
+    console.error('[auth/callback] code exchange failed:', errorMessage(exchangeError))
   }
 
   return NextResponse.redirect(

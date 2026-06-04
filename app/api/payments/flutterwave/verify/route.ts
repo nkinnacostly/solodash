@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createPublicClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(request: Request) {
   try {
@@ -115,9 +116,7 @@ export async function POST(request: Request) {
     // 7. Strict amount validation (allow 1% variance for currency rounding)
     const minAcceptable = invoice.total * 0.99;
     if (transaction.amount < minAcceptable) {
-      console.warn(
-        `[payment/verify] amount too low: paid=${transaction.amount}, expected=${invoice.total}`,
-      );
+      console.warn("[payment/verify] payment amount below invoice total");
       return NextResponse.json(
         {
           error: "Payment amount is less than invoice total",
@@ -149,7 +148,10 @@ export async function POST(request: Request) {
       .eq("id", invoice_id);
 
     if (invoiceUpdateError) {
-      console.error("[payment/verify] invoice update failed:", invoiceUpdateError);
+      console.error(
+        "[payment/verify] invoice update failed:",
+        errorMessage(invoiceUpdateError),
+      );
       return NextResponse.json(
         { error: "Failed to update invoice" },
         { status: 500 },
@@ -206,7 +208,10 @@ export async function POST(request: Request) {
           paidAt: now,
         });
       } catch (err) {
-        console.error("[payment/verify] email send failed:", err);
+        console.error(
+          "[payment/verify] email send failed:",
+          errorMessage(err),
+        );
       }
     })();
 
@@ -218,7 +223,7 @@ export async function POST(request: Request) {
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Verification failed";
-    console.error("[payment/verify] error:", error);
+    console.error("[payment/verify] error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

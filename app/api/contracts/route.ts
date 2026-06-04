@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getTemplateById } from "@/lib/contract-templates";
 import { sanitizeContractHtml } from "@/lib/sanitize-html";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function GET(request: Request) {
   try {
@@ -35,7 +36,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ contracts: contracts || [] });
   } catch (error: any) {
-    console.error("Error fetching contracts:", error);
+    console.error("Error fetching contracts:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to fetch contracts" },
       { status: 500 }
@@ -169,7 +170,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ contract }, { status: 201 });
   } catch (error: any) {
-    console.error("Error creating contract:", error);
+    console.error("Error creating contract:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to create contract" },
       { status: 500 }

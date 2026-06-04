@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { errorMessage } from "@/lib/log-redact";
 
 export async function POST(request: Request) {
   try {
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
     );
 
     if (error) {
-      console.error("Profile upsert error:", error);
+      console.error("Profile upsert error:", errorMessage(error));
       return NextResponse.json(
         { error: error.message || "Failed to save profile" },
         { status: 500 }
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Onboarding error:", error);
+    console.error("Onboarding error:", errorMessage(error));
     return NextResponse.json(
       { error: error.message || "Failed to complete onboarding" },
       { status: 500 }

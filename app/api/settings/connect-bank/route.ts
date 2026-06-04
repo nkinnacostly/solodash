@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient, createPublicClient } from "@/lib/supabase/server";
 import { createFlutterwaveSubaccount } from "@/lib/flutterwave";
+import { errorMessage } from "@/lib/log-redact";
 
 const BANK_NAMES: Record<string, string> = {
   "044": "Access Bank",
@@ -84,7 +85,7 @@ export async function POST(request: Request) {
       .eq("id", user.id);
 
     if (updateError) {
-      console.error("Profile update error:", updateError);
+      console.error("Profile update error:", errorMessage(updateError));
       return NextResponse.json(
         { error: "Failed to save bank account details" },
         { status: 500 },
@@ -97,7 +98,7 @@ export async function POST(request: Request) {
       error instanceof Error
         ? error.message
         : "Failed to connect bank account";
-    console.error("Connect bank error:", error);
+    console.error("Connect bank error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
@@ -127,7 +128,7 @@ export async function DELETE(request: Request) {
       .eq("id", user.id);
 
     if (updateError) {
-      console.error("Profile update error:", updateError);
+      console.error("Profile update error:", errorMessage(updateError));
       return NextResponse.json(
         { error: "Failed to disconnect bank account" },
         { status: 500 },
@@ -140,7 +141,7 @@ export async function DELETE(request: Request) {
       error instanceof Error
         ? error.message
         : "Failed to disconnect bank account";
-    console.error("Disconnect bank error:", error);
+    console.error("Disconnect bank error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
