@@ -18,38 +18,6 @@ import { createClient } from "@/lib/supabase/client";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
 
-const nigerianBanks = [
-  { code: "044", name: "Access Bank" },
-  { code: "023", name: "Citibank" },
-  { code: "050", name: "Ecobank Nigeria" },
-  { code: "070", name: "Fidelity Bank" },
-  { code: "011", name: "First Bank of Nigeria" },
-  { code: "214", name: "First City Monument Bank" },
-  { code: "058", name: "Guaranty Trust Bank" },
-  { code: "030", name: "Heritage Bank" },
-  { code: "082", name: "Keystone Bank" },
-  { code: "076", name: "Polaris Bank" },
-  { code: "101", name: "Providus Bank" },
-  { code: "221", name: "Stanbic IBTC Bank" },
-  { code: "068", name: "Standard Chartered Bank" },
-  { code: "232", name: "Sterling Bank" },
-  { code: "100", name: "Suntrust Bank" },
-  { code: "032", name: "Union Bank of Nigeria" },
-  { code: "033", name: "United Bank for Africa" },
-  { code: "215", name: "Unity Bank" },
-  { code: "035", name: "Wema Bank" },
-  { code: "057", name: "Zenith Bank" },
-  { code: "50211", name: "Kuda Bank" },
-  { code: "999992", name: "OPay" },
-  { code: "999991", name: "PalmPay" },
-  { code: "50515", name: "Moniepoint" },
-  { code: "566", name: "VFD Microfinance Bank" },
-  { code: "565", name: "Carbon" },
-  { code: "125", name: "Rubies Bank" },
-  { code: "104", name: "Parallex Bank" },
-  { code: "102", name: "Titan Trust Bank" },
-].sort((a, b) => a.name.localeCompare(b.name));
-
 const countries = [
   "Nigeria",
   "Ghana",
@@ -90,9 +58,14 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Bank connection state
+  const [banks, setBanks] = useState<Array<{ code: string; name: string }>>(
+    [],
+  );
+  const [loadingBanks, setLoadingBanks] = useState(true);
+
   const [bankForm, setBankForm] = useState({
-    account_bank: "",
+    bank_code: "",
+    bank_name: "",
     account_number: "",
     account_name: "",
   });
@@ -137,6 +110,16 @@ export default function SettingsPage() {
   }, []);
 
   useEffect(() => {
+    fetch("/api/banks")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.banks) setBanks(data.banks);
+      })
+      .catch((err) => console.error("Failed to load banks:", err))
+      .finally(() => setLoadingBanks(false));
+  }, []);
+
+  useEffect(() => {
     if (profile) {
       if (profile.brand_color) setBrandColor(profile.brand_color);
       if (profile.logo_url) setLogoPreview(profile.logo_url);
@@ -170,7 +153,7 @@ export default function SettingsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           account_number: bankForm.account_number,
-          account_bank: bankForm.account_bank,
+          bank_code: bankForm.bank_code,
         }),
       });
 
@@ -199,7 +182,8 @@ export default function SettingsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           account_number: bankForm.account_number,
-          account_bank: bankForm.account_bank,
+          bank_code: bankForm.bank_code,
+          bank_name: bankForm.bank_name,
           account_name: bankForm.account_name,
         }),
       });
@@ -234,7 +218,12 @@ export default function SettingsPage() {
       }
 
       toast.success("Bank account disconnected");
-      setBankForm({ account_bank: "", account_number: "", account_name: "" });
+      setBankForm({
+        bank_code: "",
+        bank_name: "",
+        account_number: "",
+        account_name: "",
+      });
       setAccountVerified(false);
       fetchProfile();
     } catch (err: any) {
@@ -849,21 +838,32 @@ export default function SettingsPage() {
                     Bank Name
                   </label>
                   <select
-                    value={bankForm.account_bank}
-                    onChange={(e) =>
+                    value={bankForm.bank_code}
+                    onChange={(e) => {
+                      const code = e.target.value;
+                      const bank = banks.find((b) => b.code === code);
                       setBankForm((prev) => ({
                         ...prev,
-                        account_bank: e.target.value,
-                      }))
-                    }
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                        bank_code: code,
+                        bank_name: bank?.name || "",
+                      }));
+                      setAccountVerified(false);
+                    }}
+                    disabled={loadingBanks}
+                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none disabled:opacity-50"
                   >
-                    <option value="">Select bank</option>
-                    {nigerianBanks.map((bank) => (
-                      <option key={bank.code} value={bank.code}>
-                        {bank.name}
-                      </option>
-                    ))}
+                    {loadingBanks ? (
+                      <option value="">Loading banks...</option>
+                    ) : (
+                      <>
+                        <option value="">Select your bank</option>
+                        {banks.map((bank) => (
+                          <option key={bank.code} value={bank.code}>
+                            {bank.name}
+                          </option>
+                        ))}
+                      </>
+                    )}
                   </select>
                 </div>
 
@@ -895,7 +895,7 @@ export default function SettingsPage() {
                   disabled={
                     verifyingBank ||
                     bankForm.account_number.length !== 10 ||
-                    !bankForm.account_bank
+                    !bankForm.bank_code
                   }
                   className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >

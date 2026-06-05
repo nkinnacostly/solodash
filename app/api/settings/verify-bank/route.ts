@@ -16,39 +16,38 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { account_number, account_bank } = body;
+    const { account_number, bank_code, account_bank } = body;
+    const resolvedBankCode = bank_code || account_bank;
 
-    // Validate account number
     if (!account_number || !/^\d{10}$/.test(account_number)) {
       return NextResponse.json(
         { error: "Account number must be exactly 10 digits" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    if (!account_bank) {
+    if (!resolvedBankCode) {
       return NextResponse.json(
-        { error: "Bank is required" },
-        { status: 400 }
+        { error: "Missing account_number or bank_code" },
+        { status: 400 },
       );
     }
 
-    // Verify bank account
     const result = await verifyBankAccount({
       account_number,
-      account_bank,
+      account_bank: resolvedBankCode,
     });
 
     return NextResponse.json({
       account_name: result.account_name,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Bank verification error:", errorMessage(error));
     return NextResponse.json(
       {
         error: "Could not verify account. Check your account number and bank.",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

@@ -3,38 +3,6 @@ import { createClient, createPublicClient } from "@/lib/supabase/server";
 import { createFlutterwaveSubaccount } from "@/lib/flutterwave";
 import { errorMessage } from "@/lib/log-redact";
 
-const BANK_NAMES: Record<string, string> = {
-  "044": "Access Bank",
-  "023": "Citibank",
-  "050": "Ecobank Nigeria",
-  "070": "Fidelity Bank",
-  "011": "First Bank of Nigeria",
-  "214": "First City Monument Bank",
-  "058": "Guaranty Trust Bank",
-  "030": "Heritage Bank",
-  "082": "Keystone Bank",
-  "076": "Polaris Bank",
-  "101": "Providus Bank",
-  "221": "Stanbic IBTC Bank",
-  "068": "Standard Chartered Bank",
-  "232": "Sterling Bank",
-  "100": "Suntrust Bank",
-  "032": "Union Bank of Nigeria",
-  "033": "United Bank for Africa",
-  "215": "Unity Bank",
-  "035": "Wema Bank",
-  "057": "Zenith Bank",
-  "50211": "Kuda Bank",
-  "999992": "OPay",
-  "999991": "PalmPay",
-  "50515": "Moniepoint",
-  "566": "VFD Microfinance Bank",
-  "565": "Carbon",
-  "125": "Rubies Bank",
-  "104": "Parallex Bank",
-  "102": "Titan Trust Bank",
-};
-
 export async function POST(request: Request) {
   try {
     const supabase = await createClient();
@@ -58,12 +26,27 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { account_number, account_bank, account_name } = body;
+    const {
+      account_number,
+      account_name,
+      bank_code,
+      bank_name,
+      account_bank,
+    } = body;
+
+    const resolvedBankCode = bank_code || account_bank;
+
+    if (!account_number || !resolvedBankCode || !account_name) {
+      return NextResponse.json(
+        { error: "Missing account_number, bank_code, or account_name" },
+        { status: 400 },
+      );
+    }
 
     const splitValue = profile.plan === "pro" ? 0 : 0.05;
 
     const result = await createFlutterwaveSubaccount({
-      account_bank,
+      account_bank: resolvedBankCode,
       account_number,
       business_name: profile.business_name || profile.name,
       business_email: profile.email || user.email || "",
@@ -78,9 +61,9 @@ export async function POST(request: Request) {
       .update({
         flutterwave_subaccount_id: result.subaccount_id,
         bank_account_number: account_number,
-        bank_code: account_bank,
+        bank_code: resolvedBankCode,
         bank_account_name: account_name,
-        bank_name: BANK_NAMES[account_bank] || account_bank,
+        bank_name: bank_name || resolvedBankCode,
       })
       .eq("id", user.id);
 
@@ -103,7 +86,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE() {
   try {
     const supabase = await createClient();
 
