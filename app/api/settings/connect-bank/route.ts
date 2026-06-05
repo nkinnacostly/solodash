@@ -3,6 +3,15 @@ import { createClient, createPublicClient } from "@/lib/supabase/server";
 import { createFlutterwaveSubaccount } from "@/lib/flutterwave";
 import { errorMessage } from "@/lib/log-redact";
 
+function logPostgresError(prefix: string, error: unknown) {
+  if (error && typeof error === "object" && "message" in error) {
+    const pg = error as { message?: string; code?: string; details?: string };
+    console.error(prefix, pg.message, pg.code, pg.details);
+    return;
+  }
+  console.error(prefix, errorMessage(error));
+}
+
 export async function POST(request: Request) {
   try {
     const supabase = await createClient();
@@ -55,7 +64,11 @@ export async function POST(request: Request) {
       split_value: splitValue,
     });
 
+    // CRITICAL: Use service role client for the profile update.
+    // The C4 trigger blocks bank field updates from authenticated
+    // users — only service role can update these fields.
     const adminSupabase = createPublicClient();
+
     const { error: updateError } = await adminSupabase
       .from("profiles")
       .update({
@@ -64,11 +77,12 @@ export async function POST(request: Request) {
         bank_code: resolvedBankCode,
         bank_account_name: account_name,
         bank_name: bank_name || resolvedBankCode,
+        updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
 
     if (updateError) {
-      console.error("Profile update error:", errorMessage(updateError));
+      logPostgresError("[connect-bank] profile update failed:", updateError);
       return NextResponse.json(
         { error: "Failed to save bank account details" },
         { status: 500 },
@@ -81,7 +95,7 @@ export async function POST(request: Request) {
       error instanceof Error
         ? error.message
         : "Failed to connect bank account";
-    console.error("Connect bank error:", errorMessage(error));
+    console.error("[connect-bank] error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
@@ -98,7 +112,9 @@ export async function DELETE() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Service role required — C4 trigger blocks bank field clears from auth users.
     const adminSupabase = createPublicClient();
+
     const { error: updateError } = await adminSupabase
       .from("profiles")
       .update({
@@ -107,11 +123,12 @@ export async function DELETE() {
         bank_account_number: null,
         bank_code: null,
         bank_account_name: null,
+        updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
 
     if (updateError) {
-      console.error("Profile update error:", errorMessage(updateError));
+      logPostgresError("[connect-bank] disconnect failed:", updateError);
       return NextResponse.json(
         { error: "Failed to disconnect bank account" },
         { status: 500 },
@@ -124,7 +141,7 @@ export async function DELETE() {
       error instanceof Error
         ? error.message
         : "Failed to disconnect bank account";
-    console.error("Disconnect bank error:", errorMessage(error));
+    console.error("[connect-bank] disconnect error:", errorMessage(error));
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
