@@ -45,9 +45,12 @@ export async function POST(request: Request) {
 
     const resolvedBankCode = bank_code || account_bank;
 
-    if (!account_number || !resolvedBankCode || !account_name) {
+    if (!account_number || !resolvedBankCode || !account_name || !bank_name) {
       return NextResponse.json(
-        { error: "Missing account_number, bank_code, or account_name" },
+        {
+          error:
+            "Missing account_number, bank_code, bank_name, or account_name",
+        },
         { status: 400 },
       );
     }
@@ -74,9 +77,8 @@ export async function POST(request: Request) {
       .update({
         flutterwave_subaccount_id: result.subaccount_id,
         bank_account_number: account_number,
-        bank_code: resolvedBankCode,
         bank_account_name: account_name,
-        bank_name: bank_name || resolvedBankCode,
+        bank_name: bank_name,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
@@ -121,7 +123,6 @@ export async function DELETE() {
         flutterwave_subaccount_id: null,
         bank_name: null,
         bank_account_number: null,
-        bank_code: null,
         bank_account_name: null,
         updated_at: new Date().toISOString(),
       })
