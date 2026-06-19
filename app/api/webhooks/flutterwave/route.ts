@@ -23,7 +23,13 @@ export async function POST(request: Request) {
     if (txRef.startsWith("TRADEPAD-")) {
       return forwardToTradepad(body, request.headers.get("verif-hash") ?? "");
     }
-
+    // Tradepad Pro subscription payments → Tradepad's subscription-webhook
+    if (txRef.startsWith("SUB-")) {
+      return forwardToTradepadSubscription(
+        body,
+        request.headers.get("verif-hash") ?? "",
+      );
+    }
     // Subscription payments are verified via /api/billing/verify
     if (txRef.startsWith("PAIDLY-SUB-")) {
       return NextResponse.json({ status: "success" });
@@ -180,10 +186,7 @@ async function forwardToSmsApp(payload: unknown) {
       console.error("Failed to forward to SMS app:", res.status);
     }
   } catch (err) {
-    console.error(
-      "Error forwarding to SMS app:",
-      errorMessage(err),
-    );
+    console.error("Error forwarding to SMS app:", errorMessage(err));
   }
 
   return NextResponse.json({ status: "success" });
@@ -207,8 +210,34 @@ async function forwardToTradepad(payload: unknown, verifHash: string) {
       console.error("Failed to forward to Tradepad:", res.status);
     }
   } catch (err) {
+    console.error("Error forwarding to Tradepad:", errorMessage(err));
+  }
+
+  return NextResponse.json({ status: "success" });
+}
+async function forwardToTradepadSubscription(
+  payload: unknown,
+  verifHash: string,
+) {
+  try {
+    const subscriptionWebhookUrl =
+      "https://xytaymcapbmswbsrntdm.supabase.co/functions/v1/subscription-webhook";
+
+    const res = await fetch(subscriptionWebhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "verif-hash": verifHash,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to forward to Tradepad subscription:", res.status);
+    }
+  } catch (err) {
     console.error(
-      "Error forwarding to Tradepad:",
+      "Error forwarding to Tradepad subscription:",
       errorMessage(err),
     );
   }
