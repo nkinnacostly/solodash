@@ -46,10 +46,10 @@ export default function TermsOfService() {
                 1. Agreement to Terms
               </h2>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                By accessing or using Paidly (the "Service"), operated by
-                Paidly ("we," "our," or "us"), you agree to be bound by these
-                Terms of Service ("Terms"). If you disagree with any part of
-                these terms, you may not access the Service.
+                By accessing or using Paidly (the "Service"), operated by Paidly
+                ("we," "our," or "us"), you agree to be bound by these Terms of
+                Service ("Terms"). If you disagree with any part of these terms,
+                you may not access the Service.
               </p>
               <p className="text-[#a1a1aa] leading-relaxed">
                 These Terms apply to all visitors, users, and others who access
@@ -82,9 +82,9 @@ export default function TermsOfService() {
                 3.1 Account Creation
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                To use Paidly, you must create an account by providing
-                accurate and complete information. You must be at least 18 years
-                old to use this Service.
+                To use Paidly, you must create an account by providing accurate
+                and complete information. You must be at least 18 years old to
+                use this Service.
               </p>
 
               <h3 className="text-lg font-semibold mb-2 text-white">
@@ -256,8 +256,8 @@ export default function TermsOfService() {
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
                 The Service and its original content, features, and
                 functionality are and will remain the exclusive property of
-                Paidly and its licensors. The Service is protected by
-                copyright, trademark, and other laws.
+                Paidly and its licensors. The Service is protected by copyright,
+                trademark, and other laws.
               </p>
               <p className="text-[#a1a1aa] leading-relaxed">
                 Our trademarks and trade dress may not be used in connection
@@ -295,8 +295,8 @@ export default function TermsOfService() {
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
                 The Service is provided on an "AS IS" and "AS AVAILABLE" basis.
-                Paidly makes no warranties, expressed or implied, including
-                but not limited to:
+                Paidly makes no warranties, expressed or implied, including but
+                not limited to:
               </p>
               <ul className="list-disc pl-6 text-[#a1a1aa] space-y-2 mb-6">
                 <li>
@@ -315,9 +315,9 @@ export default function TermsOfService() {
                 10.2 Limitation of Liability
               </h3>
               <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                In no event shall Paidly, its directors, employees, or agents
-                be liable for any indirect, incidental, special, consequential,
-                or punitive damages, including but not limited to:
+                In no event shall Paidly, its directors, employees, or agents be
+                liable for any indirect, incidental, special, consequential, or
+                punitive damages, including but not limited to:
               </p>
               <ul className="list-disc pl-6 text-[#a1a1aa] space-y-2 mb-6">
                 <li>Loss of profits, data, or business opportunities</li>
@@ -442,7 +442,7 @@ export default function TermsOfService() {
                 <p>
                   <strong className="text-white">Website:</strong>{" "}
                   <a
-                    href="https://getpaidly.co"
+                    href="https://www.getpaidly.co"
                     className="text-[#10b981] hover:underline"
                   >
                     getpaidly.co

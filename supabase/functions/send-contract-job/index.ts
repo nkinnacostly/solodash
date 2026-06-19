@@ -9,7 +9,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const RESEND_FROM_EMAIL =
   Deno.env.get("RESEND_FROM_EMAIL") || "hello@getpaidly.co";
-const APP_URL = Deno.env.get("APP_URL") || "https://getpaidly.co";
+const APP_URL = Deno.env.get("APP_URL") || "https://www.getpaidly.co";
 const PAIDLY_LINK_SECRET = Deno.env.get("PAIDLY_LINK_SECRET")!;
 
 async function generateLinkToken(
@@ -53,10 +53,7 @@ function base64url(input: string | Uint8Array): string {
     str += String.fromCharCode(bytes[i]);
   }
 
-  return btoa(str)
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
+  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 function buildEmailHtml(params: {
@@ -100,7 +97,10 @@ function buildEmailHtml(params: {
 }
 
 function clientRecord(
-  clients: { name?: string; email?: string } | { name?: string; email?: string }[] | null,
+  clients:
+    | { name?: string; email?: string }
+    | { name?: string; email?: string }[]
+    | null,
 ): { name?: string; email?: string } | null {
   if (!clients) return null;
   if (Array.isArray(clients)) return clients[0] ?? null;
@@ -119,16 +119,16 @@ Deno.serve(async (req) => {
     contractId = body.contract_id;
 
     if (!contractId) {
-      return new Response(
-        JSON.stringify({ error: "contract_id required" }),
-        { status: 400, headers: { "Content-Type": "application/json" } },
-      );
+      return new Response(JSON.stringify({ error: "contract_id required" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
   } catch {
-    return new Response(
-      JSON.stringify({ error: "Invalid request body" }),
-      { status: 400, headers: { "Content-Type": "application/json" } },
-    );
+    return new Response(JSON.stringify({ error: "Invalid request body" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -150,7 +150,10 @@ Deno.serve(async (req) => {
     }
 
     const client = clientRecord(
-      contract.clients as { name?: string; email?: string } | { name?: string; email?: string }[] | null,
+      contract.clients as
+        | { name?: string; email?: string }
+        | { name?: string; email?: string }[]
+        | null,
     );
 
     if (!client?.email) {
@@ -214,10 +217,13 @@ Deno.serve(async (req) => {
       console.error("Failed to update contract to sent:", updateErr.message);
     }
 
-    return new Response(JSON.stringify({ success: true, signingLink: signUrl }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ success: true, signingLink: signUrl }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   } catch (err) {
     console.error("[send-contract-job] failed:", (err as Error).message);
 
@@ -230,9 +236,9 @@ Deno.serve(async (req) => {
       .eq("id", contractId)
       .eq("status", "sending");
 
-    return new Response(
-      JSON.stringify({ error: (err as Error).message }),
-      { status: 500, headers: { "Content-Type": "application/json" } },
-    );
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 });

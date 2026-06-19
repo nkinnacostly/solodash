@@ -193,7 +193,7 @@ export async function sendContractSignedEmail(params: {
               <tr>
                 <td style="background-color: #0f0f0f; padding: 24px; text-align: center; border-top: 1px solid #27272a;">
                   <p style="margin: 0 0 8px 0; font-size: 14px; color: #a1a1aa;">
-                    Need help? Visit <a href="https://getpaidly.co" style="color: #10b981; text-decoration: none;">getpaidly.co</a>
+                    Need help? Visit <a href="https://www.getpaidly.co" style="color: #10b981; text-decoration: none;">getpaidly.co</a>
                   </p>
                 </td>
               </tr>

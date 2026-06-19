@@ -319,7 +319,7 @@ export default function PrivacyPolicy() {
                 <p>
                   <strong className="text-white">Website:</strong>{" "}
                   <a
-                    href="https://getpaidly.co"
+                    href="https://www.getpaidly.co"
                     className="text-[#10b981] hover:underline"
                   >
                     getpaidly.co

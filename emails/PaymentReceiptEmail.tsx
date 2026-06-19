@@ -76,7 +76,7 @@ export const PaymentReceiptEmail = ({
           <Hr style={divider} />
           <Text style={footer}>
             This invoice was sent via Paidly ·{" "}
-            <Link href="https://getpaidly.co" style={footerLink}>
+            <Link href="https://www.getpaidly.co" style={footerLink}>
               getpaidly.co
             </Link>
           </Text>
