@@ -41,6 +41,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+#claude
+CLAUDE.md
+
+#openvisio
+.openvisio
+
 
 # audit report
 docs/SECURITY-PERFORMANCE-AUDIT.md
