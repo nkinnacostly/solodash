@@ -17,6 +17,30 @@ body {
 }
 
 /* ============================================
+   INTERACTIVE CURSORS
+   Tailwind v4 Preflight no longer sets cursor: pointer on buttons,
+   so clickable elements otherwise show the default arrow. Restore it
+   app-wide. Utility classes (e.g. cursor-not-allowed) still win because
+   utilities are a higher layer than base.
+   ============================================ */
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  a[href],
+  label[for],
+  summary,
+  select:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+/* ============================================
    SCROLL ANIMATIONS
    ============================================ */
 
@@ -195,4 +219,39 @@ body {
 
 .contract-content li {
   margin-bottom: 6px;
+}
+
+/* ============================================
+   PRINT — Download contract as PDF
+   ============================================ */
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  /* Hide everything, then reveal only the contract document */
+  body * {
+    visibility: hidden;
+  }
+
+  #contract-document,
+  #contract-document * {
+    visibility: visible;
+  }
+
+  #contract-document {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Keep the emerald accents, watermark, and signature colors in the PDF */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

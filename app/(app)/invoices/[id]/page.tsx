@@ -23,6 +23,7 @@ import Image from "next/image";
 
 interface Invoice {
   id: string;
+  client_id: string;
   invoice_number: string;
   status: string;
   subtotal: number;
@@ -78,6 +79,7 @@ export default function InvoiceDetailPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [markPaidLoading, setMarkPaidLoading] = useState(false);
+  const [duplicating, setDuplicating] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [publicUrl, setPublicUrl] = useState<string | null>(null);
   const [publicLinkLoading, setPublicLinkLoading] = useState(false);
@@ -271,6 +273,52 @@ export default function InvoiceDetailPage() {
   const handlePreviewPaymentPage = () => {
     if (!publicUrl) return;
     window.open(publicUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleDownloadPdf = () => {
+    // Server route returns the PDF with Content-Disposition: attachment.
+    window.open(`/api/invoices/${invoiceId}/generate-pdf`, "_blank");
+  };
+
+  const handleDuplicate = async () => {
+    if (!invoice) return;
+    setDuplicating(true);
+
+    try {
+      const response = await fetch("/api/invoices", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientId: invoice.client_id,
+          status: "draft",
+          currency: invoice.currency,
+          taxRate: invoice.tax_rate,
+          issueDate: invoice.issue_date,
+          dueDate: invoice.due_date,
+          notes: invoice.notes,
+          lineItems: invoice.invoice_items
+            .slice()
+            .sort((a, b) => a.sort_order - b.sort_order)
+            .map((item) => ({
+              description: item.description,
+              quantity: item.quantity,
+              rate: item.rate,
+            })),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to duplicate invoice");
+      }
+
+      toast.success("Invoice duplicated", "Opening the new draft...");
+      router.push(`/invoices/${data.invoice.id}/edit`);
+    } catch (err: any) {
+      toast.error("Failed to duplicate", err.message);
+      setDuplicating(false);
+    }
   };
 
   const handleShareWhatsApp = () => {
@@ -730,17 +778,24 @@ export default function InvoiceDetailPage() {
                   <>
                     <button
                       type="button"
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                      onClick={handleDownloadPdf}
+                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] hover:text-[#10b981] transition-colors flex items-center justify-center gap-2"
                     >
                       <Download size={18} />
                       Download PDF
                     </button>
                     <button
                       type="button"
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                      onClick={handleDuplicate}
+                      disabled={duplicating}
+                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] hover:text-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
-                      <Copy size={18} />
-                      Duplicate Invoice
+                      {duplicating ? (
+                        <Loader2 size={18} className="animate-spin" />
+                      ) : (
+                        <Copy size={18} />
+                      )}
+                      {duplicating ? "Duplicating..." : "Duplicate Invoice"}
                     </button>
                   </>
                 )}

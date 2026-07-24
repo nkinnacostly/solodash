@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import {
   Plus,
   FileText,
-  MoreVertical,
   Eye,
   Edit,
   CheckCircle,
@@ -89,7 +88,6 @@ export default function InvoicesPage() {
     total: number;
     hasMore: boolean;
   } | null>(null);
-  const [actionMenuOpen, setActionMenuOpen] = useState<string | null>(null);
   const [updating, setUpdating] = useState<string | null>(null);
 
   const fetchInvoices = async () => {
@@ -166,7 +164,6 @@ export default function InvoicesPage() {
       alert(err.message);
     } finally {
       setUpdating(null);
-      setActionMenuOpen(null);
     }
   };
 
@@ -192,7 +189,6 @@ export default function InvoicesPage() {
       alert(err.message);
     } finally {
       setUpdating(null);
-      setActionMenuOpen(null);
     }
   };
 
@@ -398,79 +394,70 @@ export default function InvoicesPage() {
                         {new Date(invoice.due_date).toLocaleDateString()}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-right relative">
-                      <button
-                        onClick={() =>
-                          setActionMenuOpen(
-                            actionMenuOpen === invoice.id ? null : invoice.id,
-                          )
-                        }
-                        className="p-2 hover:bg-[#27272a] rounded-lg transition-colors"
-                      >
-                        <MoreVertical size={18} className="text-[#a1a1aa]" />
-                      </button>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center justify-end gap-1">
+                        <Link
+                          href={`/invoices/${invoice.id}`}
+                          className="p-2 hover:bg-[#27272a] rounded-lg transition-colors"
+                          title="View"
+                        >
+                          <Eye size={16} className="text-[#a1a1aa]" />
+                        </Link>
 
-                      {actionMenuOpen === invoice.id && (
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-[#18181b] border border-[#27272a] rounded-lg shadow-xl z-10">
-                          <div className="py-1">
-                            <Link
-                              href={`/invoices/${invoice.id}`}
-                              className="flex items-center gap-3 px-4 py-2 text-sm text-[#a1a1aa] hover:text-white hover:bg-[#27272a] transition-colors"
-                              onClick={() => setActionMenuOpen(null)}
-                            >
-                              <Eye size={16} />
-                              View
-                            </Link>
+                        {invoice.status === "draft" && (
+                          <Link
+                            href={`/invoices/${invoice.id}/edit`}
+                            className="p-2 hover:bg-[#27272a] rounded-lg transition-colors"
+                            title="Edit"
+                          >
+                            <Edit size={16} className="text-[#a1a1aa]" />
+                          </Link>
+                        )}
 
-                            {invoice.status === "draft" && (
-                              <Link
-                                href={`/invoices/${invoice.id}/edit`}
-                                className="flex items-center gap-3 px-4 py-2 text-sm text-[#a1a1aa] hover:text-white hover:bg-[#27272a] transition-colors"
-                                onClick={() => setActionMenuOpen(null)}
-                              >
-                                <Edit size={16} />
-                                Edit
-                              </Link>
+                        {(invoice.status === "sent" ||
+                          invoice.status === "viewed" ||
+                          invoice.status === "overdue") && (
+                          <button
+                            onClick={() => handleMarkAsPaid(invoice.id)}
+                            disabled={updating === invoice.id}
+                            className="p-2 hover:bg-[#27272a] rounded-lg transition-colors disabled:opacity-50"
+                            title="Mark as paid"
+                          >
+                            {updating === invoice.id ? (
+                              <Loader2
+                                size={16}
+                                className="text-[#a1a1aa] animate-spin"
+                              />
+                            ) : (
+                              <CheckCircle size={16} className="text-[#10b981]" />
                             )}
+                          </button>
+                        )}
 
-                            {(invoice.status === "sent" ||
-                              invoice.status === "viewed" ||
-                              invoice.status === "overdue") && (
-                              <button
-                                onClick={() => handleMarkAsPaid(invoice.id)}
-                                disabled={updating === invoice.id}
-                                className="w-full flex items-center gap-3 px-4 py-2 text-sm text-[#a1a1aa] hover:text-white hover:bg-[#27272a] transition-colors disabled:opacity-50"
-                              >
-                                {updating === invoice.id ? (
-                                  <Loader2 size={16} className="animate-spin" />
-                                ) : (
-                                  <CheckCircle size={16} />
-                                )}
-                                Mark as Paid
-                              </button>
-                            )}
+                        <button
+                          onClick={() =>
+                            window.open(
+                              `/api/invoices/${invoice.id}/generate-pdf`,
+                              "_blank",
+                            )
+                          }
+                          className="p-2 hover:bg-[#27272a] rounded-lg transition-colors"
+                          title="Download PDF"
+                        >
+                          <Download size={16} className="text-[#a1a1aa]" />
+                        </button>
 
-                            <button
-                              className="flex items-center gap-3 px-4 py-2 text-sm text-[#a1a1aa] hover:text-white hover:bg-[#27272a] transition-colors"
-                              onClick={() => setActionMenuOpen(null)}
-                            >
-                              <Download size={16} />
-                              Download PDF
-                            </button>
-
-                            {invoice.status === "draft" && (
-                              <button
-                                onClick={() => handleDelete(invoice.id)}
-                                disabled={updating === invoice.id}
-                                className="w-full flex items-center gap-3 px-4 py-2 text-sm text-[#ef4444] hover:bg-[#27272a] transition-colors disabled:opacity-50"
-                              >
-                                <Trash2 size={16} />
-                                Delete
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      )}
+                        {invoice.status === "draft" && (
+                          <button
+                            onClick={() => handleDelete(invoice.id)}
+                            disabled={updating === invoice.id}
+                            className="p-2 hover:bg-[#ef4444]/10 rounded-lg transition-colors disabled:opacity-50"
+                            title="Delete"
+                          >
+                            <Trash2 size={16} className="text-[#ef4444]" />
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

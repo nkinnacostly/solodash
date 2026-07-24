@@ -534,12 +534,13 @@ export default function Home() {
                   ₦450,000
                 </span>
               </div>
-              <button
-                type="button"
-                className="mt-5 w-full rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] py-2.5 text-sm font-semibold text-white transition-shadow duration-300 ease-out hover:shadow-[0_0_24px_#10b98130]"
+              {/* Decorative — part of the product mockup, not a real action */}
+              <div
+                aria-hidden="true"
+                className="mt-5 w-full rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] py-2.5 text-center text-sm font-semibold text-white select-none"
               >
                 Pay Now →
-              </button>
+              </div>
             </MockShell>
           </Reveal>
         </div>

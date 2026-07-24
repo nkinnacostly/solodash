@@ -128,6 +128,19 @@ export default function ContractDetailPage() {
     }
   };
 
+  const handleDownloadPdf = () => {
+    // No server-side contract PDF pipeline exists — use the browser's
+    // print-to-PDF, scoped to #contract-document via @media print in globals.css.
+    const originalTitle = document.title;
+    const restore = () => {
+      document.title = originalTitle;
+      window.removeEventListener("afterprint", restore);
+    };
+    document.title = `${contract?.title || "Contract"} — Paidly`;
+    window.addEventListener("afterprint", restore);
+    window.print();
+  };
+
   const handleSend = async () => {
     setSendingLoading(true);
 
@@ -318,7 +331,10 @@ export default function ContractDetailPage() {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* LEFT: Contract Content */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden relative">
+          <div
+            id="contract-document"
+            className="bg-white rounded-xl shadow-lg overflow-hidden relative"
+          >
             {/* Document header bar */}
             <div style={{ background: "#10b981" }} className="h-2 w-full" />
 
@@ -816,7 +832,8 @@ export default function ContractDetailPage() {
                   )}
                   <button
                     type="button"
-                    className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                    onClick={handleDownloadPdf}
+                    className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg cursor-pointer hover:border-[#10b981] hover:text-[#10b981] transition-colors flex items-center justify-center gap-2"
                   >
                     <Download size={18} />
                     Download PDF
