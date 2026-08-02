@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FileText, Plus, Loader2, Trash2, Eye } from "lucide-react";
+import { FileText, Plus, Loader2, Trash2, Eye, Edit } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
 
@@ -315,6 +315,17 @@ export default function ContractsPage() {
                         </button>
                         {contract.status === "draft" && (
                           <button
+                            onClick={() =>
+                              router.push(`/contracts/${contract.id}/edit`)
+                            }
+                            className="p-2 hover:bg-[#27272a] rounded-lg transition-colors"
+                            title="Edit"
+                          >
+                            <Edit size={16} className="text-[#a1a1aa]" />
+                          </button>
+                        )}
+                        {contract.status === "draft" && (
+                          <button
                             onClick={() => setDeleteId(contract.id)}
                             className="p-2 hover:bg-[#ef4444]/10 rounded-lg transition-colors"
                             title="Delete"
@@ -369,6 +380,16 @@ export default function ContractsPage() {
                     >
                       View
                     </button>
+                    {contract.status === "draft" && (
+                      <button
+                        onClick={() =>
+                          router.push(`/contracts/${contract.id}/edit`)
+                        }
+                        className="text-xs text-[#a1a1aa] hover:underline"
+                      >
+                        Edit
+                      </button>
+                    )}
                     {contract.status === "draft" && (
                       <button
                         onClick={() => setDeleteId(contract.id)}
