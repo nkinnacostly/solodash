@@ -210,7 +210,7 @@ export const contractTemplates: ContractTemplate[] = [
           <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #10b981; padding-bottom: 8px;">4. Timeline</h2>
           <p><strong>Start Date:</strong> ${startDateFormatted}</p>
           <p><strong>Estimated Completion:</strong> ${endDateStr}</p>
-          <p style="margin-top: 12px;">The Contractor will provide regular progress updates. Any delays will be communicated promptly with revised timelines.</p>
+          <p style="margin-top: 12px;">The Contractor will provide regular progress updates and respond to the Client's questions and feedback within three (3) business days. Any delays will be communicated promptly with revised timelines.</p>
 
           <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #10b981; padding-bottom: 8px;">5. Compensation</h2>
           <p>The Client agrees to pay a fixed project fee of <strong>${symbol}${projectFeeDisplay}</strong> for the complete scope of work outlined in this Agreement.</p>
@@ -226,7 +226,7 @@ export const contractTemplates: ContractTemplate[] = [
           <p>The Client agrees to:</p>
           <ul style="margin: 12px 0; padding-left: 24px;">
             <li>Provide all necessary materials, information, and access in a timely manner</li>
-            <li>Respond to questions and feedback requests within three (3) business days</li>
+            <li>Provide feedback, approvals, and answers to the Contractor's questions within three (3) business days</li>
             <li>Designate a single point of contact for project communications</li>
           </ul>
 
