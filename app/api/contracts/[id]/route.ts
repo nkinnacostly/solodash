@@ -123,7 +123,7 @@ export async function PUT(
     // Fetch contract to check ownership + status
     const { data: existing, error: fetchError } = await supabase
       .from("contracts")
-      .select("status")
+      .select("status, client_signed_at, freelancer_signed_at")
       .eq("id", id)
       .eq("user_id", user.id)
       .single();
@@ -135,10 +135,19 @@ export async function PUT(
       );
     }
 
-    // Only allow editing drafts (mirrors invoice edit + delete guards)
-    if (existing.status !== "draft") {
+    // Editable until it's signed. Draft and sent are fine, but once either
+    // party has signed (or the status has advanced past sent) editing would
+    // invalidate a signature, so it's locked.
+    const isSigned =
+      existing.status === "signed" ||
+      existing.status === "active" ||
+      existing.status === "completed" ||
+      Boolean(existing.client_signed_at) ||
+      Boolean(existing.freelancer_signed_at);
+
+    if (isSigned) {
       return NextResponse.json(
-        { error: "Only draft contracts can be edited" },
+        { error: "A signed contract can no longer be edited" },
         { status: 400 },
       );
     }

@@ -15,11 +15,20 @@ interface Contract {
   value: number;
   currency: string;
   created_at: string;
+  client_signed_at: string | null;
+  freelancer_signed_at: string | null;
   clients: {
     name: string;
     email: string;
   } | null;
 }
+
+// Editable until the client signs — draft, or sent with no signatures yet.
+const isEditable = (contract: Contract) =>
+  contract.status === "draft" ||
+  (contract.status === "sent" &&
+    !contract.client_signed_at &&
+    !contract.freelancer_signed_at);
 
 const statusColors: Record<string, string> = {
   draft: "bg-[#27272a] text-[#a1a1aa]",
@@ -313,7 +322,7 @@ export default function ContractsPage() {
                         >
                           <Eye size={16} className="text-[#a1a1aa]" />
                         </button>
-                        {contract.status === "draft" && (
+                        {isEditable(contract) && (
                           <button
                             onClick={() =>
                               router.push(`/contracts/${contract.id}/edit`)
@@ -380,7 +389,7 @@ export default function ContractsPage() {
                     >
                       View
                     </button>
-                    {contract.status === "draft" && (
+                    {isEditable(contract) && (
                       <button
                         onClick={() =>
                           router.push(`/contracts/${contract.id}/edit`)

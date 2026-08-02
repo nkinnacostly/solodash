@@ -22,6 +22,8 @@ interface Invoice {
   freelancer: {
     name: string;
     business_name: string | null;
+    logo_url: string | null;
+    brand_color: string | null;
   };
   subaccount_id: string | null;
   is_pro: boolean;
@@ -298,9 +300,37 @@ function PayInvoiceContent() {
         <div className="w-full max-w-md">
           {/* Invoice Summary Card */}
           <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-8">
-            {/* Header */}
+            {/* Header — Pro users show their own branding, else Paidly */}
             <div className="mb-6">
-              <h1 className="text-2xl font-bold text-[#10b981] mb-1">Paidly</h1>
+              {invoice.is_pro && invoice.freelancer.logo_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={invoice.freelancer.logo_url}
+                  alt={
+                    invoice.freelancer.business_name ||
+                    invoice.freelancer.name ||
+                    "Logo"
+                  }
+                  className="h-10 w-auto object-contain mb-2"
+                />
+              ) : (
+                <h1
+                  className="text-2xl font-bold mb-1"
+                  style={{
+                    color:
+                      invoice.is_pro && invoice.freelancer.brand_color
+                        ? invoice.freelancer.brand_color
+                        : "#10b981",
+                  }}
+                >
+                  {invoice.is_pro &&
+                  (invoice.freelancer.business_name ||
+                    invoice.freelancer.name)
+                    ? invoice.freelancer.business_name ||
+                      invoice.freelancer.name
+                    : "Paidly"}
+                </h1>
+              )}
               <p className="text-sm text-[#a1a1aa]">
                 Invoice from{" "}
                 {invoice.freelancer.business_name || invoice.freelancer.name}

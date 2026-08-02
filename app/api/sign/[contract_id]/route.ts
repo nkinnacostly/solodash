@@ -71,9 +71,12 @@ export async function GET(
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("name, business_name")
+      .select("name, business_name, plan, logo_url, brand_color")
       .eq("id", contract.user_id)
       .single();
+
+    // Derive Pro server-side; only expose branding assets for Pro users.
+    const isPro = profile?.plan === "pro";
 
     const client = contract.clients as {
       name?: string;
@@ -89,7 +92,10 @@ export async function GET(
       freelancer: {
         name: profile?.name || "",
         business_name: profile?.business_name || null,
+        logo_url: isPro ? profile?.logo_url || null : null,
+        brand_color: isPro ? profile?.brand_color || null : null,
       },
+      is_pro: isPro,
       client: {
         name: client?.name || "",
         email: client?.email || "",

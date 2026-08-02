@@ -608,7 +608,7 @@ export default function NewInvoicePage() {
                         {profile?.plan === "pro" &&
                         (profile?.business_name || profile?.name)
                           ? profile.business_name || profile.name
-                          : "Costly"}
+                          : "Paidly"}
                       </h2>
                     )}
                     <p className="text-sm text-gray-500">Invoice</p>

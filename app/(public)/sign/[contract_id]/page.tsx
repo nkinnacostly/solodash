@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import { Loader2, CheckCircle, PenTool, Type, X } from "lucide-react";
+import { Loader2, CheckCircle, PenTool, Type, X, Download } from "lucide-react";
 import { sanitizeContractHtml } from "@/lib/sanitize-html";
 
 interface Contract {
@@ -14,7 +14,10 @@ interface Contract {
   freelancer: {
     name: string;
     business_name: string | null;
+    logo_url: string | null;
+    brand_color: string | null;
   };
+  is_pro: boolean;
   client: {
     name: string;
     email: string;
@@ -267,12 +270,50 @@ function SignContractContent() {
     );
   }
 
+  const handleDownloadPdf = () => {
+    // Mirrors the app-side contract download: browser print scoped to
+    // #contract-document via @media print in globals.css (no server PDF).
+    const originalTitle = document.title;
+    const restore = () => {
+      document.title = originalTitle;
+      window.removeEventListener("afterprint", restore);
+    };
+    document.title = `${contract.title || "Contract"} — Paidly`;
+    window.addEventListener("afterprint", restore);
+    window.print();
+  };
+
+  const brandColor =
+    (contract.is_pro && contract.freelancer.brand_color) || "#10b981";
+
   return (
     <div className="min-h-screen bg-[#0f0f0f] p-4">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
+        {/* Header — Pro users show their own branding, else Paidly */}
         <div className="text-center mb-8 pt-8">
-          <h1 className="text-3xl font-bold text-[#10b981] mb-2">Paidly</h1>
+          {contract.is_pro && contract.freelancer.logo_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={contract.freelancer.logo_url}
+              alt={
+                contract.freelancer.business_name ||
+                contract.freelancer.name ||
+                "Logo"
+              }
+              className="h-12 w-auto object-contain mx-auto mb-2"
+            />
+          ) : (
+            <h1
+              className="text-3xl font-bold mb-2"
+              style={{ color: brandColor }}
+            >
+              {contract.is_pro &&
+              (contract.freelancer.business_name || contract.freelancer.name)
+                ? contract.freelancer.business_name ||
+                  contract.freelancer.name
+                : "Paidly"}
+            </h1>
+          )}
           <p className="text-[#a1a1aa]">Contract for signature</p>
         </div>
 
@@ -300,19 +341,79 @@ function SignContractContent() {
           </p>
         </div>
 
-        {/* Contract Content */}
-        {!contract.client_signed_at && (
-          <>
+        {/* Contract document — always visible so the client can read and save
+            a branded copy, whether or not it's already signed. */}
+        <div className="max-h-[600px] overflow-y-auto mb-4">
+          <div
+            id="contract-document"
+            className="relative bg-white rounded-xl p-10 shadow-lg overflow-hidden"
+          >
+            {/* Watermark — Pro only */}
+            {contract.is_pro && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%) rotate(-20deg)",
+                  opacity: 0.08,
+                  pointerEvents: "none",
+                  zIndex: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                {contract.freelancer.logo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={contract.freelancer.logo_url}
+                    alt="watermark"
+                    style={{ width: 220, height: 220, objectFit: "contain" }}
+                  />
+                ) : (
+                  <p
+                    style={{
+                      fontSize: "64px",
+                      fontWeight: "bold",
+                      color: brandColor,
+                      whiteSpace: "nowrap",
+                      margin: 0,
+                    }}
+                  >
+                    {contract.freelancer.business_name || "Paidly"}
+                  </p>
+                )}
+              </div>
+            )}
+
             <div
-              className="bg-white rounded-xl p-10 mb-6 shadow-lg max-h-[600px] overflow-y-auto"
+              style={{ position: "relative", zIndex: 1 }}
               dangerouslySetInnerHTML={{
                 __html: sanitizeContractHtml(
-                  contract.content || (contract as { content_html?: string }).content_html || ""
+                  contract.content ||
+                    (contract as { content_html?: string }).content_html ||
+                    "",
                 ),
               }}
             />
+          </div>
+        </div>
 
-            {/* Signature Section */}
+        {/* Download a branded copy */}
+        <button
+          type="button"
+          onClick={handleDownloadPdf}
+          className="w-full py-3 mb-6 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+        >
+          <Download size={16} />
+          Download PDF
+        </button>
+
+        {/* Signature Section */}
+        {!contract.client_signed_at && (
+          <>
             <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
               <h3 className="text-lg font-semibold text-white">
                 Sign this contract

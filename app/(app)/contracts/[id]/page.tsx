@@ -371,7 +371,7 @@ export default function ContractDetailPage() {
                       style={{
                         fontSize: "64px",
                         fontWeight: "bold",
-                        color: "#10b981",
+                        color: userProfile.brand_color || "#10b981",
                         whiteSpace: "nowrap",
                         margin: 0,
                       }}
@@ -777,6 +777,18 @@ export default function ContractDetailPage() {
                       Sign Contract
                     </button>
                   )}
+                  {/* Editable while awaiting the client — but not after either
+                      party has signed (would invalidate a signature). */}
+                  {!contract.freelancer_signed_at &&
+                    !contract.client_signed_at && (
+                      <Link
+                        href={`/contracts/${contract.id}/edit`}
+                        className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Edit size={18} />
+                        Edit Contract
+                      </Link>
+                    )}
                   <button
                     type="button"
                     onClick={handleSend}

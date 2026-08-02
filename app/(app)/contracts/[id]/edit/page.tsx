@@ -43,7 +43,7 @@ export default function EditContractPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [notDraft, setNotDraft] = useState(false);
+  const [locked, setLocked] = useState(false);
   const [clients, setClients] = useState<{ id: string; name: string; email: string }[]>(
     [],
   );
@@ -91,8 +91,16 @@ export default function EditContractPage() {
 
         const contract = data.contract;
 
-        if (contract.status !== "draft") {
-          setNotDraft(true);
+        // Editable until it's signed by either party (draft/sent are fine).
+        const isSigned =
+          contract.status === "signed" ||
+          contract.status === "active" ||
+          contract.status === "completed" ||
+          Boolean(contract.client_signed_at) ||
+          Boolean(contract.freelancer_signed_at);
+
+        if (isSigned) {
+          setLocked(true);
           setLoading(false);
           return;
         }
@@ -168,15 +176,15 @@ export default function EditContractPage() {
     );
   }
 
-  if (notDraft) {
+  if (locked) {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="text-center py-20">
           <h3 className="text-xl font-semibold text-white mb-2">
-            Only draft contracts can be edited
+            This contract can no longer be edited
           </h3>
           <p className="text-[#a1a1aa] mb-6">
-            This contract has already been sent or signed.
+            It has already been signed.
           </p>
           <Link
             href={`/contracts/${contractId}`}

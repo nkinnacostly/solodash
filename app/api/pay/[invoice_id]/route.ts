@@ -67,9 +67,14 @@ export async function GET(
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("name, business_name, flutterwave_subaccount_id, plan")
+      .select(
+        "name, business_name, flutterwave_subaccount_id, plan, logo_url, brand_color",
+      )
       .eq("id", invoice.user_id)
       .single();
+
+    // Derive Pro server-side; only expose branding assets for Pro users.
+    const isPro = profile?.plan === "pro";
 
     const client = invoice.clients as {
       name?: string;
@@ -100,9 +105,11 @@ export async function GET(
       freelancer: {
         name: profile?.name || "",
         business_name: profile?.business_name || null,
+        logo_url: isPro ? profile?.logo_url || null : null,
+        brand_color: isPro ? profile?.brand_color || null : null,
       },
       subaccount_id: profile?.flutterwave_subaccount_id || null,
-      is_pro: profile?.plan === "pro",
+      is_pro: isPro,
       line_items: (lineItems || [])
         .sort((a, b) => a.sort_order - b.sort_order)
         .map((item) => ({
