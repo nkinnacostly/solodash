@@ -1,9 +1,75 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, Suspense } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  Suspense,
+  type CSSProperties,
+} from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { Loader2, CheckCircle, PenTool, Type, X, Download } from "lucide-react";
 import { sanitizeContractHtml } from "@/lib/sanitize-html";
+
+// Signature block styles (rendered on the white contract document).
+const sigLabel: CSSProperties = {
+  fontSize: "12px",
+  color: "#6b7280",
+  marginBottom: "8px",
+};
+const sigBox: CSSProperties = {
+  border: "1px solid #57c9b0",
+  borderRadius: "8px",
+  padding: "16px",
+  background: "#f4fbf8",
+  minHeight: "60px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+};
+const sigCursive: CSSProperties = {
+  fontSize: "20px",
+  fontFamily: "cursive",
+  color: "#374151",
+  margin: 0,
+};
+const sigName: CSSProperties = {
+  fontSize: "14px",
+  color: "#374151",
+  margin: 0,
+};
+const sigImg: CSSProperties = {
+  maxHeight: "50px",
+  maxWidth: "200px",
+  objectFit: "contain",
+};
+const sigBadge: CSSProperties = {
+  fontSize: "11px",
+  background: "#57c9b0",
+  color: "#ffffff",
+  padding: "2px 8px",
+  borderRadius: "20px",
+  marginLeft: "12px",
+  whiteSpace: "nowrap",
+};
+const sigDate: CSSProperties = {
+  fontSize: "12px",
+  color: "#6b7280",
+  marginTop: "8px",
+};
+const sigPending: CSSProperties = {
+  border: "1px dashed #d1d5db",
+  borderRadius: "8px",
+  padding: "16px",
+  background: "#f9fafb",
+  minHeight: "60px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "14px",
+  color: "#9ca3af",
+};
 
 interface Contract {
   id: string;
@@ -11,6 +77,10 @@ interface Contract {
   content: string;
   status: string;
   client_signed_at: string | null;
+  freelancer_signed_at: string | null;
+  signature_signed_url: string | null;
+  freelancer_signature_signed_url: string | null;
+  freelancer_signature_typed: string | null;
   freelancer: {
     name: string;
     business_name: string | null;
@@ -398,6 +468,90 @@ function SignContractContent() {
                 ),
               }}
             />
+
+            {/* Digital Signatures — inside the document so they appear in the
+                downloaded/printed PDF. */}
+            {(contract.client_signed_at || contract.freelancer_signed_at) && (
+              <div
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  marginTop: "48px",
+                  paddingTop: "24px",
+                  borderTop: "2px solid #e5e7eb",
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    marginBottom: "20px",
+                    color: "#14171d",
+                  }}
+                >
+                  Digital Signatures
+                </h3>
+                <div style={{ display: "flex", gap: "40px" }}>
+                  {/* Contractor */}
+                  <div style={{ flex: 1 }}>
+                    <p style={sigLabel}>Contractor</p>
+                    {contract.freelancer_signed_at ? (
+                      <>
+                        <div style={sigBox}>
+                          {contract.freelancer_signature_typed ? (
+                            <p style={sigCursive}>
+                              {contract.freelancer_signature_typed}
+                            </p>
+                          ) : contract.freelancer_signature_signed_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={contract.freelancer_signature_signed_url}
+                              alt="Contractor signature"
+                              style={sigImg}
+                            />
+                          ) : (
+                            <p style={sigName}>{contract.freelancer.name}</p>
+                          )}
+                          <span style={sigBadge}>✓ Signed</span>
+                        </div>
+                        <p style={sigDate}>
+                          Signed on {formatDate(contract.freelancer_signed_at)}
+                        </p>
+                      </>
+                    ) : (
+                      <div style={sigPending}>Awaiting signature</div>
+                    )}
+                  </div>
+
+                  {/* Client */}
+                  <div style={{ flex: 1 }}>
+                    <p style={sigLabel}>Client</p>
+                    {contract.client_signed_at ? (
+                      <>
+                        <div style={sigBox}>
+                          {contract.signature_signed_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={contract.signature_signed_url}
+                              alt="Client signature"
+                              style={sigImg}
+                            />
+                          ) : (
+                            <p style={sigCursive}>{contract.client.name}</p>
+                          )}
+                          <span style={sigBadge}>✓ Signed</span>
+                        </div>
+                        <p style={sigDate}>
+                          Signed on {formatDate(contract.client_signed_at)}
+                        </p>
+                      </>
+                    ) : (
+                      <div style={sigPending}>Awaiting signature</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

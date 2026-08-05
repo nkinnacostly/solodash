@@ -45,6 +45,9 @@ export async function GET(
         content,
         status,
         client_signed_at,
+        client_signature_url,
+        freelancer_signed_at,
+        freelancer_signature_url,
         client_id,
         user_id,
         clients (
@@ -83,12 +86,43 @@ export async function GET(
       email?: string;
     } | null;
 
+    // Resolve signatures into displayable values — a typed name or a short-lived
+    // signed image URL. Raw storage paths are never exposed to the public link.
+    const clientSignaturePath = contract.client_signature_url as string | null;
+    const freelancerSignaturePath =
+      contract.freelancer_signature_url as string | null;
+
+    let clientSignatureUrl: string | null = null;
+    if (clientSignaturePath) {
+      const { data: signed } = await supabase.storage
+        .from("documents")
+        .createSignedUrl(clientSignaturePath, 3600);
+      clientSignatureUrl = signed?.signedUrl || null;
+    }
+
+    let freelancerSignatureUrl: string | null = null;
+    let freelancerSignatureTyped: string | null = null;
+    if (freelancerSignaturePath) {
+      if (freelancerSignaturePath.startsWith("typed:")) {
+        freelancerSignatureTyped = freelancerSignaturePath.replace("typed:", "");
+      } else {
+        const { data: signed } = await supabase.storage
+          .from("documents")
+          .createSignedUrl(freelancerSignaturePath, 3600);
+        freelancerSignatureUrl = signed?.signedUrl || null;
+      }
+    }
+
     const safeContract = {
       id: contract.id,
       title: contract.title,
       content: contract.content,
       status: contract.status,
       client_signed_at: contract.client_signed_at,
+      freelancer_signed_at: contract.freelancer_signed_at,
+      signature_signed_url: clientSignatureUrl,
+      freelancer_signature_signed_url: freelancerSignatureUrl,
+      freelancer_signature_typed: freelancerSignatureTyped,
       freelancer: {
         name: profile?.name || "",
         business_name: profile?.business_name || null,
