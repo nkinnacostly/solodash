@@ -240,9 +240,9 @@ export default function NewInvoicePage() {
         <div className="flex items-center gap-4 mb-8">
           <Link
             href="/invoices"
-            className="p-2 hover:bg-[#18181b] rounded-lg transition-colors"
+            className="p-2 hover:bg-[#1c202a] rounded-lg transition-colors"
           >
-            <ArrowLeft size={20} className="text-[#a1a1aa]" />
+            <ArrowLeft size={20} className="text-[#8f9db1]" />
           </Link>
           <h1 className="text-3xl font-bold text-white">New Invoice</h1>
         </div>
@@ -251,7 +251,7 @@ export default function NewInvoicePage() {
           {/* LEFT: Form */}
           <div className="space-y-6">
             {/* Section 1: Client */}
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">Client</h2>
 
               {/* Client Selection with Searchable Dropdown */}
@@ -284,7 +284,7 @@ export default function NewInvoicePage() {
 
               {/* New Client Fields */}
               {showNewClient && (
-                <div className="space-y-4 pt-4 border-t border-[#27272a]">
+                <div className="space-y-4 pt-4 border-t border-[#2a303c]">
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
                       Client Name *
@@ -293,7 +293,7 @@ export default function NewInvoicePage() {
                       {...register("clientName")}
                       type="text"
                       placeholder="John Doe"
-                      className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                      className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                     />
                     {errors.clientName && (
                       <p className="mt-1 text-sm text-[#ef4444]">
@@ -310,7 +310,7 @@ export default function NewInvoicePage() {
                       {...register("clientEmail")}
                       type="email"
                       placeholder="john@example.com"
-                      className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                      className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                     />
                     {errors.clientEmail && (
                       <p className="mt-1 text-sm text-[#ef4444]">
@@ -327,7 +327,7 @@ export default function NewInvoicePage() {
                       {...register("clientAddress")}
                       type="text"
                       placeholder="123 Main St, Lagos"
-                      className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                      className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                     />
                   </div>
                 </div>
@@ -335,7 +335,7 @@ export default function NewInvoicePage() {
             </div>
 
             {/* Section 2: Invoice Details */}
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 Invoice Details
               </h2>
@@ -348,7 +348,7 @@ export default function NewInvoicePage() {
                   <input
                     {...register("invoiceNumber")}
                     type="text"
-                    className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                    className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                   />
                   {errors.invoiceNumber && (
                     <p className="mt-1 text-sm text-[#ef4444]">
@@ -363,7 +363,7 @@ export default function NewInvoicePage() {
                   </label>
                   <select
                     {...register("currency")}
-                    className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                    className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                   >
                     {currencies.map((c) => (
                       <option key={c.code} value={c.code}>
@@ -400,7 +400,7 @@ export default function NewInvoicePage() {
             </div>
 
             {/* Section 3: Line Items */}
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 Line Items
               </h2>
@@ -413,7 +413,7 @@ export default function NewInvoicePage() {
                         {...register(`lineItems.${index}.description`)}
                         type="text"
                         placeholder="Description"
-                        className="w-full px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors text-sm"
+                        className="w-full px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors text-sm"
                       />
                       {errors.lineItems?.[index]?.description && (
                         <p className="mt-1 text-xs text-[#ef4444]">
@@ -429,7 +429,7 @@ export default function NewInvoicePage() {
                         step="0.01"
                         min="0.01"
                         placeholder="Qty"
-                        className="w-full px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors text-sm"
+                        className="w-full px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors text-sm"
                       />
                     </div>
 
@@ -440,11 +440,11 @@ export default function NewInvoicePage() {
                         step="0.01"
                         min="0.01"
                         placeholder="Rate"
-                        className="w-full px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors text-sm"
+                        className="w-full px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors text-sm"
                       />
                     </div>
 
-                    <div className="col-span-2 flex items-center px-3 py-2 bg-[#0f0f0f] rounded-lg text-sm text-[#a1a1aa]">
+                    <div className="col-span-2 flex items-center px-3 py-2 bg-[#14171d] rounded-lg text-sm text-[#8f9db1]">
                       {selectedCurrency.symbol}
                       {(() => {
                         const qty =
@@ -463,7 +463,7 @@ export default function NewInvoicePage() {
                         type="button"
                         onClick={() => remove(index)}
                         disabled={fields.length === 1}
-                        className="p-1 text-[#a1a1aa] hover:text-[#ef4444] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="p-1 text-[#8f9db1] hover:text-[#ef4444] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                       >
                         <X size={18} />
                       </button>
@@ -477,7 +477,7 @@ export default function NewInvoicePage() {
                 onClick={() =>
                   append({ description: "", quantity: 1, rate: 0 })
                 }
-                className="mt-4 flex items-center gap-2 text-sm text-[#10b981] hover:underline"
+                className="mt-4 flex items-center gap-2 text-sm text-[#6ea8ff] hover:underline"
               >
                 <Plus size={16} />
                 Add line item
@@ -491,9 +491,9 @@ export default function NewInvoicePage() {
             </div>
 
             {/* Section 4: Totals */}
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <div className="space-y-3">
-                <div className="flex justify-between text-[#a1a1aa]">
+                <div className="flex justify-between text-[#8f9db1]">
                   <span>Subtotal</span>
                   <span>
                     {selectedCurrency.symbol}
@@ -503,24 +503,24 @@ export default function NewInvoicePage() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-[#a1a1aa]">Tax</span>
+                    <span className="text-[#8f9db1]">Tax</span>
                     <input
                       {...register("taxRate")}
                       type="number"
                       min="0"
                       max="100"
                       step="0.01"
-                      className="w-20 px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white text-sm focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                      className="w-20 px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white text-sm focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                     />
-                    <span className="text-[#a1a1aa]">%</span>
+                    <span className="text-[#8f9db1]">%</span>
                   </div>
-                  <span className="text-[#a1a1aa]">
+                  <span className="text-[#8f9db1]">
                     {selectedCurrency.symbol}
                     {taxAmount.toFixed(2)}
                   </span>
                 </div>
 
-                <div className="pt-3 border-t border-[#27272a] flex justify-between text-lg font-bold text-white">
+                <div className="pt-3 border-t border-[#2a303c] flex justify-between text-lg font-bold text-white">
                   <span>Total</span>
                   <span>
                     {selectedCurrency.symbol}
@@ -531,13 +531,13 @@ export default function NewInvoicePage() {
             </div>
 
             {/* Section 5: Notes */}
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">Notes</h2>
               <textarea
                 {...register("notes")}
                 rows={4}
                 placeholder="Payment terms, thank you note, bank details..."
-                className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors resize-none"
+                className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors resize-none"
               />
             </div>
 
@@ -554,7 +554,7 @@ export default function NewInvoicePage() {
                 type="button"
                 onClick={() => handleSubmit((data) => onSubmit("draft"))()}
                 disabled={loading}
-                className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50"
+                className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors disabled:opacity-50"
               >
                 Save as Draft
               </button>
@@ -562,7 +562,7 @@ export default function NewInvoicePage() {
                 type="button"
                 onClick={() => handleSubmit((data) => onSubmit("sent"))()}
                 disabled={loading}
-                className="flex-1 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -579,7 +579,7 @@ export default function NewInvoicePage() {
           {/* RIGHT: Live Preview (Desktop Only) */}
           <div className="hidden lg:block">
             <div className="sticky top-6">
-              <p className="text-sm text-[#a1a1aa] mb-3 font-medium">
+              <p className="text-sm text-[#8f9db1] mb-3 font-medium">
                 Invoice Preview
               </p>
               <div className="bg-white text-gray-900 rounded-xl p-8 shadow-2xl">
@@ -602,7 +602,7 @@ export default function NewInvoicePage() {
                           color:
                             profile?.plan === "pro" && profile?.brand_color
                               ? profile.brand_color
-                              : "#10b981",
+                              : "#3b7ae0",
                         }}
                       >
                         {profile?.plan === "pro" &&

@@ -20,13 +20,13 @@ interface ContractEmailProps {
 }
 
 const header = {
-  backgroundColor: "#0f0f0f",
+  backgroundColor: "#14171d",
   padding: "32px 24px",
   textAlign: "center" as const,
 };
 
 const logo = {
-  color: "#10b981",
+  color: "#6ea8ff",
   fontSize: "28px",
   fontWeight: "bold",
   margin: "0",
@@ -40,7 +40,7 @@ const content = {
 const greeting = {
   fontSize: "20px",
   fontWeight: "600",
-  color: "#0f0f0f",
+  color: "#14171d",
   marginBottom: "16px",
 };
 
@@ -52,9 +52,9 @@ const bodyText = {
 };
 
 const button = {
-  backgroundColor: "#10b981",
+  backgroundColor: "#6ea8ff",
   borderRadius: "8px",
-  color: "#ffffff",
+  color: "#0e1116",
   fontSize: "16px",
   fontWeight: "600",
   textDecoration: "none",
@@ -116,7 +116,7 @@ export function ContractEmail({
                 borderRadius: "8px",
                 border: "1px solid #e5e7eb",
                 fontWeight: "600",
-                color: "#0f0f0f",
+                color: "#14171d",
               }}
             >
               {contractTitle}
@@ -141,7 +141,7 @@ export function ContractEmail({
               If the button doesn't work, copy and paste this link into your
               browser:
               <br />
-              <Link href={signingLink} style={{ color: "#10b981" }}>
+              <Link href={signingLink} style={{ color: "#6ea8ff" }}>
                 {signingLink}
               </Link>
             </Text>

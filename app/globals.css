@@ -1,17 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #10b981;
-  --color-brand-dark: #059669;
-  --color-bg: #0f0f0f;
-  --color-card: #18181b;
-  --color-border: #27272a;
-  --color-muted: #a1a1aa;
+  /* Harbor — calm slate-blue on cool ink (rebrand). Single source of truth;
+     prefer these tokens (bg-brand, text-muted, …) over raw hex in new code. */
+  --color-brand: #6ea8ff;
+  --color-brand-dark: #5b93e6;
+  --color-brand-ink: #0e1116; /* text on a solid brand fill */
+  --color-bg: #14171d;
+  --color-sidebar: #171b23;
+  --color-card: #1c202a;
+  --color-border: #2a303c;
+  --color-muted: #8f9db1;
+  --color-success: #57c9b0;
+  --color-warning: #e6b566;
+  --color-danger: #ee8b86;
+  --font-sans:
+    var(--font-jakarta), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 body {
-  background: #0f0f0f;
-  color: #ffffff;
+  background: #14171d;
+  color: #eef2f8;
+  font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  font-feature-settings: "tnum" 1; /* tabular figures — money columns align */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -135,10 +146,10 @@ body {
     inset: -2px;
     background: linear-gradient(
       45deg,
-      #10b981,
-      #059669,
-      #10b981,
-      #059669
+      #6ea8ff,
+      #5b93e6,
+      #6ea8ff,
+      #5b93e6
     );
     background-size: 400% 400%;
     border-radius: inherit;
@@ -168,8 +179,8 @@ body {
   }
 
   .feature-card:hover {
-    border-color: #10b981;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+    border-color: #6ea8ff;
+    box-shadow: 0 0 20px rgba(110, 168, 255, 0.1);
   }
 
   /* Feature icon scale */
@@ -187,7 +198,7 @@ body {
   }
 
   .problem-after:hover {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), transparent);
+    background: linear-gradient(135deg, rgba(110, 168, 255, 0.05), transparent);
   }
 }
 

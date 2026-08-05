@@ -158,7 +158,7 @@ function MockShell({
         style={{ transform: "translate3d(var(--tx,0px), var(--ty,0px), 0)" }}
       >
         <div
-          className={`relative rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_0_120px_#10b98110,0_24px_80px_rgba(0,0,0,0.45)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_0_140px_#10b98118,0_28px_90px_rgba(0,0,0,0.5)] ${rot}`}
+          className={`relative rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_0_120px_#6ea8ff10,0_24px_80px_rgba(0,0,0,0.45)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_0_140px_#6ea8ff18,0_28px_90px_rgba(0,0,0,0.5)] ${rot}`}
         >
           {children}
         </div>
@@ -173,7 +173,7 @@ function HeroInvoiceVisual() {
       className="relative mx-auto w-full max-w-[min(100%,420px)] select-none"
       aria-hidden
     >
-      <div className="absolute inset-0 -z-10 rounded-[28px] bg-[radial-gradient(ellipse_at_center,#10b98112,transparent_70%)] blur-2xl" />
+      <div className="absolute inset-0 -z-10 rounded-[28px] bg-[radial-gradient(ellipse_at_center,#6ea8ff12,transparent_70%)] blur-2xl" />
       <svg
         viewBox="0 0 400 260"
         className="h-auto w-full overflow-visible text-[#1a1a1a]"
@@ -181,8 +181,8 @@ function HeroInvoiceVisual() {
       >
         <defs>
           <linearGradient id="paidlyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#10b981" />
-            <stop offset="100%" stopColor="#059669" />
+            <stop offset="0%" stopColor="#6ea8ff" />
+            <stop offset="100%" stopColor="#5b93e6" />
           </linearGradient>
         </defs>
         {/* Floating sheet */}
@@ -199,12 +199,12 @@ function HeroInvoiceVisual() {
           />
           <rect x="72" y="64" width="120" height="10" rx="4" fill="#1a1a1a" />
           <rect x="72" y="84" width="180" height="8" rx="3" fill="#262626" />
-          <rect x="280" y="64" width="48" height="14" rx="6" fill="#10b98122" />
+          <rect x="280" y="64" width="48" height="14" rx="6" fill="#6ea8ff22" />
           <text
             x="304"
             y="74"
             textAnchor="middle"
-            fill="#10b981"
+            fill="#6ea8ff"
             fontSize="9"
             fontFamily="ui-sans-serif, system-ui"
             fontWeight="700"
@@ -214,7 +214,7 @@ function HeroInvoiceVisual() {
           <rect x="72" y="118" width="256" height="1" fill="#1a1a1a" />
           <rect x="72" y="132" width="140" height="8" rx="3" fill="#2a2a2a" />
           <rect x="72" y="148" width="100" height="8" rx="3" fill="#2a2a2a" />
-          <rect x="280" y="132" width="48" height="8" rx="3" fill="#3f3f46" />
+          <rect x="280" y="132" width="48" height="8" rx="3" fill="#3a4353" />
           <rect x="72" y="176" width="96" height="28" rx="14" fill="url(#paidlyGrad)" />
           <text
             x="120"
@@ -235,7 +235,7 @@ function HeroInvoiceVisual() {
             fill="#0a0a0a"
             stroke="#1a1a1a"
           />
-          <circle cx="326" cy="58" r="4" fill="#10b981" />
+          <circle cx="326" cy="58" r="4" fill="#6ea8ff" />
         </g>
         <g opacity="0.35">
           <rect
@@ -245,7 +245,7 @@ function HeroInvoiceVisual() {
             height="188"
             rx="16"
             fill="none"
-            stroke="#10b981"
+            stroke="#6ea8ff"
             strokeWidth="1"
             strokeDasharray="6 6"
           />
@@ -292,7 +292,7 @@ export default function Home() {
         fontFamily:
           'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
         backgroundImage:
-          "radial-gradient(#ffffff03 1px, transparent 1px), radial-gradient(ellipse 80% 55% at 50% -10%, #10b98108, transparent 55%)",
+          "radial-gradient(#ffffff03 1px, transparent 1px), radial-gradient(ellipse 80% 55% at 50% -10%, #6ea8ff08, transparent 55%)",
         backgroundSize: "20px 20px, 100% 100%",
         backgroundAttachment: "fixed, scroll",
       }}
@@ -328,7 +328,7 @@ export default function Home() {
         <div className="mx-auto flex h-full max-w-[1100px] items-center justify-between px-4 sm:px-6">
           <a
             href="/"
-            className="text-[22px] font-bold tracking-tight text-[#10b981]"
+            className="text-[22px] font-bold tracking-tight text-[#6ea8ff]"
             style={{ fontWeight: 700 }}
           >
             Paidly
@@ -355,7 +355,7 @@ export default function Home() {
             </Link>
             <Link
               href="/signup"
-              className="rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] px-5 py-2 text-sm font-semibold text-white shadow-none transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_24px_#10b98140] active:scale-[0.99]"
+              className="rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] px-5 py-2 text-sm font-semibold text-white shadow-none transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40] active:scale-[0.99]"
             >
               Start free →
             </Link>
@@ -398,14 +398,14 @@ export default function Home() {
           <a
             href="#features"
             onClick={closeMobile}
-            className="py-3 text-sm uppercase tracking-widest text-[#a1a1aa] transition-colors hover:text-white"
+            className="py-3 text-sm uppercase tracking-widest text-[#8f9db1] transition-colors hover:text-white"
           >
             Features
           </a>
           <a
             href="#pricing"
             onClick={closeMobile}
-            className="py-3 text-sm uppercase tracking-widest text-[#a1a1aa] transition-colors hover:text-white"
+            className="py-3 text-sm uppercase tracking-widest text-[#8f9db1] transition-colors hover:text-white"
           >
             Pricing
           </a>
@@ -420,7 +420,7 @@ export default function Home() {
           <Link
             href="/signup"
             onClick={closeMobile}
-            className="mt-4 rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] py-3 text-center text-sm font-semibold text-white transition-shadow duration-300 ease-out hover:shadow-[0_0_24px_#10b98140]"
+            className="mt-4 rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] py-3 text-center text-sm font-semibold text-white transition-shadow duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40]"
           >
             Start free →
           </Link>
@@ -430,14 +430,14 @@ export default function Home() {
       {/* HERO */}
       <section className="relative flex min-h-[calc(100dvh-4rem)] flex-col items-center justify-center px-4 pb-24 pt-28 sm:px-6">
         <div className="mx-auto flex w-full max-w-[720px] flex-col items-center text-center">
-          <div className="paidly-hero-item paidly-hero-0 mb-8 inline-flex items-center rounded-full border border-[#10b98130] bg-[#10b98110] px-4 py-1.5 text-[12px] font-semibold uppercase tracking-widest text-[#10b981]">
+          <div className="paidly-hero-item paidly-hero-0 mb-8 inline-flex items-center rounded-full border border-[#6ea8ff30] bg-[#6ea8ff10] px-4 py-1.5 text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
             ✦ Built for African freelancers
           </div>
 
           <h1 className="paidly-hero-item paidly-hero-1 text-balance text-[2.35rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white sm:text-[56px]">
             Stop chasing payments.
             <br />
-            <span className="text-[#10b981]">Start getting paid.</span>
+            <span className="text-[#6ea8ff]">Start getting paid.</span>
           </h1>
 
           <p className="paidly-hero-item paidly-hero-2 mx-auto mt-6 max-w-[520px] text-balance text-[18px] leading-relaxed text-[#71717a]">
@@ -448,7 +448,7 @@ export default function Home() {
           <div className="paidly-hero-item paidly-hero-3 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] px-8 py-3 text-sm font-semibold text-white transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_24px_#10b98140] active:scale-[0.99]"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] px-8 py-3 text-sm font-semibold text-white transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40] active:scale-[0.99]"
             >
               Start for free →
             </Link>
@@ -491,7 +491,7 @@ export default function Home() {
         {/* Row 1 */}
         <div className="mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-12 py-20 lg:grid-cols-2 lg:gap-16">
           <Reveal className="order-1 lg:order-1">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#10b981]">
+            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
               Invoicing
             </p>
             <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
@@ -514,16 +514,16 @@ export default function Home() {
                     Acme Studios Ltd.
                   </p>
                 </div>
-                <span className="rounded-md bg-[#10b98114] px-2 py-1 text-xs font-bold text-[#10b981]">
+                <span className="rounded-md bg-[#6ea8ff14] px-2 py-1 text-xs font-bold text-[#6ea8ff]">
                   INV-001
                 </span>
               </div>
               <div className="mt-6 space-y-3 border-t border-[#1a1a1a] pt-5">
-                <div className="flex justify-between text-sm text-[#a1a1aa]">
+                <div className="flex justify-between text-sm text-[#8f9db1]">
                   <span>Brand identity sprint</span>
                   <span className="text-[#e4e4e7]">₦280,000</span>
                 </div>
-                <div className="flex justify-between text-sm text-[#a1a1aa]">
+                <div className="flex justify-between text-sm text-[#8f9db1]">
                   <span>Web design — 4 pages</span>
                   <span className="text-[#e4e4e7]">₦170,000</span>
                 </div>
@@ -537,7 +537,7 @@ export default function Home() {
               {/* Decorative — part of the product mockup, not a real action */}
               <div
                 aria-hidden="true"
-                className="mt-5 w-full rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] py-2.5 text-center text-sm font-semibold text-white select-none"
+                className="mt-5 w-full rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] py-2.5 text-center text-sm font-semibold text-white select-none"
               >
                 Pay Now →
               </div>
@@ -558,7 +558,7 @@ export default function Home() {
                     Paidly × Client Co.
                   </p>
                 </div>
-                <span className="rounded-full border border-[#10b98140] bg-[#10b98110] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#10b981]">
+                <span className="rounded-full border border-[#6ea8ff40] bg-[#6ea8ff10] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#6ea8ff]">
                   ✓ Signed
                 </span>
               </div>
@@ -573,21 +573,21 @@ export default function Home() {
                   <p className="text-[11px] uppercase tracking-widest text-[#52525b]">
                     Client
                   </p>
-                  <div className="mt-4 h-10 rounded border border-[#262626] bg-[#0f0f0f]" />
+                  <div className="mt-4 h-10 rounded border border-[#262626] bg-[#14171d]" />
                   <p className="mt-2 text-xs text-[#52525b]">Signature</p>
                 </div>
                 <div>
                   <p className="text-[11px] uppercase tracking-widest text-[#52525b]">
                     You
                   </p>
-                  <div className="mt-4 h-10 rounded border border-[#10b98140] bg-[#10b98108]" />
-                  <p className="mt-2 text-xs text-[#10b981]">Signed Apr 12</p>
+                  <div className="mt-4 h-10 rounded border border-[#6ea8ff40] bg-[#6ea8ff08]" />
+                  <p className="mt-2 text-xs text-[#6ea8ff]">Signed Apr 12</p>
                 </div>
               </div>
             </MockShell>
           </Reveal>
           <Reveal className="order-1 lg:order-2">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#10b981]">
+            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
               Contracts
             </p>
             <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
@@ -603,7 +603,7 @@ export default function Home() {
         {/* Row 3 */}
         <div className="mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-12 py-20 lg:grid-cols-2 lg:gap-16">
           <Reveal className="order-1">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#10b981]">
+            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
               Earnings
             </p>
             <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
@@ -620,7 +620,7 @@ export default function Home() {
                 {[40, 64, 48, 88, 56, 72].map((h, i) => (
                   <div
                     key={i}
-                    className="w-[12%] rounded-t-md bg-gradient-to-t from-[#059669] to-[#10b981] opacity-90"
+                    className="w-[12%] rounded-t-md bg-gradient-to-t from-[#5b93e6] to-[#6ea8ff] opacity-90"
                     style={{ height: `${h}px` }}
                   />
                 ))}
@@ -645,7 +645,7 @@ export default function Home() {
           <Reveal className="order-2 lg:order-1" delayMs={80}>
             <MockShell rotateDeg={-0.75}>
               <div className="flex items-center gap-4">
-                <div className="flex h-14 w-11 shrink-0 items-center justify-center rounded-lg border border-[#1a1a1a] bg-[#0f0f0f]">
+                <div className="flex h-14 w-11 shrink-0 items-center justify-center rounded-lg border border-[#1a1a1a] bg-[#14171d]">
                   <svg width="22" height="26" viewBox="0 0 24 28" aria-hidden>
                     <path
                       fill="#ef4444"
@@ -670,14 +670,14 @@ export default function Home() {
                   </p>
                   <p className="text-xs text-[#52525b]">Ready to download</p>
                 </div>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1a1a1a] text-[#10b981] transition-colors duration-300 ease-out hover:border-[#10b98140] hover:bg-[#10b98110]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1a1a1a] text-[#6ea8ff] transition-colors duration-300 ease-out hover:border-[#6ea8ff40] hover:bg-[#6ea8ff10]">
                   ↓
                 </span>
               </div>
             </MockShell>
           </Reveal>
           <Reveal className="order-1 lg:order-2">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#10b981]">
+            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
               Tax export
             </p>
             <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
@@ -705,7 +705,7 @@ export default function Home() {
                 <div className="px-5 py-4 text-left text-[14px] font-semibold text-[#ef4444]">
                   Without Paidly
                 </div>
-                <div className="border-l border-[#1a1a1a] px-5 py-4 text-left text-[14px] font-semibold text-[#10b981]">
+                <div className="border-l border-[#1a1a1a] px-5 py-4 text-left text-[14px] font-semibold text-[#6ea8ff]">
                   With Paidly
                 </div>
               </div>
@@ -782,7 +782,7 @@ export default function Home() {
                   Free
                 </p>
                 <p className="mt-4 text-4xl font-bold text-white">₦0</p>
-                <div className="mt-8 space-y-3 text-sm leading-relaxed text-[#a1a1aa]">
+                <div className="mt-8 space-y-3 text-sm leading-relaxed text-[#8f9db1]">
                   <p>3 invoices per month</p>
                   <p>1 contract per month</p>
                   <p>Earnings tracking</p>
@@ -791,7 +791,7 @@ export default function Home() {
                 <div className="flex-1" />
                 <Link
                   href="/signup"
-                  className="mt-10 inline-flex w-full items-center justify-center rounded-full border border-[#1a1a1a] py-3 text-sm font-semibold text-[#e4e4e7] transition-colors duration-300 ease-out hover:border-[#2a2a2a] hover:bg-[#0f0f0f]"
+                  className="mt-10 inline-flex w-full items-center justify-center rounded-full border border-[#1a1a1a] py-3 text-sm font-semibold text-[#e4e4e7] transition-colors duration-300 ease-out hover:border-[#2a2a2a] hover:bg-[#14171d]"
                 >
                   Get started
                 </Link>
@@ -800,14 +800,14 @@ export default function Home() {
 
             <Reveal delayMs={80}>
               <div
-                className="flex h-full flex-col rounded-2xl border border-[#10b98140] bg-[#0a0a0a] p-8 text-left transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.01]"
-                style={{ boxShadow: "0 0 60px #10b98110" }}
+                className="flex h-full flex-col rounded-2xl border border-[#6ea8ff40] bg-[#0a0a0a] p-8 text-left transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.01]"
+                style={{ boxShadow: "0 0 60px #6ea8ff10" }}
               >
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold uppercase tracking-widest text-[#10b981]">
+                  <p className="text-sm font-semibold uppercase tracking-widest text-[#6ea8ff]">
                     Pro
                   </p>
-                  <span className="rounded-full bg-[#10b98114] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#10b981]">
+                  <span className="rounded-full bg-[#6ea8ff14] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#6ea8ff]">
                     Popular
                   </span>
                 </div>
@@ -828,7 +828,7 @@ export default function Home() {
                 <div className="flex-1" />
                 <Link
                   href="/signup"
-                  className="mt-10 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] py-3 text-sm font-semibold text-white transition-shadow duration-300 ease-out hover:shadow-[0_0_24px_#10b98140]"
+                  className="mt-10 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] py-3 text-sm font-semibold text-white transition-shadow duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40]"
                 >
                   Upgrade to Pro →
                 </Link>
@@ -850,7 +850,7 @@ export default function Home() {
           </p>
           <Link
             href="/signup"
-            className="mt-10 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#10b981] to-[#059669] px-10 py-4 text-base font-semibold text-white transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_28px_#10b98145] active:scale-[0.99]"
+            className="mt-10 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] px-10 py-4 text-base font-semibold text-white transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_28px_#6ea8ff45] active:scale-[0.99]"
           >
             Start for free →
           </Link>
@@ -864,14 +864,14 @@ export default function Home() {
       <footer className="border-t border-[#1a1a1a] px-4 py-14 sm:px-6">
         <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-10 text-sm text-[#52525b] md:grid-cols-3 md:gap-8">
           <div>
-            <p className="text-lg font-bold text-[#10b981]">Paidly</p>
+            <p className="text-lg font-bold text-[#6ea8ff]">Paidly</p>
             <p className="mt-3 max-w-xs leading-relaxed transition-colors duration-300 ease-out">
               Built for African freelancers
             </p>
             <p className="mt-6">© 2026 Paidly</p>
           </div>
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#3f3f46]">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#3a4353]">
               Product
             </p>
             <ul className="mt-4 space-y-3">
@@ -894,7 +894,7 @@ export default function Home() {
             </ul>
           </div>
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#3f3f46]">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#3a4353]">
               Legal
             </p>
             <ul className="mt-4 space-y-3">

@@ -235,13 +235,13 @@ export default function EarningsPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="animate-pulse space-y-6">
-          <div className="h-12 bg-[#18181b] rounded" />
+          <div className="h-12 bg-[#1c202a] rounded" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-24 bg-[#18181b] rounded-xl" />
+              <div key={i} className="h-24 bg-[#1c202a] rounded-xl" />
             ))}
           </div>
-          <div className="h-64 bg-[#18181b] rounded-xl" />
+          <div className="h-64 bg-[#1c202a] rounded-xl" />
         </div>
       </div>
     );
@@ -253,7 +253,7 @@ export default function EarningsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white">Earnings</h1>
-          <p className="text-[#a1a1aa] mt-1">
+          <p className="text-[#8f9db1] mt-1">
             Track your income and export tax reports
           </p>
         </div>
@@ -264,7 +264,7 @@ export default function EarningsPage() {
               setSelectedYear(parseInt(e.target.value));
               setPage(1);
             }}
-            className="appearance-none px-4 py-2 pr-10 bg-[#18181b] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none cursor-pointer"
+            className="appearance-none px-4 py-2 pr-10 bg-[#1c202a] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none cursor-pointer"
           >
             {years.map((year) => (
               <option key={year} value={year}>
@@ -274,17 +274,17 @@ export default function EarningsPage() {
           </select>
           <ChevronDown
             size={16}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] pointer-events-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f9db1] pointer-events-none"
           />
         </div>
       </div>
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
-            <DollarSign size={20} className="text-[#10b981]" />
-            <p className="text-sm text-[#a1a1aa]">Total Earned</p>
+            <DollarSign size={20} className="text-[#6ea8ff]" />
+            <p className="text-sm text-[#8f9db1]">Total Earned</p>
           </div>
           <p className="text-2xl font-bold text-white">
             {getCurrencySymbol(currency)}
@@ -294,18 +294,18 @@ export default function EarningsPage() {
           </p>
         </div>
 
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
-            <TrendingUp size={20} className="text-[#10b981]" />
-            <p className="text-sm text-[#a1a1aa]">Paid Invoices</p>
+            <TrendingUp size={20} className="text-[#6ea8ff]" />
+            <p className="text-sm text-[#8f9db1]">Paid Invoices</p>
           </div>
           <p className="text-2xl font-bold text-white">{paidInvoices}</p>
         </div>
 
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
-            <Calendar size={20} className="text-[#10b981]" />
-            <p className="text-sm text-[#a1a1aa]">Best Month</p>
+            <Calendar size={20} className="text-[#6ea8ff]" />
+            <p className="text-sm text-[#8f9db1]">Best Month</p>
           </div>
           <p className="text-2xl font-bold text-white">
             {bestMonth && bestMonth.amount > 0
@@ -314,10 +314,10 @@ export default function EarningsPage() {
           </p>
         </div>
 
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
-            <Users size={20} className="text-[#10b981]" />
-            <p className="text-sm text-[#a1a1aa]">Average/Month</p>
+            <Users size={20} className="text-[#6ea8ff]" />
+            <p className="text-sm text-[#8f9db1]">Average/Month</p>
           </div>
           <p className="text-2xl font-bold text-white">
             {getCurrencySymbol(currency)}
@@ -330,7 +330,7 @@ export default function EarningsPage() {
       </div>
 
       {/* Monthly Chart */}
-      <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
         <h2 className="text-lg font-semibold text-white mb-6">
           Monthly Earnings
         </h2>
@@ -341,43 +341,43 @@ export default function EarningsPage() {
               amount: m.amount,
             }))}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-            <XAxis dataKey="name" stroke="#a1a1aa" />
-            <YAxis stroke="#a1a1aa" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#2a303c" />
+            <XAxis dataKey="name" stroke="#8f9db1" />
+            <YAxis stroke="#8f9db1" />
             <Tooltip
               formatter={(value: any) => [
                 `${getCurrencySymbol(currency)}${value.toLocaleString()}`,
                 "Amount",
               ]}
               contentStyle={{
-                backgroundColor: "#18181b",
-                border: "1px solid #27272a",
+                backgroundColor: "#1c202a",
+                border: "1px solid #2a303c",
                 borderRadius: "8px",
                 color: "#fff",
               }}
             />
-            <Bar dataKey="amount" fill="#10b981" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="amount" fill="#6ea8ff" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
       {/* Income by Client */}
       {byClient.length > 0 && (
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4">
             Income by Client
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b border-[#27272a]">
+              <thead className="border-b border-[#2a303c]">
                 <tr>
-                  <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                     Client
                   </th>
-                  <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                     Invoices
                   </th>
-                  <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                     Total
                   </th>
                   <th className="text-left py-3 text-sm font-medium text-muted">
@@ -391,7 +391,7 @@ export default function EarningsPage() {
                     <td className="py-3 text-sm text-white">
                       {client.client_name || "Manual Entry"}
                     </td>
-                    <td className="py-3 text-sm text-[#a1a1aa]">
+                    <td className="py-3 text-sm text-[#8f9db1]">
                       {client.count}
                     </td>
                     <td className="py-3 text-sm text-white font-medium">
@@ -401,7 +401,7 @@ export default function EarningsPage() {
                         maximumFractionDigits: 2,
                       })}
                     </td>
-                    <td className="py-3 text-sm text-[#a1a1aa]">
+                    <td className="py-3 text-sm text-[#8f9db1]">
                       {totalEarned
                         ? Math.round((client.total / totalEarned) * 100)
                         : 0}
@@ -416,12 +416,12 @@ export default function EarningsPage() {
       )}
 
       {/* Income Log */}
-      <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-white">Income Log</h2>
           <button
             onClick={() => setShowManualForm(!showManualForm)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#10b981] text-white text-sm font-medium rounded-lg hover:bg-[#059669] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#6ea8ff] text-[#0e1116] text-sm font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
           >
             <Plus size={16} />
             Add Income
@@ -431,7 +431,7 @@ export default function EarningsPage() {
         {showManualForm && (
           <form
             onSubmit={handleManualSubmit}
-            className="bg-[#0f0f0f] border border-[#27272a] rounded-lg p-4 mb-4 space-y-4"
+            className="bg-[#14171d] border border-[#2a303c] rounded-lg p-4 mb-4 space-y-4"
           >
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -450,7 +450,7 @@ export default function EarningsPage() {
                   }
                   required
                   placeholder="0.00"
-                  className="w-full px-4 py-2 bg-[#18181b] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#1c202a] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                 />
               </div>
               <div>
@@ -465,7 +465,7 @@ export default function EarningsPage() {
                       currency: e.target.value,
                     }))
                   }
-                  className="w-full px-4 py-2 bg-[#18181b] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#1c202a] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
                 >
                   <option value="USD">USD</option>
                   <option value="GBP">GBP</option>
@@ -489,7 +489,7 @@ export default function EarningsPage() {
                     setManualForm((prev) => ({ ...prev, date: e.target.value }))
                   }
                   required
-                  className="w-full px-4 py-2 bg-[#18181b] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#1c202a] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
                 />
               </div>
               <div>
@@ -507,7 +507,7 @@ export default function EarningsPage() {
                   }
                   required
                   placeholder="Freelance work"
-                  className="w-full px-4 py-2 bg-[#18181b] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#1c202a] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                 />
               </div>
             </div>
@@ -515,7 +515,7 @@ export default function EarningsPage() {
               <button
                 type="submit"
                 disabled={manualLoading}
-                className="flex-1 py-2 bg-[#10b981] text-white text-sm font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-2 bg-[#6ea8ff] text-[#0e1116] text-sm font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {manualLoading ? (
                   <Loader2 size={16} className="animate-spin" />
@@ -526,7 +526,7 @@ export default function EarningsPage() {
               <button
                 type="button"
                 onClick={() => setShowManualForm(false)}
-                className="px-4 py-2 border border-[#27272a] text-white text-sm font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center gap-2"
+                className="px-4 py-2 border border-[#2a303c] text-white text-sm font-medium rounded-lg hover:border-[#6ea8ff] transition-colors flex items-center gap-2"
               >
                 <X size={16} />
                 Cancel
@@ -537,29 +537,29 @@ export default function EarningsPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="border-b border-[#27272a]">
+            <thead className="border-b border-[#2a303c]">
               <tr>
-                <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                   Date
                 </th>
-                <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                   Description
                 </th>
-                <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                   Client
                 </th>
-                <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                   Amount
                 </th>
-                <th className="text-left py-3 text-sm font-medium text-[#a1a1aa]">
+                <th className="text-left py-3 text-sm font-medium text-[#8f9db1]">
                   Type
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#27272a]">
+            <tbody className="divide-y divide-[#2a303c]">
               {entries.map((entry) => (
                 <tr key={entry.id}>
-                  <td className="py-3 text-sm text-[#a1a1aa]">
+                  <td className="py-3 text-sm text-[#8f9db1]">
                     {new Date(entry.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",
@@ -569,7 +569,7 @@ export default function EarningsPage() {
                   <td className="py-3 text-sm text-white">
                     {entry.description}
                   </td>
-                  <td className="py-3 text-sm text-[#a1a1aa]">
+                  <td className="py-3 text-sm text-[#8f9db1]">
                     {entry.client_name || "—"}
                   </td>
                   <td className="py-3 text-sm text-white font-medium">
@@ -582,7 +582,7 @@ export default function EarningsPage() {
                     <span
                       className={`inline-block px-2 py-1 rounded text-xs font-medium ${
                         entry.type === "invoice_payment"
-                          ? "bg-[#052e16] text-[#10b981]"
+                          ? "bg-[#0c2e26] text-[#57c9b0]"
                           : "bg-[#1e3a5f] text-[#60a5fa]"
                       }`}
                     >
@@ -596,8 +596,8 @@ export default function EarningsPage() {
         </div>
 
         {pagination && pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#27272a]">
-            <p className="text-sm text-[#a1a1aa]">
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#2a303c]">
+            <p className="text-sm text-[#8f9db1]">
               Showing page {page} of {pagination.totalPages} (
               {pagination.total} total)
             </p>
@@ -605,14 +605,14 @@ export default function EarningsPage() {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-3 py-1 text-sm border border-[#27272a] rounded-lg disabled:opacity-50 text-white hover:border-[#10b981]"
+                className="px-3 py-1 text-sm border border-[#2a303c] rounded-lg disabled:opacity-50 text-white hover:border-[#6ea8ff]"
               >
                 Previous
               </button>
               <button
                 onClick={() => setPage((p) => p + 1)}
                 disabled={!pagination.hasMore}
-                className="px-3 py-1 text-sm border border-[#27272a] rounded-lg disabled:opacity-50 text-white hover:border-[#10b981]"
+                className="px-3 py-1 text-sm border border-[#2a303c] rounded-lg disabled:opacity-50 text-white hover:border-[#6ea8ff]"
               >
                 Next
               </button>
@@ -622,16 +622,16 @@ export default function EarningsPage() {
       </div>
 
       {/* Tax Export */}
-      <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
         <h2 className="text-lg font-semibold text-white mb-4">Tax Export</h2>
-        <p className="text-sm text-[#a1a1aa] mb-4">
+        <p className="text-sm text-[#8f9db1] mb-4">
           Export your {selectedYear} income data for tax filing
         </p>
 
-        <div className="bg-[#0f0f0f] border border-[#27272a] rounded-lg p-4 mb-6">
+        <div className="bg-[#14171d] border border-[#2a303c] rounded-lg p-4 mb-6">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-[#a1a1aa] mb-1">Total Income</p>
+              <p className="text-xs text-[#8f9db1] mb-1">Total Income</p>
               <p className="text-lg font-bold text-white">
                 {getCurrencySymbol(currency)}
                 {totalEarned.toLocaleString("en-US", {
@@ -640,7 +640,7 @@ export default function EarningsPage() {
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#a1a1aa] mb-1">Clients</p>
+              <p className="text-xs text-[#8f9db1] mb-1">Clients</p>
               <p className="text-lg font-bold text-white">
                 {byClient.length}
               </p>
@@ -651,21 +651,21 @@ export default function EarningsPage() {
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={() => handleExport("pdf")}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
           >
             <Download size={18} />
             Export PDF
           </button>
           <button
             onClick={() => handleExport("csv")}
-            className="flex-1 flex items-center justify-center gap-2 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors"
           >
             <Download size={18} />
             Export CSV
           </button>
         </div>
 
-        <p className="text-xs text-[#a1a1aa] mt-4">
+        <p className="text-xs text-[#8f9db1] mt-4">
           Paidly provides income data only. Consult a tax professional for
           filing guidance.
         </p>

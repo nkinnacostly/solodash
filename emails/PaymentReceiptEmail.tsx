@@ -99,13 +99,13 @@ const container = {
 };
 
 const header = {
-  backgroundColor: "#0f0f0f",
+  backgroundColor: "#14171d",
   padding: "32px 24px",
   textAlign: "center" as const,
 };
 
 const logo = {
-  color: "#10b981",
+  color: "#6ea8ff",
   fontSize: "28px",
   fontWeight: "bold",
   margin: "0",
@@ -124,7 +124,7 @@ const checkmark = {
 const headline = {
   fontSize: "28px",
   fontWeight: "bold",
-  color: "#18181b",
+  color: "#1c202a",
   margin: "0 0 16px 0",
 };
 
@@ -145,7 +145,7 @@ const detailsBox = {
 const amountDisplay = {
   fontSize: "32px",
   fontWeight: "bold",
-  color: "#10b981",
+  color: "#6ea8ff",
   margin: "0 0 20px 0",
 };
 
@@ -165,7 +165,7 @@ const detailsLabel = {
 const detailsValue = {
   fontSize: "14px",
   fontWeight: "600",
-  color: "#18181b",
+  color: "#1c202a",
   margin: "0",
 };
 
@@ -183,13 +183,13 @@ const divider = {
 
 const footer = {
   fontSize: "12px",
-  color: "#a1a1aa",
+  color: "#8f9db1",
   textAlign: "center" as const,
   padding: "16px 24px 32px",
   margin: "0",
 };
 
 const footerLink = {
-  color: "#a1a1aa",
+  color: "#8f9db1",
   textDecoration: "underline",
 };

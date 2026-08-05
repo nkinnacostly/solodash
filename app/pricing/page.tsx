@@ -43,23 +43,23 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f]">
+    <div className="min-h-screen bg-[#14171d]">
       {/* Navbar */}
-      <nav className="border-b border-[#27272a] bg-[#0f0f0f]">
+      <nav className="border-b border-[#2a303c] bg-[#14171d]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-[#10b981]">
+          <Link href="/" className="text-2xl font-bold text-[#6ea8ff]">
             Paidly
           </Link>
           <div className="flex items-center gap-4">
             <Link
               href="/login"
-              className="text-sm text-[#a1a1aa] hover:text-white transition-colors"
+              className="text-sm text-[#8f9db1] hover:text-white transition-colors"
             >
               Log in
             </Link>
             <Link
               href="/signup"
-              className="text-sm px-4 py-2 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+              className="text-sm px-4 py-2 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
             >
               Start free
             </Link>
@@ -73,7 +73,7 @@ export default function PricingPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Simple pricing. No surprises.
           </h1>
-          <p className="text-lg text-[#a1a1aa]">
+          <p className="text-lg text-[#8f9db1]">
             Start free. Upgrade when your business grows.
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function PricingPage() {
         <div className="flex items-center justify-center gap-4 mb-12">
           <span
             className={`text-sm font-medium ${
-              !isAnnual ? "text-white" : "text-[#a1a1aa]"
+              !isAnnual ? "text-white" : "text-[#8f9db1]"
             }`}
           >
             Monthly
@@ -90,7 +90,7 @@ export default function PricingPage() {
           <button
             onClick={() => setIsAnnual(!isAnnual)}
             className={`relative w-14 h-7 rounded-full transition-colors ${
-              isAnnual ? "bg-[#10b981]" : "bg-[#27272a]"
+              isAnnual ? "bg-[#6ea8ff]" : "bg-[#2a303c]"
             }`}
           >
             <span
@@ -101,53 +101,53 @@ export default function PricingPage() {
           </button>
           <span
             className={`text-sm font-medium ${
-              isAnnual ? "text-white" : "text-[#a1a1aa]"
+              isAnnual ? "text-white" : "text-[#8f9db1]"
             }`}
           >
-            Annual <span className="text-[#10b981]">(save 30%)</span>
+            Annual <span className="text-[#6ea8ff]">(save 30%)</span>
           </span>
         </div>
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-20">
           {/* Free Plan */}
-          <div className="bg-[#18181b] border border-[#27272a] rounded-2xl p-8">
+          <div className="bg-[#1c202a] border border-[#2a303c] rounded-2xl p-8">
             <h3 className="text-xl font-semibold text-white mb-2">Free</h3>
-            <p className="text-sm text-[#a1a1aa] mb-6">
+            <p className="text-sm text-[#8f9db1] mb-6">
               For freelancers just getting started
             </p>
             <div className="mb-8">
               <span className="text-5xl font-bold text-white">$0</span>
-              <span className="text-[#a1a1aa]">/mo</span>
-              <p className="text-xs text-[#a1a1aa] mt-1">Free forever</p>
+              <span className="text-[#8f9db1]">/mo</span>
+              <p className="text-xs text-[#8f9db1] mt-1">Free forever</p>
             </div>
 
             <ul className="space-y-4 mb-8">
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">3 invoices per month</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">1 contract per month</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">Earnings tracking</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">
                   Flutterwave payments (5% fee)
@@ -156,60 +156,60 @@ export default function PricingPage() {
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">PDF exports</span>
               </li>
               <li className="flex items-start gap-3">
-                <X size={18} className="text-[#a1a1aa] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#a1a1aa]">
+                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-[#8f9db1]">
                   Unlimited invoices
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <X size={18} className="text-[#a1a1aa] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#a1a1aa]">Custom branding</span>
+                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-[#8f9db1]">Custom branding</span>
               </li>
               <li className="flex items-start gap-3">
-                <X size={18} className="text-[#a1a1aa] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#a1a1aa]">0% platform fee</span>
+                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-[#8f9db1]">0% platform fee</span>
               </li>
               <li className="flex items-start gap-3">
-                <X size={18} className="text-[#a1a1aa] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#a1a1aa]">Priority support</span>
+                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-[#8f9db1]">Priority support</span>
               </li>
             </ul>
 
             <Link
               href="/signup"
-              className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors flex items-center justify-center gap-2"
             >
               Get started free
             </Link>
           </div>
 
           {/* Pro Plan */}
-          <div className="bg-[#18181b] border-2 border-[#10b981] rounded-2xl p-8 relative shadow-lg shadow-[#10b981]/10">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#10b981] text-white text-xs font-semibold rounded-full">
+          <div className="bg-[#1c202a] border-2 border-[#6ea8ff] rounded-2xl p-8 relative shadow-lg shadow-[#6ea8ff]/10">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#6ea8ff] text-[#0e1116] text-xs font-semibold rounded-full">
               Most popular
             </div>
 
             <h3 className="text-xl font-semibold text-white mb-2">Pro</h3>
-            <p className="text-sm text-[#a1a1aa] mb-6">
+            <p className="text-sm text-[#8f9db1] mb-6">
               For serious freelancers
             </p>
             <div className="mb-8">
               <span className="text-5xl font-bold text-white">
                 {isAnnual ? "₦130,000" : "₦15,000"}
               </span>
-              <span className="text-[#a1a1aa]">/mo</span>
+              <span className="text-[#8f9db1]">/mo</span>
               {isAnnual && (
                 <>
-                  <span className="text-[#a1a1aa]">/yr</span>
-                  <p className="text-xs text-[#10b981] mt-1">Save ₦50,000</p>
+                  <span className="text-[#8f9db1]">/yr</span>
+                  <p className="text-xs text-[#6ea8ff] mt-1">Save ₦50,000</p>
                 </>
               )}
-              <p className="text-xs text-[#a1a1aa] mt-1">
+              <p className="text-xs text-[#8f9db1] mt-1">
                 ~$9/mo at current exchange rate
               </p>
             </div>
@@ -218,28 +218,28 @@ export default function PricingPage() {
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">Unlimited invoices</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">Unlimited contracts</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">Earnings tracking</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">
                   Flutterwave payments (0% fee — you keep 100%)
@@ -248,28 +248,28 @@ export default function PricingPage() {
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">PDF exports</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">Custom branding</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">Priority support</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check
                   size={18}
-                  className="text-[#10b981] mt-0.5 flex-shrink-0"
+                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
                 />
                 <span className="text-sm text-white">Tax export</span>
               </li>
@@ -278,7 +278,7 @@ export default function PricingPage() {
             <button
               onClick={handleUpgrade}
               disabled={upgrading}
-              className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {upgrading ? (
                 <>
@@ -301,31 +301,31 @@ export default function PricingPage() {
           </h2>
 
           <div className="space-y-4">
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h3 className="text-lg font-semibold text-white mb-2">
                 Can I cancel anytime?
               </h3>
-              <p className="text-sm text-[#a1a1aa]">
+              <p className="text-sm text-[#8f9db1]">
                 Yes, cancel anytime. Your account reverts to the free plan
                 immediately. You won't lose any data.
               </p>
             </div>
 
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h3 className="text-lg font-semibold text-white mb-2">
                 What payment methods do you accept?
               </h3>
-              <p className="text-sm text-[#a1a1aa]">
+              <p className="text-sm text-[#8f9db1]">
                 Card payments via Flutterwave in NGN. International cards
                 accepted.
               </p>
             </div>
 
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h3 className="text-lg font-semibold text-white mb-2">
                 Do you offer refunds?
               </h3>
-              <p className="text-sm text-[#a1a1aa]">
+              <p className="text-sm text-[#8f9db1]">
                 Yes, within 7 days of payment if you haven't used Pro features.
                 Contact us at support@getpaidly.co
               </p>

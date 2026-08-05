@@ -235,10 +235,10 @@ export default function EditInvoicePage() {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="animate-pulse space-y-8">
-          <div className="h-8 bg-[#18181b] rounded w-48" />
+          <div className="h-8 bg-[#1c202a] rounded w-48" />
           <div className="space-y-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 bg-[#18181b] rounded-xl" />
+              <div key={i} className="h-32 bg-[#1c202a] rounded-xl" />
             ))}
           </div>
         </div>
@@ -253,12 +253,12 @@ export default function EditInvoicePage() {
           <h3 className="text-xl font-semibold text-white mb-2">
             Only draft invoices can be edited
           </h3>
-          <p className="text-[#a1a1aa] mb-6">
+          <p className="text-[#8f9db1] mb-6">
             This invoice has already been sent or paid.
           </p>
           <Link
             href={`/invoices/${invoiceId}`}
-            className="inline-flex items-center gap-2 px-5 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
           >
             <ArrowLeft size={18} />
             Back to Invoice
@@ -275,7 +275,7 @@ export default function EditInvoicePage() {
           <p className="text-[#ef4444] text-lg">{error}</p>
           <Link
             href="/invoices"
-            className="mt-4 inline-block text-[#10b981] hover:underline"
+            className="mt-4 inline-block text-[#6ea8ff] hover:underline"
           >
             ← Back to Invoices
           </Link>
@@ -290,13 +290,13 @@ export default function EditInvoicePage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href={`/invoices/${invoiceId}`}
-          className="p-2 hover:bg-[#18181b] rounded-lg transition-colors"
+          className="p-2 hover:bg-[#1c202a] rounded-lg transition-colors"
         >
-          <ArrowLeft size={20} className="text-[#a1a1aa]" />
+          <ArrowLeft size={20} className="text-[#8f9db1]" />
         </Link>
         <div>
           <h1 className="text-3xl font-bold text-white">Edit Invoice</h1>
-          <p className="text-sm text-[#a1a1aa] mt-1">
+          <p className="text-sm text-[#8f9db1] mt-1">
             {formValues.invoiceNumber}
           </p>
         </div>
@@ -305,7 +305,7 @@ export default function EditInvoicePage() {
       {/* Form */}
       <div className="space-y-6">
         {/* Client Selection */}
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4">Client</h2>
           <div>
             <label className="block text-sm font-medium text-white mb-2">
@@ -313,7 +313,7 @@ export default function EditInvoicePage() {
             </label>
             <select
               {...register("clientId")}
-              className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+              className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
             >
               <option value="">Choose a client...</option>
               {clients.map((client) => (
@@ -326,7 +326,7 @@ export default function EditInvoicePage() {
         </div>
 
         {/* Invoice Details */}
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4">
             Invoice Details
           </h2>
@@ -339,7 +339,7 @@ export default function EditInvoicePage() {
               <input
                 {...register("invoiceNumber")}
                 type="text"
-                className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
               />
               {errors.invoiceNumber && (
                 <p className="mt-1 text-sm text-[#ef4444]">
@@ -354,7 +354,7 @@ export default function EditInvoicePage() {
               </label>
               <select
                 {...register("currency")}
-                className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
               >
                 {currencies.map((c) => (
                   <option key={c.code} value={c.code}>
@@ -391,7 +391,7 @@ export default function EditInvoicePage() {
         </div>
 
         {/* Line Items */}
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4">Line Items</h2>
 
           <div className="space-y-3">
@@ -402,7 +402,7 @@ export default function EditInvoicePage() {
                     {...register(`lineItems.${index}.description`)}
                     type="text"
                     placeholder="Description"
-                    className="w-full px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors text-sm"
+                    className="w-full px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors text-sm"
                   />
                   {errors.lineItems?.[index]?.description && (
                     <p className="mt-1 text-xs text-[#ef4444]">
@@ -418,7 +418,7 @@ export default function EditInvoicePage() {
                     step="0.01"
                     min="0.01"
                     placeholder="Qty"
-                    className="w-full px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors text-sm"
+                    className="w-full px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors text-sm"
                   />
                 </div>
 
@@ -429,11 +429,11 @@ export default function EditInvoicePage() {
                     step="0.01"
                     min="0.01"
                     placeholder="Rate"
-                    className="w-full px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors text-sm"
+                    className="w-full px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors text-sm"
                   />
                 </div>
 
-                <div className="col-span-2 flex items-center px-3 py-2 bg-[#0f0f0f] rounded-lg text-sm text-[#a1a1aa]">
+                <div className="col-span-2 flex items-center px-3 py-2 bg-[#14171d] rounded-lg text-sm text-[#8f9db1]">
                   {selectedCurrency.symbol}
                   {(
                     Number(formValues.lineItems?.[index]?.quantity || 0) *
@@ -446,7 +446,7 @@ export default function EditInvoicePage() {
                     type="button"
                     onClick={() => remove(index)}
                     disabled={fields.length === 1}
-                    className="p-1 text-[#a1a1aa] hover:text-[#ef4444] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-1 text-[#8f9db1] hover:text-[#ef4444] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     <X size={18} />
                   </button>
@@ -458,7 +458,7 @@ export default function EditInvoicePage() {
           <button
             type="button"
             onClick={() => append({ description: "", quantity: 1, rate: 0 })}
-            className="mt-4 flex items-center gap-2 text-sm text-[#10b981] hover:underline"
+            className="mt-4 flex items-center gap-2 text-sm text-[#6ea8ff] hover:underline"
           >
             <Plus size={16} />
             Add line item
@@ -472,9 +472,9 @@ export default function EditInvoicePage() {
         </div>
 
         {/* Totals */}
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <div className="space-y-3">
-            <div className="flex justify-between text-[#a1a1aa]">
+            <div className="flex justify-between text-[#8f9db1]">
               <span>Subtotal</span>
               <span>
                 {selectedCurrency.symbol}
@@ -484,24 +484,24 @@ export default function EditInvoicePage() {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-[#a1a1aa]">Tax</span>
+                <span className="text-[#8f9db1]">Tax</span>
                 <input
                   {...register("taxRate")}
                   type="number"
                   min="0"
                   max="100"
                   step="0.01"
-                  className="w-20 px-3 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white text-sm focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                  className="w-20 px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white text-sm focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                 />
-                <span className="text-[#a1a1aa]">%</span>
+                <span className="text-[#8f9db1]">%</span>
               </div>
-              <span className="text-[#a1a1aa]">
+              <span className="text-[#8f9db1]">
                 {selectedCurrency.symbol}
                 {taxAmount.toFixed(2)}
               </span>
             </div>
 
-            <div className="pt-3 border-t border-[#27272a] flex justify-between text-lg font-bold text-white">
+            <div className="pt-3 border-t border-[#2a303c] flex justify-between text-lg font-bold text-white">
               <span>Total</span>
               <span>
                 {selectedCurrency.symbol}
@@ -512,13 +512,13 @@ export default function EditInvoicePage() {
         </div>
 
         {/* Notes */}
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
           <h2 className="text-lg font-semibold text-white mb-4">Notes</h2>
           <textarea
             {...register("notes")}
             rows={4}
             placeholder="Payment terms, thank you note, bank details..."
-            className="w-full px-4 py-3 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors resize-none"
+            className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors resize-none"
           />
         </div>
 
@@ -533,7 +533,7 @@ export default function EditInvoicePage() {
         <div className="flex gap-3">
           <Link
             href={`/invoices/${invoiceId}`}
-            className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors text-center"
+            className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors text-center"
           >
             Cancel
           </Link>
@@ -541,7 +541,7 @@ export default function EditInvoicePage() {
             type="button"
             onClick={handleSubmit(onSubmit)}
             disabled={saving}
-            className="flex-1 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {saving ? (
               <>

@@ -11,6 +11,7 @@ import {
   Settings2,
   LogOut,
   Zap,
+  Receipt,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -31,6 +32,7 @@ export default function Sidebar({ profile }: SidebarProps) {
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/invoices", icon: FileText, label: "Invoices" },
+    { href: "/bills", icon: Receipt, label: "Bills" },
     { href: "/contracts", icon: FilePen, label: "Contracts" },
     { href: "/earnings", icon: TrendingUp, label: "Earnings" },
     { href: "/settings", icon: Settings2, label: "Settings" },
@@ -57,10 +59,10 @@ export default function Sidebar({ profile }: SidebarProps) {
   };
 
   return (
-    <aside className="fixed top-0 left-0 h-screen w-[240px] bg-[#111111] border-r border-[#27272a] flex flex-col">
+    <aside className="fixed top-0 left-0 h-screen w-[240px] bg-[#171b23] border-r border-[#2a303c] flex flex-col">
       {/* Logo */}
       <div className="px-6 py-6">
-        <Link href="/dashboard" className="text-xl font-bold text-[#10b981]">
+        <Link href="/dashboard" className="text-xl font-bold text-[#6ea8ff]">
           Paidly
         </Link>
       </div>
@@ -75,8 +77,8 @@ export default function Sidebar({ profile }: SidebarProps) {
               href={href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-colors ${
                 isActive
-                  ? "text-[#10b981] bg-[#10b981]/10"
-                  : "text-[#a1a1aa] hover:text-white hover:bg-white/5"
+                  ? "text-[#6ea8ff] bg-[#6ea8ff]/10"
+                  : "text-[#8f9db1] hover:text-white hover:bg-white/5"
               }`}
             >
               <Icon size={20} />
@@ -87,24 +89,24 @@ export default function Sidebar({ profile }: SidebarProps) {
       </nav>
 
       {/* Bottom Section */}
-      <div className="p-4 border-t border-[#27272a]">
+      <div className="p-4 border-t border-[#2a303c]">
         {/* Upgrade Prompt (Free users only) */}
         {profile?.plan === "free" && (
-          <div className="mb-3 p-3 border border-[#10b981]/30 rounded-lg bg-[#10b981]/5">
+          <div className="mb-3 p-3 border border-[#6ea8ff]/30 rounded-lg bg-[#6ea8ff]/5">
             <div className="flex items-start gap-2 mb-2">
-              <Zap size={16} className="text-[#10b981] flex-shrink-0 mt-0.5" />
+              <Zap size={16} className="text-[#6ea8ff] flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-[13px] font-bold text-white">
                   Upgrade to Pro
                 </p>
-                <p className="text-[12px] text-[#a1a1aa]">
+                <p className="text-[12px] text-[#8f9db1]">
                   Keep 100% of your payments
                 </p>
               </div>
             </div>
             <Link
               href="/dashboard/pricing"
-              className="w-full py-2 bg-[#10b981] text-white text-sm font-medium rounded-lg hover:bg-[#059669] transition-colors flex items-center justify-center gap-1"
+              className="w-full py-2 bg-[#6ea8ff] text-[#0e1116] text-sm font-medium rounded-lg hover:bg-[#5b93e6] transition-colors flex items-center justify-center gap-1"
             >
               Upgrade →
             </Link>
@@ -116,8 +118,8 @@ export default function Sidebar({ profile }: SidebarProps) {
           <span
             className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
               profile?.plan === "pro"
-                ? "bg-[#10b981]/20 text-[#10b981]"
-                : "bg-[#27272a] text-[#a1a1aa]"
+                ? "bg-[#6ea8ff]/20 text-[#6ea8ff]"
+                : "bg-[#2a303c] text-[#8f9db1]"
             }`}
           >
             {profile?.plan === "pro" ? "Pro" : "Free"}
@@ -127,7 +129,7 @@ export default function Sidebar({ profile }: SidebarProps) {
         {/* User Info */}
         <div className="flex items-center gap-3 mb-3">
           {/* Avatar */}
-          <div className="w-9 h-9 rounded-full bg-[#10b981]/20 text-[#10b981] flex items-center justify-center text-sm font-medium flex-shrink-0">
+          <div className="w-9 h-9 rounded-full bg-[#6ea8ff]/20 text-[#6ea8ff] flex items-center justify-center text-sm font-medium flex-shrink-0">
             {getInitials()}
           </div>
 
@@ -136,7 +138,7 @@ export default function Sidebar({ profile }: SidebarProps) {
             <p className="text-sm font-medium text-white truncate">
               {profile?.name || "User"}
             </p>
-            <p className="text-xs text-[#a1a1aa] truncate">{profile?.email}</p>
+            <p className="text-xs text-[#8f9db1] truncate">{profile?.email}</p>
           </div>
         </div>
 
@@ -144,7 +146,7 @@ export default function Sidebar({ profile }: SidebarProps) {
         <button
           onClick={handleLogout}
           disabled={loggingOut}
-          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#a1a1aa] hover:text-[#ef4444] transition-colors disabled:opacity-50"
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#8f9db1] hover:text-[#ef4444] transition-colors disabled:opacity-50"
         >
           <LogOut size={18} />
           <span>{loggingOut ? "Logging out..." : "Log out"}</span>

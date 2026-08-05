@@ -44,18 +44,18 @@ export default function UpgradeModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-[#18181b] border border-[#27272a] rounded-2xl max-w-md w-full p-6 shadow-xl">
+      <div className="relative bg-[#1c202a] border border-[#2a303c] rounded-2xl max-w-md w-full p-6 shadow-xl">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 hover:bg-[#27272a] rounded-lg transition-colors"
+          className="absolute top-4 right-4 p-1 hover:bg-[#2a303c] rounded-lg transition-colors"
         >
-          <X size={20} className="text-[#a1a1aa]" />
+          <X size={20} className="text-[#8f9db1]" />
         </button>
 
         {/* Icon */}
-        <div className="w-16 h-16 bg-[#10b981]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Crown size={32} className="text-[#10b981]" />
+        <div className="w-16 h-16 bg-[#6ea8ff]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Crown size={32} className="text-[#6ea8ff]" />
         </div>
 
         {/* Header */}
@@ -64,21 +64,21 @@ export default function UpgradeModal({
         </h2>
 
         {reason && (
-          <p className="text-sm text-[#a1a1aa] text-center mb-6">{reason}</p>
+          <p className="text-sm text-[#8f9db1] text-center mb-6">{reason}</p>
         )}
 
         {/* Feature Comparison */}
-        <div className="bg-[#0f0f0f] border border-[#27272a] rounded-xl p-4 mb-6">
+        <div className="bg-[#14171d] border border-[#2a303c] rounded-xl p-4 mb-6">
           <h3 className="text-sm font-semibold text-white mb-4">Free vs Pro</h3>
           <div className="space-y-3">
             {Object.values(comparisons).map((comp, idx) => (
               <div key={idx} className="flex items-center justify-between">
-                <span className="text-sm text-[#a1a1aa]">{comp.label}</span>
+                <span className="text-sm text-[#8f9db1]">{comp.label}</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-[#a1a1aa] line-through">
+                  <span className="text-xs text-[#8f9db1] line-through">
                     {comp.free}
                   </span>
-                  <span className="text-xs text-[#10b981] font-medium">
+                  <span className="text-xs text-[#6ea8ff] font-medium">
                     → {comp.pro}
                   </span>
                 </div>
@@ -90,20 +90,20 @@ export default function UpgradeModal({
         {/* Price */}
         <div className="text-center mb-6">
           <p className="text-3xl font-bold text-white">₦13,500/month</p>
-          <p className="text-sm text-[#a1a1aa]">or ₦119,000/year (save 30%)</p>
+          <p className="text-sm text-[#8f9db1]">or ₦119,000/year (save 30%)</p>
         </div>
 
         {/* Buttons */}
         <div className="space-y-3">
           <a
             href="/pricing"
-            className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors flex items-center justify-center gap-2"
           >
             Upgrade to Pro →
           </a>
           <button
             onClick={onClose}
-            className="w-full py-3 border border-[#27272a] text-[#a1a1aa] font-medium rounded-lg hover:border-[#3f3f46] hover:text-white transition-colors"
+            className="w-full py-3 border border-[#2a303c] text-[#8f9db1] font-medium rounded-lg hover:border-[#3a4353] hover:text-white transition-colors"
           >
             Maybe later
           </button>

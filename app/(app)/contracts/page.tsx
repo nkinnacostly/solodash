@@ -31,18 +31,18 @@ const isEditable = (contract: Contract) =>
     !contract.freelancer_signed_at);
 
 const statusColors: Record<string, string> = {
-  draft: "bg-[#27272a] text-[#a1a1aa]",
-  sending: "bg-[#27272a] text-[#a1a1aa]",
+  draft: "bg-[#2a303c] text-[#8f9db1]",
+  sending: "bg-[#2a303c] text-[#8f9db1]",
   sent: "bg-[#1e3a5f] text-[#60a5fa]",
-  signed: "bg-[#052e16] text-[#10b981]",
-  active: "bg-[#052e16] text-[#10b981]",
-  completed: "bg-[#27272a] text-[#6b7280]",
+  signed: "bg-[#0c2e26] text-[#57c9b0]",
+  active: "bg-[#0c2e26] text-[#57c9b0]",
+  completed: "bg-[#2a303c] text-[#6b7280]",
 };
 
 const typeColors: Record<string, string> = {
   hourly: "bg-[#1e3a5f] text-[#60a5fa]",
   project: "bg-[#3b0764] text-[#a78bfa]",
-  retainer: "bg-[#3d2e00] text-[#fbbf24]",
+  retainer: "bg-[#3d2e00] text-[#e6b566]",
 };
 
 function ContractStatusBadge({ status }: { status: string }) {
@@ -60,7 +60,7 @@ function ContractStatusBadge({ status }: { status: string }) {
   return (
     <span
       className={`inline-block px-2 py-1 rounded text-xs font-medium ${
-        statusColors[status] || "bg-[#27272a] text-[#a1a1aa]"
+        statusColors[status] || "bg-[#2a303c] text-[#8f9db1]"
       }`}
     >
       {status}
@@ -167,11 +167,11 @@ export default function ContractsPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="animate-pulse space-y-6">
-          <div className="h-10 bg-[#18181b] rounded w-48" />
-          <div className="h-12 bg-[#18181b] rounded" />
+          <div className="h-10 bg-[#1c202a] rounded w-48" />
+          <div className="h-12 bg-[#1c202a] rounded" />
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-[#18181b] rounded" />
+              <div key={i} className="h-16 bg-[#1c202a] rounded" />
             ))}
           </div>
         </div>
@@ -185,13 +185,13 @@ export default function ContractsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white">Contracts</h1>
-          <p className="text-[#a1a1aa] mt-1">
+          <p className="text-[#8f9db1] mt-1">
             Create and manage client contracts
           </p>
         </div>
         <Link
           href="/contracts/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
         >
           <Plus size={18} />
           New Contract
@@ -199,7 +199,7 @@ export default function ContractsPage() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-2 mb-6 flex gap-2 overflow-x-auto">
+      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-2 mb-6 flex gap-2 overflow-x-auto">
         {["all", "draft", "sent", "signed", "active", "completed"].map(
           (status) => (
             <button
@@ -210,8 +210,8 @@ export default function ContractsPage() {
               }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === status
-                  ? "bg-[#10b981] text-white"
-                  : "text-[#a1a1aa] hover:text-white hover:bg-[#27272a]"
+                  ? "bg-[#6ea8ff] text-[#0e1116]"
+                  : "text-[#8f9db1] hover:text-white hover:bg-[#2a303c]"
               }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -225,12 +225,12 @@ export default function ContractsPage() {
 
       {/* Contracts List */}
       {contracts.length === 0 ? (
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-12 text-center">
-          <FileText size={48} className="text-[#27272a] mx-auto mb-4" />
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-12 text-center">
+          <FileText size={48} className="text-[#2a303c] mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">
             No contracts yet
           </h3>
-          <p className="text-[#a1a1aa] mb-6">
+          <p className="text-[#8f9db1] mb-6">
             {filter === "all"
               ? "Create your first contract to get started"
               : `No ${filter} contracts found`}
@@ -238,7 +238,7 @@ export default function ContractsPage() {
           {filter === "all" && (
             <Link
               href="/contracts/new"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
             >
               <Plus size={18} />
               Create Contract
@@ -248,49 +248,49 @@ export default function ContractsPage() {
       ) : (
         <>
           {/* Desktop Table */}
-          <div className="hidden md:block bg-[#18181b] border border-[#27272a] rounded-xl overflow-hidden">
+          <div className="hidden md:block bg-[#1c202a] border border-[#2a303c] rounded-xl overflow-hidden">
             <table className="w-full">
-              <thead className="border-b border-[#27272a]">
+              <thead className="border-b border-[#2a303c]">
                 <tr>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left px-6 py-4 text-sm font-medium text-[#8f9db1]">
                     Contract
                   </th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left px-6 py-4 text-sm font-medium text-[#8f9db1]">
                     Client
                   </th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left px-6 py-4 text-sm font-medium text-[#8f9db1]">
                     Type
                   </th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left px-6 py-4 text-sm font-medium text-[#8f9db1]">
                     Status
                   </th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left px-6 py-4 text-sm font-medium text-[#8f9db1]">
                     Value
                   </th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left px-6 py-4 text-sm font-medium text-[#8f9db1]">
                     Date
                   </th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-[#a1a1aa]">
+                  <th className="text-left px-6 py-4 text-sm font-medium text-[#8f9db1]">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#27272a]">
+              <tbody className="divide-y divide-[#2a303c]">
                 {contracts.map((contract) => (
-                  <tr key={contract.id} className="hover:bg-[#111111]">
+                  <tr key={contract.id} className="hover:bg-[#171b23]">
                     <td className="px-6 py-4">
                       <p className="text-sm font-medium text-white">
                         {contract.title}
                       </p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-[#a1a1aa]">
+                      <p className="text-sm text-[#8f9db1]">
                         {contract.clients?.name || "N/A"}
                       </p>
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-block px-2 py-1 rounded text-xs font-medium ${typeColors[contract.type] || "bg-[#27272a] text-[#a1a1aa]"}`}
+                        className={`inline-block px-2 py-1 rounded text-xs font-medium ${typeColors[contract.type] || "bg-[#2a303c] text-[#8f9db1]"}`}
                       >
                         {contract.type}
                       </span>
@@ -307,7 +307,7 @@ export default function ContractsPage() {
                       </p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-[#a1a1aa]">
+                      <p className="text-sm text-[#8f9db1]">
                         {formatDate(contract.created_at)}
                       </p>
                     </td>
@@ -317,20 +317,20 @@ export default function ContractsPage() {
                           onClick={() =>
                             router.push(`/contracts/${contract.id}`)
                           }
-                          className="p-2 hover:bg-[#27272a] rounded-lg transition-colors"
+                          className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors"
                           title="View"
                         >
-                          <Eye size={16} className="text-[#a1a1aa]" />
+                          <Eye size={16} className="text-[#8f9db1]" />
                         </button>
                         {isEditable(contract) && (
                           <button
                             onClick={() =>
                               router.push(`/contracts/${contract.id}/edit`)
                             }
-                            className="p-2 hover:bg-[#27272a] rounded-lg transition-colors"
+                            className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors"
                             title="Edit"
                           >
-                            <Edit size={16} className="text-[#a1a1aa]" />
+                            <Edit size={16} className="text-[#8f9db1]" />
                           </button>
                         )}
                         {contract.status === "draft" && (
@@ -355,14 +355,14 @@ export default function ContractsPage() {
             {contracts.map((contract) => (
               <div
                 key={contract.id}
-                className="bg-[#18181b] border border-[#27272a] rounded-xl p-4"
+                className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-4"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <h3 className="text-sm font-semibold text-white mb-1">
                       {contract.title}
                     </h3>
-                    <p className="text-xs text-[#a1a1aa]">
+                    <p className="text-xs text-[#8f9db1]">
                       {contract.clients?.name || "No client"}
                     </p>
                   </div>
@@ -385,7 +385,7 @@ export default function ContractsPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => router.push(`/contracts/${contract.id}`)}
-                      className="text-xs text-[#10b981] hover:underline"
+                      className="text-xs text-[#6ea8ff] hover:underline"
                     >
                       View
                     </button>
@@ -394,7 +394,7 @@ export default function ContractsPage() {
                         onClick={() =>
                           router.push(`/contracts/${contract.id}/edit`)
                         }
-                        className="text-xs text-[#a1a1aa] hover:underline"
+                        className="text-xs text-[#8f9db1] hover:underline"
                       >
                         Edit
                       </button>
@@ -414,8 +414,8 @@ export default function ContractsPage() {
           </div>
 
           {pagination && pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-[#27272a] px-4 py-3 mt-6 rounded-xl bg-[#18181b]">
-              <p className="text-sm text-[#a1a1aa]">
+            <div className="flex items-center justify-between border-t border-[#2a303c] px-4 py-3 mt-6 rounded-xl bg-[#1c202a]">
+              <p className="text-sm text-[#8f9db1]">
                 Showing page {page} of {pagination.totalPages} (
                 {pagination.total} total)
               </p>
@@ -423,14 +423,14 @@ export default function ContractsPage() {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3 py-1.5 rounded-md text-sm bg-[#18181b] border border-[#27272a] hover:border-[#10b981] disabled:opacity-40 disabled:cursor-not-allowed text-white"
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#1c202a] border border-[#2a303c] hover:border-[#6ea8ff] disabled:opacity-40 disabled:cursor-not-allowed text-white"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setPage((p) => p + 1)}
                   disabled={!pagination.hasMore}
-                  className="px-3 py-1.5 rounded-md text-sm bg-[#18181b] border border-[#27272a] hover:border-[#10b981] disabled:opacity-40 disabled:cursor-not-allowed text-white"
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#1c202a] border border-[#2a303c] hover:border-[#6ea8ff] disabled:opacity-40 disabled:cursor-not-allowed text-white"
                 >
                   Next
                 </button>

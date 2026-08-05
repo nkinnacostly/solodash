@@ -88,16 +88,16 @@ export default function SignupPage() {
   return (
     <div className="w-full max-w-md">
       <div className="text-center mb-8">
-        <Link href="/" className="text-3xl font-bold text-[#10b981]">
+        <Link href="/" className="text-3xl font-bold text-[#6ea8ff]">
           Paidly
         </Link>
       </div>
 
-      <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-8">
+      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-8">
         <h1 className="text-2xl font-bold text-white mb-2">
           Create your account
         </h1>
-        <p className="text-[#a1a1aa] mb-6">
+        <p className="text-[#8f9db1] mb-6">
           Start managing your freelance business
         </p>
 
@@ -129,10 +129,10 @@ export default function SignupPage() {
 
         <div className="relative mb-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-[#27272a]" />
+            <div className="w-full border-t border-[#2a303c]" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-[#18181b] text-[#a1a1aa]">or</span>
+            <span className="px-4 bg-[#1c202a] text-[#8f9db1]">or</span>
           </div>
         </div>
 
@@ -149,7 +149,7 @@ export default function SignupPage() {
               type="text"
               id="name"
               placeholder="John Doe"
-              className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+              className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
               disabled={loading}
             />
             {errors.name && (
@@ -171,7 +171,7 @@ export default function SignupPage() {
               type="email"
               id="email"
               placeholder="you@example.com"
-              className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+              className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
               disabled={loading}
             />
             {errors.email && (
@@ -194,13 +194,13 @@ export default function SignupPage() {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 placeholder="••••••••"
-                className="w-full px-4 py-3 pr-12 bg-[#0f0f0f] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                className="w-full px-4 py-3 pr-12 bg-[#14171d] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                 disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-white transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8f9db1] hover:text-white transition-colors"
                 disabled={loading}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -226,13 +226,13 @@ export default function SignupPage() {
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
                 placeholder="••••••••"
-                className="w-full px-4 py-3 pr-12 bg-[#0f0f0f] border border-[#27272a] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-colors"
+                className="w-full px-4 py-3 pr-12 bg-[#14171d] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
                 disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-white transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8f9db1] hover:text-white transition-colors"
                 disabled={loading}
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -254,7 +254,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -267,11 +267,11 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-[#a1a1aa]">
+        <p className="mt-6 text-center text-sm text-[#8f9db1]">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="text-[#10b981] hover:underline font-medium"
+            className="text-[#6ea8ff] hover:underline font-medium"
           >
             Log in
           </Link>

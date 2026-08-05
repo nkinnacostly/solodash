@@ -54,13 +54,13 @@ interface Invoice {
 }
 
 const statusColors: Record<string, string> = {
-  draft: "bg-[#27272a] text-[#a1a1aa]",
-  sending: "bg-[#27272a] text-[#a1a1aa]",
+  draft: "bg-[#2a303c] text-[#8f9db1]",
+  sending: "bg-[#2a303c] text-[#8f9db1]",
   sent: "bg-[#1e3a5f] text-[#60a5fa]",
-  viewed: "bg-[#3d2e00] text-[#fbbf24]",
-  paid: "bg-[#052e16] text-[#10b981]",
+  viewed: "bg-[#3d2e00] text-[#e6b566]",
+  paid: "bg-[#0c2e26] text-[#57c9b0]",
   overdue: "bg-[#3d0a0a] text-[#ef4444]",
-  cancelled: "bg-[#27272a] text-[#6b7280]",
+  cancelled: "bg-[#2a303c] text-[#6b7280]",
 };
 
 export default function InvoiceDetailPage() {
@@ -334,10 +334,10 @@ export default function InvoiceDetailPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="animate-pulse space-y-8">
-          <div className="h-8 bg-[#18181b] rounded w-48" />
+          <div className="h-8 bg-[#1c202a] rounded w-48" />
           <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 h-[600px] bg-[#18181b] rounded-xl" />
-            <div className="h-[600px] bg-[#18181b] rounded-xl" />
+            <div className="lg:col-span-2 h-[600px] bg-[#1c202a] rounded-xl" />
+            <div className="h-[600px] bg-[#1c202a] rounded-xl" />
           </div>
         </div>
       </div>
@@ -353,7 +353,7 @@ export default function InvoiceDetailPage() {
           </p>
           <Link
             href="/invoices"
-            className="mt-4 inline-block text-[#10b981] hover:underline"
+            className="mt-4 inline-block text-[#6ea8ff] hover:underline"
           >
             ← Back to Invoices
           </Link>
@@ -374,9 +374,9 @@ export default function InvoiceDetailPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/invoices"
-          className="p-2 hover:bg-[#18181b] rounded-lg transition-colors"
+          className="p-2 hover:bg-[#1c202a] rounded-lg transition-colors"
         >
-          <ArrowLeft size={20} className="text-[#a1a1aa]" />
+          <ArrowLeft size={20} className="text-[#8f9db1]" />
         </Link>
         <h1 className="text-3xl font-bold text-white">Invoice Details</h1>
       </div>
@@ -417,7 +417,7 @@ export default function InvoiceDetailPage() {
                     style={{
                       fontSize: "64px",
                       fontWeight: "bold",
-                      color: profile.brand_color || "#10b981",
+                      color: profile.brand_color || "#6ea8ff",
                       whiteSpace: "nowrap",
                       margin: 0,
                     }}
@@ -433,7 +433,7 @@ export default function InvoiceDetailPage() {
               <span
                 className={`px-4 py-2 text-sm font-bold rounded-full ${
                   statusColors[isOverdue ? "overdue" : invoice.status] ||
-                  "bg-[#27272a] text-[#a1a1aa]"
+                  "bg-[#2a303c] text-[#8f9db1]"
                 }`}
               >
                 {(isOverdue ? "overdue" : invoice.status)
@@ -465,7 +465,7 @@ export default function InvoiceDetailPage() {
                       color:
                         profile?.plan === "pro" && profile?.brand_color
                           ? profile.brand_color
-                          : "#10b981",
+                          : "#3b7ae0",
                     }}
                   >
                     {profile?.plan === "pro" &&
@@ -594,7 +594,7 @@ export default function InvoiceDetailPage() {
         <div className="lg:col-span-1">
           <div className="sticky top-6 space-y-6">
             {/* Invoice Info Card */}
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h3 className="text-lg font-bold text-white mb-4">
                 {invoice.invoice_number}
               </h3>
@@ -602,11 +602,11 @@ export default function InvoiceDetailPage() {
               <div className="space-y-4 mb-6">
                 {/* Status */}
                 <div>
-                  <p className="text-sm text-[#a1a1aa] mb-1">Status</p>
+                  <p className="text-sm text-[#8f9db1] mb-1">Status</p>
                   <span
                     className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${
                       statusColors[isOverdue ? "overdue" : invoice.status] ||
-                      "bg-[#27272a] text-[#a1a1aa]"
+                      "bg-[#2a303c] text-[#8f9db1]"
                     }`}
                   >
                     {(isOverdue ? "overdue" : invoice.status)
@@ -618,7 +618,7 @@ export default function InvoiceDetailPage() {
 
                 {/* Amount Due */}
                 <div>
-                  <p className="text-sm text-[#a1a1aa] mb-1">
+                  <p className="text-sm text-[#8f9db1] mb-1">
                     {invoice.status === "paid" ? "Amount Paid" : "Amount Due"}
                   </p>
                   <p className="text-3xl font-bold text-white">
@@ -629,12 +629,12 @@ export default function InvoiceDetailPage() {
 
                 {/* Client */}
                 <div>
-                  <p className="text-sm text-[#a1a1aa] mb-1">Client</p>
+                  <p className="text-sm text-[#8f9db1] mb-1">Client</p>
                   <p className="text-white font-medium">
                     {invoice.clients?.name || "—"}
                   </p>
                   {invoice.clients?.email && (
-                    <p className="text-sm text-[#a1a1aa]">
+                    <p className="text-sm text-[#8f9db1]">
                       {invoice.clients.email}
                     </p>
                   )}
@@ -642,7 +642,7 @@ export default function InvoiceDetailPage() {
 
                 {/* Dates */}
                 <div>
-                  <p className="text-sm text-[#a1a1aa] mb-1">Due Date</p>
+                  <p className="text-sm text-[#8f9db1] mb-1">Due Date</p>
                   <p
                     className={
                       isOverdue ? "text-[#ef4444] font-medium" : "text-white"
@@ -659,7 +659,7 @@ export default function InvoiceDetailPage() {
                   <button
                     type="button"
                     disabled
-                    className="w-full py-3 bg-[#27272a] text-[#a1a1aa] font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-3 bg-[#2a303c] text-[#8f9db1] font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Loader2 size={20} className="animate-spin" />
                     Sending...
@@ -672,7 +672,7 @@ export default function InvoiceDetailPage() {
                       type="button"
                       onClick={handleSendInvoice}
                       disabled={sendingLoading}
-                      className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {sendingLoading ? (
                         <Loader2 size={20} className="animate-spin" />
@@ -685,7 +685,7 @@ export default function InvoiceDetailPage() {
                     </button>
                     <Link
                       href={`/invoices/${invoice.id}/edit`}
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors flex items-center justify-center gap-2"
+                      className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors flex items-center justify-center gap-2"
                     >
                       <Edit size={18} />
                       Edit Invoice
@@ -714,7 +714,7 @@ export default function InvoiceDetailPage() {
                       type="button"
                       onClick={handleMarkAsPaid}
                       disabled={markPaidLoading}
-                      className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {markPaidLoading ? (
                         <Loader2 size={20} className="animate-spin" />
@@ -729,7 +729,7 @@ export default function InvoiceDetailPage() {
                       type="button"
                       onClick={handleSendInvoice}
                       disabled={sendingLoading}
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {sendingLoading ? (
                         <Loader2 size={20} className="animate-spin" />
@@ -744,7 +744,7 @@ export default function InvoiceDetailPage() {
                       type="button"
                       onClick={handlePreviewPaymentPage}
                       disabled={shareActionsDisabled}
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {publicLinkLoading ? (
                         <Loader2 size={18} className="animate-spin" />
@@ -757,7 +757,7 @@ export default function InvoiceDetailPage() {
                       type="button"
                       onClick={handleCopyPaymentLink}
                       disabled={shareActionsDisabled}
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       <Link2 size={18} />
                       Copy Payment Link
@@ -779,7 +779,7 @@ export default function InvoiceDetailPage() {
                     <button
                       type="button"
                       onClick={handleDownloadPdf}
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] hover:text-[#10b981] transition-colors flex items-center justify-center gap-2"
+                      className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] hover:text-[#6ea8ff] transition-colors flex items-center justify-center gap-2"
                     >
                       <Download size={18} />
                       Download PDF
@@ -788,7 +788,7 @@ export default function InvoiceDetailPage() {
                       type="button"
                       onClick={handleDuplicate}
                       disabled={duplicating}
-                      className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] hover:text-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] hover:text-[#6ea8ff] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {duplicating ? (
                         <Loader2 size={18} className="animate-spin" />
@@ -803,18 +803,18 @@ export default function InvoiceDetailPage() {
             </div>
 
             {/* Timeline */}
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
               <h3 className="text-lg font-bold text-white mb-4">History</h3>
               <div className="space-y-4">
                 {/* Created */}
                 <div className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <div className="w-3 h-3 bg-[#10b981] rounded-full" />
-                    <div className="w-0.5 h-full bg-[#27272a] mt-1" />
+                    <div className="w-3 h-3 bg-[#6ea8ff] rounded-full" />
+                    <div className="w-0.5 h-full bg-[#2a303c] mt-1" />
                   </div>
                   <div className="pb-4">
                     <p className="text-sm font-medium text-white">Created</p>
-                    <p className="text-xs text-[#a1a1aa]">
+                    <p className="text-xs text-[#8f9db1]">
                       {new Date(invoice.created_at).toLocaleString()}
                     </p>
                   </div>
@@ -825,11 +825,11 @@ export default function InvoiceDetailPage() {
                   <div className="flex gap-3">
                     <div className="flex flex-col items-center">
                       <div className="w-3 h-3 bg-[#60a5fa] rounded-full" />
-                      <div className="w-0.5 h-full bg-[#27272a] mt-1" />
+                      <div className="w-0.5 h-full bg-[#2a303c] mt-1" />
                     </div>
                     <div className="pb-4">
                       <p className="text-sm font-medium text-white">Sent</p>
-                      <p className="text-xs text-[#a1a1aa]">
+                      <p className="text-xs text-[#8f9db1]">
                         {new Date(invoice.sent_at).toLocaleString()}
                       </p>
                     </div>
@@ -840,12 +840,12 @@ export default function InvoiceDetailPage() {
                 {invoice.viewed_at && (
                   <div className="flex gap-3">
                     <div className="flex flex-col items-center">
-                      <div className="w-3 h-3 bg-[#fbbf24] rounded-full" />
-                      <div className="w-0.5 h-full bg-[#27272a] mt-1" />
+                      <div className="w-3 h-3 bg-[#e6b566] rounded-full" />
+                      <div className="w-0.5 h-full bg-[#2a303c] mt-1" />
                     </div>
                     <div className="pb-4">
                       <p className="text-sm font-medium text-white">Viewed</p>
-                      <p className="text-xs text-[#a1a1aa]">
+                      <p className="text-xs text-[#8f9db1]">
                         {new Date(invoice.viewed_at).toLocaleString()}
                       </p>
                     </div>
@@ -856,11 +856,11 @@ export default function InvoiceDetailPage() {
                 {invoice.paid_at && (
                   <div className="flex gap-3">
                     <div className="flex flex-col items-center">
-                      <div className="w-3 h-3 bg-[#10b981] rounded-full" />
+                      <div className="w-3 h-3 bg-[#6ea8ff] rounded-full" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-white">Paid</p>
-                      <p className="text-xs text-[#a1a1aa]">
+                      <p className="text-xs text-[#8f9db1]">
                         {new Date(invoice.paid_at).toLocaleString()}
                       </p>
                     </div>

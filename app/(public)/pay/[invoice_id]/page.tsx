@@ -45,8 +45,8 @@ export default function PayInvoicePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
-          <Loader2 size={32} className="text-[#10b981] animate-spin" />
+        <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
+          <Loader2 size={32} className="text-[#6ea8ff] animate-spin" />
         </div>
       }
     >
@@ -213,17 +213,17 @@ function PayInvoiceContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <div className="animate-pulse bg-[#18181b] border border-[#27272a] rounded-xl p-8">
-            <div className="h-8 bg-[#27272a] rounded w-32 mb-4" />
-            <div className="h-4 bg-[#27272a] rounded w-48 mb-8" />
+          <div className="animate-pulse bg-[#1c202a] border border-[#2a303c] rounded-xl p-8">
+            <div className="h-8 bg-[#2a303c] rounded w-32 mb-4" />
+            <div className="h-4 bg-[#2a303c] rounded w-48 mb-8" />
             <div className="space-y-3 mb-6">
-              <div className="h-4 bg-[#27272a] rounded w-full" />
-              <div className="h-4 bg-[#27272a] rounded w-3/4" />
-              <div className="h-4 bg-[#27272a] rounded w-5/6" />
+              <div className="h-4 bg-[#2a303c] rounded w-full" />
+              <div className="h-4 bg-[#2a303c] rounded w-3/4" />
+              <div className="h-4 bg-[#2a303c] rounded w-5/6" />
             </div>
-            <div className="h-12 bg-[#27272a] rounded" />
+            <div className="h-12 bg-[#2a303c] rounded" />
           </div>
         </div>
       </div>
@@ -232,18 +232,18 @@ function PayInvoiceContent() {
 
   if (error || !invoice) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
         <div className="w-full max-w-md text-center">
           <XCircle size={64} className="text-[#ef4444] mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">
             Invoice Not Found
           </h1>
-          <p className="text-[#a1a1aa] mb-6">
+          <p className="text-[#8f9db1] mb-6">
             This invoice may have been cancelled or deleted.
           </p>
           <a
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
           >
             <ArrowLeft size={18} />
             Back to Paidly
@@ -255,32 +255,32 @@ function PayInvoiceContent() {
 
   if (paymentSuccess) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <div className="bg-[#18181b] border border-[#10b981]/30 rounded-xl p-8 text-center">
+          <div className="bg-[#1c202a] border border-[#6ea8ff]/30 rounded-xl p-8 text-center">
             <CheckCircle
               size={64}
-              className="text-[#10b981] mx-auto mb-4 animate-bounce"
+              className="text-[#6ea8ff] mx-auto mb-4 animate-bounce"
             />
             <h1 className="text-2xl font-bold text-white mb-2">
               Payment Successful!
             </h1>
-            <p className="text-[#a1a1aa] mb-6">
+            <p className="text-[#8f9db1] mb-6">
               A receipt has been sent to your email.
             </p>
-            <div className="bg-[#0f0f0f] border border-[#27272a] rounded-lg p-4 mb-6">
-              <p className="text-sm text-[#a1a1aa] mb-1">Invoice</p>
+            <div className="bg-[#14171d] border border-[#2a303c] rounded-lg p-4 mb-6">
+              <p className="text-sm text-[#8f9db1] mb-1">Invoice</p>
               <p className="text-lg font-bold text-white">
                 {invoice.invoice_number}
               </p>
-              <p className="text-2xl font-bold text-[#10b981] mt-2">
+              <p className="text-2xl font-bold text-[#6ea8ff] mt-2">
                 {getCurrencySymbol(invoice.currency)}
                 {invoice.total.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                 })}
               </p>
             </div>
-            <p className="text-sm text-[#a1a1aa]">
+            <p className="text-sm text-[#8f9db1]">
               Thank you for your payment!
             </p>
           </div>
@@ -296,10 +296,10 @@ function PayInvoiceContent() {
         strategy="afterInteractive"
       />
 
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           {/* Invoice Summary Card */}
-          <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-8">
+          <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-8">
             {/* Header — Pro users show their own branding, else Paidly */}
             <div className="mb-6">
               {invoice.is_pro && invoice.freelancer.logo_url ? (
@@ -320,7 +320,7 @@ function PayInvoiceContent() {
                     color:
                       invoice.is_pro && invoice.freelancer.brand_color
                         ? invoice.freelancer.brand_color
-                        : "#10b981",
+                        : "#6ea8ff",
                   }}
                 >
                   {invoice.is_pro &&
@@ -331,17 +331,17 @@ function PayInvoiceContent() {
                     : "Paidly"}
                 </h1>
               )}
-              <p className="text-sm text-[#a1a1aa]">
+              <p className="text-sm text-[#8f9db1]">
                 Invoice from{" "}
                 {invoice.freelancer.business_name || invoice.freelancer.name}
               </p>
-              <p className="text-xs text-[#a1a1aa] mt-1">
+              <p className="text-xs text-[#8f9db1] mt-1">
                 {invoice.invoice_number}
               </p>
             </div>
 
             {/* Divider */}
-            <div className="border-t border-[#27272a] mb-6" />
+            <div className="border-t border-[#2a303c] mb-6" />
 
             {/* Line Items */}
             <div className="space-y-3 mb-6">
@@ -352,7 +352,7 @@ function PayInvoiceContent() {
                 >
                   <div className="flex-1">
                     <p className="text-white">{item.description}</p>
-                    <p className="text-xs text-[#a1a1aa]">
+                    <p className="text-xs text-[#8f9db1]">
                       {item.quantity} × {getCurrencySymbol(invoice.currency)}
                       {item.rate.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
@@ -370,12 +370,12 @@ function PayInvoiceContent() {
             </div>
 
             {/* Divider */}
-            <div className="border-t border-[#27272a] mb-4" />
+            <div className="border-t border-[#2a303c] mb-4" />
 
             {/* Totals */}
             <div className="space-y-2 mb-6">
               <div className="flex justify-between text-sm">
-                <span className="text-[#a1a1aa]">Subtotal</span>
+                <span className="text-[#8f9db1]">Subtotal</span>
                 <span className="text-white">
                   {getCurrencySymbol(invoice.currency)}
                   {invoice.subtotal.toLocaleString("en-US", {
@@ -385,7 +385,7 @@ function PayInvoiceContent() {
               </div>
               {invoice.tax_rate > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a1a1aa]">
+                  <span className="text-[#8f9db1]">
                     Tax ({invoice.tax_rate}%)
                   </span>
                   <span className="text-white">
@@ -396,9 +396,9 @@ function PayInvoiceContent() {
                   </span>
                 </div>
               )}
-              <div className="flex justify-between text-lg font-bold pt-2 border-t border-[#27272a]">
+              <div className="flex justify-between text-lg font-bold pt-2 border-t border-[#2a303c]">
                 <span className="text-white">Total</span>
-                <span className="text-[#10b981]">
+                <span className="text-[#6ea8ff]">
                   {getCurrencySymbol(invoice.currency)}
                   {invoice.total.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
@@ -408,8 +408,8 @@ function PayInvoiceContent() {
             </div>
 
             {/* Due Date */}
-            <div className="bg-[#0f0f0f] border border-[#27272a] rounded-lg p-3 mb-6">
-              <p className="text-xs text-[#a1a1aa] mb-1">Due Date</p>
+            <div className="bg-[#14171d] border border-[#2a303c] rounded-lg p-3 mb-6">
+              <p className="text-xs text-[#8f9db1] mb-1">Due Date</p>
               <p className="text-sm text-white font-medium">
                 {formatDate(invoice.due_date)}
               </p>
@@ -417,12 +417,12 @@ function PayInvoiceContent() {
 
             {/* Already Paid */}
             {invoice.status === "paid" && (
-              <div className="bg-[#052e16] border border-[#10b981]/30 rounded-lg p-4 text-center mb-6">
+              <div className="bg-[#0c2e26] border border-[#57c9b0]/30 rounded-lg p-4 text-center mb-6">
                 <CheckCircle
                   size={20}
-                  className="text-[#10b981] mx-auto mb-2"
+                  className="text-[#6ea8ff] mx-auto mb-2"
                 />
-                <p className="text-sm text-[#10b981] font-medium">
+                <p className="text-sm text-[#6ea8ff] font-medium">
                   This invoice has already been paid
                 </p>
               </div>
@@ -446,7 +446,7 @@ function PayInvoiceContent() {
                     <button
                       onClick={handlePayment}
                       disabled={paymentProcessing}
-                      className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {paymentProcessing ? (
                         <Loader2 size={20} className="animate-spin" />
@@ -462,17 +462,17 @@ function PayInvoiceContent() {
                     )}
                   </>
                 ) : (
-                  <div className="bg-[#3d2e00] border border-[#fbbf24]/30 rounded-lg p-4 mb-4">
+                  <div className="bg-[#3d2e00] border border-[#e6b566]/30 rounded-lg p-4 mb-4">
                     <div className="flex items-start gap-3">
                       <XCircle
                         size={20}
-                        className="text-[#fbbf24] mt-0.5 flex-shrink-0"
+                        className="text-[#e6b566] mt-0.5 flex-shrink-0"
                       />
                       <div>
-                        <p className="text-sm font-medium text-[#fbbf24] mb-1">
+                        <p className="text-sm font-medium text-[#e6b566] mb-1">
                           Payment unavailable
                         </p>
-                        <p className="text-xs text-[#a1a1aa]">
+                        <p className="text-xs text-[#8f9db1]">
                           The freelancer hasn't connected their bank account
                           yet. Please contact them directly.
                         </p>
@@ -483,7 +483,7 @@ function PayInvoiceContent() {
 
                 {/* Security Note */}
                 <div className="mt-4 text-center">
-                  <p className="text-xs text-[#a1a1aa]">
+                  <p className="text-xs text-[#8f9db1]">
                     Secured by Flutterwave · Your payment is encrypted
                   </p>
                 </div>

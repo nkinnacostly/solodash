@@ -176,9 +176,9 @@ export default function NewContractPage() {
         <div className="flex items-center gap-4 mb-8">
           <Link
             href="/contracts"
-            className="p-2 hover:bg-[#18181b] rounded-lg transition-colors"
+            className="p-2 hover:bg-[#1c202a] rounded-lg transition-colors"
           >
-            <ArrowLeft size={20} className="text-[#a1a1aa]" />
+            <ArrowLeft size={20} className="text-[#8f9db1]" />
           </Link>
           <h1 className="text-3xl font-bold text-white">New Contract</h1>
         </div>
@@ -188,18 +188,18 @@ export default function NewContractPage() {
           <div
             className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
               step === 1
-                ? "bg-[#10b981] text-white"
-                : "bg-[#18181b] text-[#a1a1aa]"
+                ? "bg-[#6ea8ff] text-[#0e1116]"
+                : "bg-[#1c202a] text-[#8f9db1]"
             }`}
           >
             <span className="text-sm font-medium">Step 1: Template</span>
           </div>
-          <ChevronRight size={16} className="text-[#27272a]" />
+          <ChevronRight size={16} className="text-[#2a303c]" />
           <div
             className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
               step === 2
-                ? "bg-[#10b981] text-white"
-                : "bg-[#18181b] text-[#a1a1aa]"
+                ? "bg-[#6ea8ff] text-[#0e1116]"
+                : "bg-[#1c202a] text-[#8f9db1]"
             }`}
           >
             <span className="text-sm font-medium">Step 2: Details</span>
@@ -216,21 +216,21 @@ export default function NewContractPage() {
                   onClick={() => handleTemplateSelect(template)}
                   className={`p-6 border-2 rounded-xl text-left transition-all ${
                     selectedTemplate?.id === template.id
-                      ? "border-[#10b981] bg-[#10b981]/5"
-                      : "border-[#27272a] bg-[#18181b] hover:border-[#3f3f46]"
+                      ? "border-[#6ea8ff] bg-[#6ea8ff]/5"
+                      : "border-[#2a303c] bg-[#1c202a] hover:border-[#3a4353]"
                   }`}
                 >
                   <h3 className="text-lg font-semibold text-white mb-2">
                     {template.name}
                   </h3>
-                  <p className="text-sm text-[#a1a1aa] mb-4">
+                  <p className="text-sm text-[#8f9db1] mb-4">
                     {template.description}
                   </p>
                   <div
                     className={`inline-block px-3 py-1 rounded text-xs font-medium ${
                       selectedTemplate?.id === template.id
-                        ? "bg-[#10b981] text-white"
-                        : "bg-[#27272a] text-[#a1a1aa]"
+                        ? "bg-[#6ea8ff] text-[#0e1116]"
+                        : "bg-[#2a303c] text-[#8f9db1]"
                     }`}
                   >
                     {selectedTemplate?.id === template.id
@@ -244,7 +244,7 @@ export default function NewContractPage() {
             <button
               onClick={handleNext}
               disabled={!selectedTemplate}
-              className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next →
             </button>
@@ -254,7 +254,7 @@ export default function NewContractPage() {
         {/* Step 2: Fill Details */}
         {step === 2 && selectedTemplate && (
           <form onSubmit={handleSubmit((data) => onSubmit(data, "draft"))}>
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
               {/* Client Selection */}
               <div>
                 <label className="block text-sm font-medium text-white mb-2">
@@ -286,18 +286,18 @@ export default function NewContractPage() {
                     <input
                       {...register("clientName")}
                       placeholder="Client name"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                      className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                     />
                     <input
                       {...register("clientEmail")}
                       type="email"
                       placeholder="Client email"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                      className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                     />
                     <input
                       {...register("clientAddress")}
                       placeholder="Address (optional)"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                      className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                     />
                   </div>
                 )}
@@ -311,7 +311,7 @@ export default function NewContractPage() {
                 <textarea
                   {...register("projectDescription")}
                   rows={3}
-                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none resize-none"
+                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none resize-none"
                   placeholder="Brief overview of the project..."
                 />
                 {errors.projectDescription && (
@@ -329,7 +329,7 @@ export default function NewContractPage() {
                 <textarea
                   {...register("scopeOfWork")}
                   rows={5}
-                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none resize-none"
+                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none resize-none"
                   placeholder="Detailed description of deliverables and responsibilities..."
                 />
                 {errors.scopeOfWork && (
@@ -379,7 +379,7 @@ export default function NewContractPage() {
                       type="number"
                       step="0.01"
                       placeholder="0.00"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                      className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                     />
                     {errors.hourlyRate && (
                       <p className="text-sm text-[#ef4444] mt-1">
@@ -395,7 +395,7 @@ export default function NewContractPage() {
                       {...register("estimatedHours")}
                       type="number"
                       placeholder="0"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                      className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -412,7 +412,7 @@ export default function NewContractPage() {
                       type="number"
                       step="0.01"
                       placeholder="0.00"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                      className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                     />
                     {errors.projectFee && (
                       <p className="text-sm text-[#ef4444] mt-1">
@@ -428,7 +428,7 @@ export default function NewContractPage() {
                       {...register("revisions")}
                       type="number"
                       placeholder="2"
-                      className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                      className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -444,7 +444,7 @@ export default function NewContractPage() {
                     type="number"
                     step="0.01"
                     placeholder="0.00"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                   />
                   {errors.retainerFee && (
                     <p className="text-sm text-[#ef4444] mt-1">
@@ -461,7 +461,7 @@ export default function NewContractPage() {
                 </label>
                 <select
                   {...register("currency")}
-                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
                 >
                   <option value="NGN">NGN - Nigerian Naira</option>
                   <option value="USD">USD - US Dollar</option>
@@ -481,7 +481,7 @@ export default function NewContractPage() {
                 <input
                   {...register("paymentTerms")}
                   placeholder="e.g., 50% upfront, 50% on completion"
-                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                 />
                 {errors.paymentTerms && (
                   <p className="text-sm text-[#ef4444] mt-1">
@@ -498,7 +498,7 @@ export default function NewContractPage() {
                 <input
                   {...register("governingLaw")}
                   placeholder="e.g., Nigeria"
-                  className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                 />
               </div>
             </div>
@@ -508,14 +508,14 @@ export default function NewContractPage() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors"
+                className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors"
               >
                 ← Back
               </button>
               <button
                 type="submit"
                 disabled={draftLoading}
-                className="flex-1 py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50"
+                className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors disabled:opacity-50"
               >
                 {draftLoading ? (
                   <Loader2 size={20} className="animate-spin mx-auto" />
@@ -527,7 +527,7 @@ export default function NewContractPage() {
                 type="button"
                 onClick={handleSubmit((data) => onSubmit(data, "sent"))}
                 disabled={sendLoading}
-                className="flex-1 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50"
+                className="flex-1 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50"
               >
                 {sendLoading ? (
                   <Loader2 size={20} className="animate-spin mx-auto" />

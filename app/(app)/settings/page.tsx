@@ -91,11 +91,11 @@ export default function SettingsPage() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [removingLogo, setRemovingLogo] = useState(false);
-  const [brandColor, setBrandColor] = useState("#10b981");
+  const [brandColor, setBrandColor] = useState("#6ea8ff");
   const [savingColor, setSavingColor] = useState(false);
 
   const presetColors = [
-    "#10b981", // emerald
+    "#6ea8ff", // emerald
     "#6366f1", // indigo
     "#f59e0b", // amber
     "#ef4444", // red
@@ -443,8 +443,8 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto animate-pulse space-y-6">
-        <div className="h-12 bg-[#18181b] rounded" />
-        <div className="h-64 bg-[#18181b] rounded" />
+        <div className="h-12 bg-[#1c202a] rounded" />
+        <div className="h-64 bg-[#1c202a] rounded" />
       </div>
     );
   }
@@ -462,15 +462,15 @@ export default function SettingsPage() {
       <h1 className="text-3xl font-bold text-white mb-8">Settings</h1>
 
       {/* Tabs */}
-      <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-2 mb-6 flex gap-2 overflow-x-auto">
+      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-2 mb-6 flex gap-2 overflow-x-auto">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
               activeTab === id
-                ? "bg-[#10b981] text-white"
-                : "text-[#a1a1aa] hover:text-white hover:bg-[#27272a]"
+                ? "bg-[#6ea8ff] text-[#0e1116]"
+                : "text-[#8f9db1] hover:text-white hover:bg-[#2a303c]"
             }`}
           >
             <Icon size={16} />
@@ -483,7 +483,7 @@ export default function SettingsPage() {
       {activeTab === "profile" && (
         <form
           onSubmit={handleSaveProfile}
-          className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6"
+          className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6"
         >
           <h2 className="text-lg font-semibold text-white">Profile Settings</h2>
 
@@ -498,7 +498,7 @@ export default function SettingsPage() {
               }
               required
               minLength={2}
-              className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+              className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
             />
           </div>
 
@@ -514,7 +514,7 @@ export default function SettingsPage() {
                   business_name: e.target.value,
                 }))
               }
-              className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+              className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
               placeholder="Your business or trading name"
             />
           </div>
@@ -529,7 +529,7 @@ export default function SettingsPage() {
                 setProfile((prev: any) => ({ ...prev, phone: e.target.value }))
               }
               type="tel"
-              className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+              className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
               placeholder="+234..."
             />
           </div>
@@ -547,7 +547,7 @@ export default function SettingsPage() {
                     country: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
               >
                 {countries.map((c) => (
                   <option key={c} value={c}>
@@ -569,7 +569,7 @@ export default function SettingsPage() {
                     timezone: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
               >
                 {timezones.map((t) => (
                   <option key={t} value={t}>
@@ -593,7 +593,7 @@ export default function SettingsPage() {
                     currency: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
               >
                 {currencies.map((c) => (
                   <option key={c} value={c}>
@@ -615,7 +615,7 @@ export default function SettingsPage() {
                     default_payment_terms: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
               >
                 {paymentTerms.map((t) => (
                   <option key={t} value={t}>
@@ -629,7 +629,7 @@ export default function SettingsPage() {
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {saving ? (
               <Loader2 size={20} className="animate-spin" />
@@ -643,12 +643,12 @@ export default function SettingsPage() {
       {activeTab === "branding" && (
         <div className="space-y-6">
           {profile?.plan === "free" ? (
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-12 text-center">
-              <Lock size={48} className="text-[#fbbf24] mx-auto mb-4" />
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-12 text-center">
+              <Lock size={48} className="text-[#e6b566] mx-auto mb-4" />
               <h2 className="text-xl font-bold text-white mb-2">
                 Custom Branding
               </h2>
-              <p className="text-sm text-[#a1a1aa] mb-6 max-w-md mx-auto">
+              <p className="text-sm text-[#8f9db1] mb-6 max-w-md mx-auto">
                 Custom branding is a{" "}
                 <strong className="text-white">Pro feature</strong>. Upgrade to
                 Pro to add your logo and brand colors to all invoices and
@@ -656,7 +656,7 @@ export default function SettingsPage() {
               </p>
               <a
                 href="/pricing"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
               >
                 Upgrade to Pro
               </a>
@@ -664,15 +664,15 @@ export default function SettingsPage() {
           ) : (
             <>
               {/* Logo Upload Section */}
-              <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+              <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
                 <h2 className="text-lg font-semibold text-white">Logo</h2>
-                <p className="text-sm text-[#a1a1aa]">
+                <p className="text-sm text-[#8f9db1]">
                   Upload your business logo to display on invoices and contracts
                 </p>
 
                 {logoPreview && (
                   <div className="flex items-center gap-4">
-                    <div className="w-[120px] h-[120px] rounded-xl border border-[#27272a] overflow-hidden flex items-center justify-center bg-[#111111]">
+                    <div className="w-[120px] h-[120px] rounded-xl border border-[#2a303c] overflow-hidden flex items-center justify-center bg-[#171b23]">
                       <img
                         src={logoPreview}
                         alt="Logo"
@@ -700,8 +700,8 @@ export default function SettingsPage() {
                 <div
                   className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
                     logoFile
-                      ? "border-[#10b981] bg-[#10b981]/5"
-                      : "border-[#27272a] hover:border-[#3f3f46]"
+                      ? "border-[#6ea8ff] bg-[#6ea8ff]/5"
+                      : "border-[#2a303c] hover:border-[#3a4353]"
                   }`}
                 >
                   <input
@@ -715,24 +715,24 @@ export default function SettingsPage() {
                     htmlFor="logo-upload"
                     className="cursor-pointer flex flex-col items-center"
                   >
-                    <Upload size={32} className="text-[#a1a1aa] mb-3" />
+                    <Upload size={32} className="text-[#8f9db1] mb-3" />
                     <p className="text-sm text-white font-medium mb-1">
                       Click to upload or drag and drop
                     </p>
-                    <p className="text-xs text-[#a1a1aa]">PNG, JPG up to 2MB</p>
+                    <p className="text-xs text-[#8f9db1]">PNG, JPG up to 2MB</p>
                   </label>
                 </div>
 
                 {logoFile && (
                   <div className="flex items-center justify-between">
-                    <p className="text-sm text-[#a1a1aa]">
+                    <p className="text-sm text-[#8f9db1]">
                       Selected: {logoFile.name}
                     </p>
                     <button
                       type="button"
                       onClick={handleUploadLogo}
                       disabled={uploadingLogo}
-                      className="px-6 py-2 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center gap-2"
+                      className="px-6 py-2 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center gap-2"
                     >
                       {uploadingLogo ? (
                         <Loader2 size={16} className="animate-spin" />
@@ -745,11 +745,11 @@ export default function SettingsPage() {
               </div>
 
               {/* Brand Color Section */}
-              <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+              <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
                 <h2 className="text-lg font-semibold text-white">
                   Brand Color
                 </h2>
-                <p className="text-sm text-[#a1a1aa]">
+                <p className="text-sm text-[#8f9db1]">
                   Used as accent color on your invoices and contracts
                 </p>
 
@@ -765,12 +765,12 @@ export default function SettingsPage() {
                       <p className="text-sm text-white font-mono">
                         {brandColor}
                       </p>
-                      <p className="text-xs text-[#a1a1aa]">Current color</p>
+                      <p className="text-xs text-[#8f9db1]">Current color</p>
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-sm text-[#a1a1aa] mb-2">Preset colors</p>
+                    <p className="text-sm text-[#8f9db1] mb-2">Preset colors</p>
                     <div className="flex gap-2">
                       {presetColors.map((color) => (
                         <button
@@ -792,7 +792,7 @@ export default function SettingsPage() {
                     type="button"
                     onClick={handleSaveBrandColor}
                     disabled={savingColor}
-                    className="px-6 py-2 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center gap-2"
+                    className="px-6 py-2 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
                     {savingColor ? (
                       <Loader2 size={16} className="animate-spin" />
@@ -810,12 +810,12 @@ export default function SettingsPage() {
       {activeTab === "payment" && (
         <div className="space-y-6">
           {!profile?.flutterwave_subaccount_id ? (
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
               <div>
                 <h2 className="text-lg font-semibold text-white mb-2">
                   Connect Your Bank Account
                 </h2>
-                <p className="text-sm text-[#a1a1aa]">
+                <p className="text-sm text-[#8f9db1]">
                   Connect your bank account so clients can pay you directly.
                   Money goes straight to your account — Paidly never holds your
                   funds.
@@ -823,8 +823,8 @@ export default function SettingsPage() {
               </div>
 
               {profile?.plan === "free" && (
-                <div className="bg-[#3d2e00] border border-[#fbbf24]/30 rounded-lg p-4">
-                  <p className="text-sm text-[#fbbf24]">
+                <div className="bg-[#3d2e00] border border-[#e6b566]/30 rounded-lg p-4">
+                  <p className="text-sm text-[#e6b566]">
                     <strong>You're on the Free plan.</strong> Paidly takes a 5%
                     fee on each payment. Upgrade to Pro to keep 100% of every
                     payment.
@@ -850,7 +850,7 @@ export default function SettingsPage() {
                       setAccountVerified(false);
                     }}
                     disabled={loadingBanks}
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none disabled:opacity-50"
+                    className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none disabled:opacity-50"
                   >
                     {loadingBanks ? (
                       <option value="">Loading banks...</option>
@@ -885,7 +885,7 @@ export default function SettingsPage() {
                     }}
                     maxLength={10}
                     placeholder="1234567890"
-                    className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#10b981] focus:outline-none"
+                    className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
                   />
                 </div>
 
@@ -897,7 +897,7 @@ export default function SettingsPage() {
                     bankForm.account_number.length !== 10 ||
                     !bankForm.bank_code
                   }
-                  className="w-full py-3 border border-[#27272a] text-white font-medium rounded-lg hover:border-[#10b981] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {verifyingBank ? (
                     <Loader2 size={20} className="animate-spin" />
@@ -913,7 +913,7 @@ export default function SettingsPage() {
                   <input
                     value={bankForm.account_name}
                     readOnly
-                    className="w-full px-4 py-2 bg-[#0f0f0f] border border-[#27272a] rounded-lg text-[#a1a1aa] cursor-not-allowed"
+                    className="w-full px-4 py-2 bg-[#14171d] border border-[#2a303c] rounded-lg text-[#8f9db1] cursor-not-allowed"
                     placeholder="Will be auto-filled after verification"
                   />
                 </div>
@@ -922,7 +922,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={handleConnectBank}
                   disabled={connectingBank || !accountVerified}
-                  className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {connectingBank ? (
                     <Loader2 size={20} className="animate-spin" />
@@ -936,33 +936,33 @@ export default function SettingsPage() {
               </div>
             </div>
           ) : (
-            <div className="bg-[#18181b] border border-[#10b981]/30 rounded-xl p-6 space-y-6">
+            <div className="bg-[#1c202a] border border-[#6ea8ff]/30 rounded-xl p-6 space-y-6">
               <div className="text-center">
                 <CheckCircle
                   size={48}
-                  className="text-[#10b981] mx-auto mb-4"
+                  className="text-[#6ea8ff] mx-auto mb-4"
                 />
                 <h2 className="text-xl font-bold text-white mb-2">
                   Bank Account Connected
                 </h2>
-                <p className="text-sm text-[#a1a1aa]">
+                <p className="text-sm text-[#8f9db1]">
                   Clients can now pay you directly
                 </p>
               </div>
 
-              <div className="bg-[#0f0f0f] border border-[#27272a] rounded-lg p-4 space-y-3">
+              <div className="bg-[#14171d] border border-[#2a303c] rounded-lg p-4 space-y-3">
                 <div>
-                  <p className="text-xs text-[#a1a1aa] mb-1">Bank</p>
+                  <p className="text-xs text-[#8f9db1] mb-1">Bank</p>
                   <p className="text-sm text-white">{profile.bank_name}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-[#a1a1aa] mb-1">Account Number</p>
+                  <p className="text-xs text-[#8f9db1] mb-1">Account Number</p>
                   <p className="text-sm text-white">
                     ****{profile.bank_account_number?.slice(-4)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-[#a1a1aa] mb-1">Account Name</p>
+                  <p className="text-xs text-[#8f9db1] mb-1">Account Name</p>
                   <p className="text-sm text-white">
                     {profile.bank_account_name}
                   </p>
@@ -972,13 +972,13 @@ export default function SettingsPage() {
               <div
                 className={`rounded-lg p-4 ${
                   profile.plan === "pro"
-                    ? "bg-[#052e16] border border-[#10b981]/30"
-                    : "bg-[#3d2e00] border border-[#fbbf24]/30"
+                    ? "bg-[#0c2e26] border border-[#57c9b0]/30"
+                    : "bg-[#3d2e00] border border-[#e6b566]/30"
                 }`}
               >
                 <p
                   className={`text-sm font-medium ${
-                    profile.plan === "pro" ? "text-[#10b981]" : "text-[#fbbf24]"
+                    profile.plan === "pro" ? "text-[#6ea8ff]" : "text-[#e6b566]"
                   }`}
                 >
                   {profile.plan === "pro"
@@ -991,7 +991,7 @@ export default function SettingsPage() {
                 {profile.plan === "free" && (
                   <a
                     href="/pricing"
-                    className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors flex items-center justify-center gap-2"
                   >
                     Upgrade to Pro
                   </a>
@@ -1016,7 +1016,7 @@ export default function SettingsPage() {
       )}
 
       {activeTab === "notifications" && (
-        <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-6">
+        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
           <h2 className="text-lg font-semibold text-white">
             Notification Preferences
           </h2>
@@ -1032,14 +1032,14 @@ export default function SettingsPage() {
           ].map(({ key, label }) => (
             <div
               key={key}
-              className="flex items-center justify-between py-3 border-b border-[#27272a] last:border-0"
+              className="flex items-center justify-between py-3 border-b border-[#2a303c] last:border-0"
             >
               <span className="text-sm text-white">{label}</span>
               <button
                 type="button"
                 onClick={() => handleToggleNotification(key, !profile?.[key])}
                 className={`relative w-12 h-6 rounded-full transition-colors ${
-                  profile?.[key] ? "bg-[#10b981]" : "bg-[#27272a]"
+                  profile?.[key] ? "bg-[#6ea8ff]" : "bg-[#2a303c]"
                 }`}
               >
                 <span
@@ -1058,7 +1058,7 @@ export default function SettingsPage() {
           {/* Change Password */}
           <form
             onSubmit={handleChangePassword}
-            className="bg-[#18181b] border border-[#27272a] rounded-xl p-6 space-y-4"
+            className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-4"
           >
             <h2 className="text-lg font-semibold text-white">
               Change Password
@@ -1077,7 +1077,7 @@ export default function SettingsPage() {
                     currentPassword: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
               />
             </div>
 
@@ -1091,7 +1091,7 @@ export default function SettingsPage() {
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, newPassword: e.target.value }))
                 }
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
               />
             </div>
 
@@ -1108,14 +1108,14 @@ export default function SettingsPage() {
                     confirmPassword: e.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 bg-[#111111] border border-[#27272a] rounded-lg text-white focus:border-[#10b981] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={changingPassword}
-              className="w-full py-3 bg-[#10b981] text-white font-medium rounded-lg hover:bg-[#059669] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {changingPassword ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -1126,11 +1126,11 @@ export default function SettingsPage() {
           </form>
 
           {/* Danger Zone */}
-          <div className="bg-[#18181b] border-2 border-[#ef4444]/30 rounded-xl p-6">
+          <div className="bg-[#1c202a] border-2 border-[#ef4444]/30 rounded-xl p-6">
             <h2 className="text-lg font-semibold text-[#ef4444] mb-4">
               Danger Zone
             </h2>
-            <p className="text-sm text-[#a1a1aa] mb-4">
+            <p className="text-sm text-[#8f9db1] mb-4">
               This will permanently delete your account and all data.
             </p>
             <button
