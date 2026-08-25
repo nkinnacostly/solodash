@@ -1,4 +1,12 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "How Paidly collects, uses, and protects your data — invoices, contracts, client information, and payment details — for African freelancers using getpaidly.co.",
+  alternates: { canonical: "/privacy" },
+};
 
 export default function PrivacyPolicy() {
   return (

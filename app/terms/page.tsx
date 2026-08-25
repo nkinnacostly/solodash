@@ -1,4 +1,12 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description:
+    "The terms governing your use of Paidly — invoicing, contracts, earnings tracking, and payments for African freelancers on getpaidly.co.",
+  alternates: { canonical: "/terms" },
+};
 
 export default function TermsOfService() {
   return (

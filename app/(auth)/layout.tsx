@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import "../globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
+
+/** Auth screens are transactional, not content — keep them out of indexes. */
+export const metadata: Metadata = {
+  title: { default: "Log in", template: "%s | Paidly" },
+  robots: { index: false, follow: false },
+};
 
 export default function AuthLayout({
   children,

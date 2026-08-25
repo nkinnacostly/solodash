@@ -38,7 +38,21 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  const publicRoutes = ['/', '/login', '/signup', '/pricing', '/privacy', '/terms', '/verify-email', '/auth/callback']
+  const publicRoutes = [
+    '/',
+    '/login',
+    '/signup',
+    '/pricing',
+    '/privacy',
+    '/terms',
+    '/verify-email',
+    '/auth/callback',
+    '/robots.txt',
+    '/sitemap.xml',
+    '/llms.txt',
+    '/manifest.webmanifest',
+    '/opengraph-image',
+  ]
   const isPublicRoute = publicRoutes.includes(pathname)
   const isPayRoute = pathname.startsWith('/pay/')
   const isSignRoute = pathname.startsWith('/sign/')
