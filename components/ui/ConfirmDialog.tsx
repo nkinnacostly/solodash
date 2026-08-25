@@ -102,12 +102,12 @@ export default function ConfirmDialog({
     >
       <div
         ref={dialogRef}
-        className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 max-w-[400px] w-full mx-4 shadow-2xl animate-scaleIn"
+        className="bg-[#141419] border border-[#26262e] rounded-xl p-6 max-w-[400px] w-full mx-4 shadow-2xl animate-scaleIn"
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 text-[#8f9db1] hover:text-white transition-colors"
+          className="absolute top-4 right-4 p-1 text-[#a1a1aa] hover:text-white transition-colors"
           aria-label="Close dialog"
         >
           <X size={20} />
@@ -123,7 +123,7 @@ export default function ConfirmDialog({
           </h3>
           <p
             id="confirm-dialog-message"
-            className="text-sm text-[#8f9db1] leading-relaxed"
+            className="text-sm text-[#a1a1aa] leading-relaxed"
           >
             {message}
           </p>
@@ -134,7 +134,7 @@ export default function ConfirmDialog({
           <button
             onClick={onClose}
             disabled={loading}
-            className="px-4 py-2.5 border border-[#2a303c] text-[#8f9db1] font-medium rounded-lg hover:border-[#6ea8ff] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2.5 border border-[#26262e] text-[#a1a1aa] font-medium rounded-lg hover:border-[#3b82f6] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {cancelLabel}
           </button>
@@ -144,7 +144,7 @@ export default function ConfirmDialog({
             className={`px-4 py-2.5 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 ${
               variant === "danger"
                 ? "bg-[#ef4444] hover:bg-[#dc2626]"
-                : "bg-[#6ea8ff] hover:bg-[#5b93e6]"
+                : "bg-[#3b82f6] hover:bg-[#1d4ed8]"
             }`}
           >
             {loading ? (

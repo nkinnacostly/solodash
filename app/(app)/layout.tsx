@@ -25,7 +25,7 @@ export default async function AppLayout({
     .single();
 
   return (
-    <div className="flex h-screen bg-[#14171d]">
+    <div className="flex h-screen bg-[#0a0a0b]">
       <Sidebar profile={profile} />
       <main className="flex-1 overflow-y-auto md:ml-60 pb-20 md:pb-0">
         <ToastProvider>

@@ -156,12 +156,12 @@ export default function SearchableSelect({
         }}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        className={`w-full px-4 py-3 bg-[#171b23] border rounded-lg text-left flex items-center justify-between transition-colors ${
+        className={`w-full px-4 py-3 bg-[#0d0d10] border rounded-lg text-left flex items-center justify-between transition-colors ${
           error
             ? "border-[#ef4444]"
             : isOpen
-              ? "border-[#6ea8ff] ring-1 ring-[#6ea8ff]"
-              : "border-[#2a303c] hover:border-[#52525b]"
+              ? "border-[#3b82f6] ring-1 ring-[#3b82f6]"
+              : "border-[#26262e] hover:border-[#52525b]"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       >
         <span className={selectedOption ? "text-white" : "text-[#52525b]"}>
@@ -169,7 +169,7 @@ export default function SearchableSelect({
         </span>
         <ChevronDown
           size={20}
-          className={`text-[#8f9db1] transition-transform ${
+          className={`text-[#a1a1aa] transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -181,13 +181,13 @@ export default function SearchableSelect({
       {/* Dropdown */}
       {isOpen && (
         <div
-          className="absolute z-50 w-full mt-2 bg-[#1c202a] border border-[#2a303c] rounded-lg shadow-2xl opacity-0 animate-in fade-in duration-200"
+          className="absolute z-50 w-full mt-2 bg-[#141419] border border-[#26262e] rounded-lg shadow-2xl opacity-0 animate-in fade-in duration-200"
           style={{
             animation: "fadeIn 0.2s ease-out forwards",
           }}
         >
           {/* Search Input */}
-          <div className="p-2 border-b border-[#2a303c]">
+          <div className="p-2 border-b border-[#26262e]">
             <input
               ref={searchInputRef}
               type="text"
@@ -197,7 +197,7 @@ export default function SearchableSelect({
                 setHighlightedIndex(-1);
               }}
               placeholder={searchPlaceholder}
-              className="w-full px-3 py-2 bg-[#14171d] border border-[#2a303c] rounded-lg text-white text-sm placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] transition-colors"
+              className="w-full px-3 py-2 bg-[#0a0a0b] border border-[#26262e] rounded-lg text-white text-sm placeholder-[#52525b] focus:outline-none focus:border-[#3b82f6] transition-colors"
             />
           </div>
 
@@ -208,7 +208,7 @@ export default function SearchableSelect({
             role="listbox"
           >
             {filteredOptions.length === 0 ? (
-              <li className="px-4 py-10 text-center text-sm text-[#8f9db1]">
+              <li className="px-4 py-10 text-center text-sm text-[#a1a1aa]">
                 No clients found
               </li>
             ) : (
@@ -221,16 +221,16 @@ export default function SearchableSelect({
                   onMouseEnter={() => setHighlightedIndex(index)}
                   className={`px-3 py-2.5 cursor-pointer flex items-center justify-between transition-colors ${
                     index === highlightedIndex
-                      ? "bg-[#2a303c]"
-                      : "hover:bg-[#2a303c]"
-                  } ${option.value === value ? "text-[#6ea8ff]" : "text-white"}`}
+                      ? "bg-[#26262e]"
+                      : "hover:bg-[#26262e]"
+                  } ${option.value === value ? "text-[#3b82f6]" : "text-white"}`}
                 >
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
                       {option.label}
                     </p>
                     {option.sublabel && (
-                      <p className="text-xs text-[#8f9db1] mt-0.5 truncate">
+                      <p className="text-xs text-[#a1a1aa] mt-0.5 truncate">
                         {option.sublabel}
                       </p>
                     )}
@@ -238,7 +238,7 @@ export default function SearchableSelect({
                   {option.value === value && (
                     <Check
                       size={16}
-                      className="text-[#6ea8ff] flex-shrink-0 ml-2"
+                      className="text-[#3b82f6] flex-shrink-0 ml-2"
                     />
                   )}
                 </li>
@@ -248,10 +248,10 @@ export default function SearchableSelect({
             {/* Add New Option */}
             {allowCustom && onAddNew && (
               <>
-                <li className="border-t border-[#2a303c]" />
+                <li className="border-t border-[#26262e]" />
                 <li
                   onClick={handleAddNew}
-                  className="px-3 py-2.5 cursor-pointer flex items-center gap-2 text-[#6ea8ff] hover:bg-[#2a303c] transition-colors"
+                  className="px-3 py-2.5 cursor-pointer flex items-center gap-2 text-[#3b82f6] hover:bg-[#26262e] transition-colors"
                 >
                   <Plus size={16} className="flex-shrink-0" />
                   <span className="text-sm font-medium">Add new client</span>

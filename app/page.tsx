@@ -2,13 +2,23 @@
 
 import Link from "next/link";
 import {
-  useCallback,
+  ArrowUpRight,
+  Download,
+  FileText,
+  Menu,
+  PenLine,
+  TrendingUp,
+  Wallet,
+  X,
+} from "lucide-react";
+import {
   useEffect,
   useRef,
   useState,
-  type CSSProperties,
   type ReactNode,
 } from "react";
+
+/* ---------------------------------- utils --------------------------------- */
 
 function usePrefersReducedMotion(): boolean {
   const [reduced, setReduced] = useState(false);
@@ -22,19 +32,6 @@ function usePrefersReducedMotion(): boolean {
   }, []);
 
   return reduced;
-}
-
-function useScrollPast(thresholdPx: number): boolean {
-  const [past, setPast] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setPast(window.scrollY > thresholdPx);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [thresholdPx]);
-
-  return past;
 }
 
 function useReveal<T extends HTMLElement = HTMLDivElement>() {
@@ -57,7 +54,7 @@ function useReveal<T extends HTMLElement = HTMLDivElement>() {
           obs.unobserve(el);
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px -60px 0px" },
     );
 
     obs.observe(el);
@@ -70,12 +67,10 @@ function useReveal<T extends HTMLElement = HTMLDivElement>() {
 function Reveal({
   children,
   className = "",
-  style,
   delayMs = 0,
 }: {
   children: ReactNode;
   className?: string;
-  style?: CSSProperties;
   delayMs?: number;
 }) {
   const ref = useReveal<HTMLDivElement>();
@@ -83,195 +78,264 @@ function Reveal({
     <div
       ref={ref}
       data-visible="false"
-      className={`opacity-0 translate-y-5 transition-[opacity,transform] duration-300 ease-out data-[visible=true]:opacity-100 data-[visible=true]:translate-y-0 ${className}`}
-      style={{ ...style, transitionDelay: `${delayMs}ms` }}
+      className={`opacity-0 translate-y-6 transition-[opacity,transform] duration-500 ease-out data-[visible=true]:opacity-100 data-[visible=true]:translate-y-0 ${className}`}
+      style={{ transitionDelay: `${delayMs}ms` }}
     >
       {children}
     </div>
   );
 }
 
-function useParallaxTilt(strength = 8) {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduced = usePrefersReducedMotion();
+/* ---------------------------------- brand --------------------------------- */
 
-  const onMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (reduced) return;
-      const node = ref.current;
-      if (!node) return;
-      const r = node.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      node.style.setProperty("--tx", `${-px * strength}px`);
-      node.style.setProperty("--ty", `${-py * strength}px`);
-    },
-    [reduced, strength],
+function LogoMark({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
+      <circle cx="8.5" cy="8.5" r="4.5" fill="#2563eb" />
+      <circle cx="15.5" cy="8.5" r="4.5" fill="#2563eb" opacity="0.75" />
+      <circle cx="8.5" cy="15.5" r="4.5" fill="#2563eb" opacity="0.75" />
+      <circle cx="15.5" cy="15.5" r="4.5" fill="#2563eb" />
+    </svg>
   );
-
-  const onLeave = useCallback(() => {
-    const node = ref.current;
-    if (!node) return;
-    node.style.setProperty("--tx", "0px");
-    node.style.setProperty("--ty", "0px");
-  }, []);
-
-  return { ref, onMove, onLeave };
 }
 
-function MockShell({
-  children,
-  rotateDeg = 0,
-}: {
-  children: ReactNode;
-  rotateDeg?: number;
-}) {
-  const { ref, onMove, onLeave } = useParallaxTilt(10);
-  const rot =
-    rotateDeg === 0
-      ? ""
-      : rotateDeg === 1
-        ? "rotate-1 max-lg:rotate-0"
-        : rotateDeg === -1
-          ? "-rotate-1 max-lg:rotate-0"
-          : rotateDeg === 0.5
-            ? "rotate-[0.5deg] max-lg:rotate-0"
-            : rotateDeg === -0.75
-              ? "-rotate-[0.75deg] max-lg:rotate-0"
-              : "";
+function Logo({ dark = false }: { dark?: boolean }) {
+  return (
+    <span className="inline-flex items-center gap-2">
+      <LogoMark className="h-6 w-6" />
+      <span
+        className={`text-lg font-extrabold tracking-tight ${dark ? "text-lp-ink" : "text-white"}`}
+      >
+        Paidly
+      </span>
+    </span>
+  );
+}
 
+function CircleArrow({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+  const dim =
+    size === "lg" ? "h-14 w-14" : size === "sm" ? "h-7 w-7" : "h-10 w-10";
+  const icon = size === "lg" ? 24 : size === "sm" ? 13 : 17;
+  return (
+    <span
+      className={`inline-flex ${dim} shrink-0 items-center justify-center rounded-full bg-lp-accent text-white`}
+    >
+      <ArrowUpRight size={icon} strokeWidth={2.4} />
+    </span>
+  );
+}
+
+/* ------------------------------ mockup pieces ----------------------------- */
+
+const DOT_GRID: number[][] = [
+  [2, 1, 1, 0, 1, 2, 1],
+  [1, 1, 0, 2, 1, 1, 0],
+  [0, 2, 1, 1, 2, 0, 1],
+  [1, 0, 2, 1, 1, 1, 2],
+];
+
+function DotMatrix({ cols = 7 }: { cols?: number }) {
   return (
     <div
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className="relative flex justify-center [perspective:1200px]"
-      style={
-        {
-          ["--tx" as string]: "0px",
-          ["--ty" as string]: "0px",
-        } as CSSProperties
-      }
+      className="grid gap-[7px]"
+      style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
     >
-      <div
-        className="w-full max-w-[420px] transition-transform duration-300 ease-out"
-        style={{ transform: "translate3d(var(--tx,0px), var(--ty,0px), 0)" }}
-      >
-        <div
-          className={`relative rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_0_120px_#6ea8ff10,0_24px_80px_rgba(0,0,0,0.45)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_0_140px_#6ea8ff18,0_28px_90px_rgba(0,0,0,0.5)] ${rot}`}
-        >
-          {children}
-        </div>
+      {DOT_GRID.flatMap((row, ri) =>
+        row.slice(0, cols).map((v, ci) => (
+          <span
+            key={`${ri}-${ci}`}
+            className={`h-3 w-3 rounded-full ${
+              v === 1
+                ? "bg-lp-accent"
+                : v === 2
+                  ? "bg-lp-ink"
+                  : "bg-lp-line"
+            }`}
+          />
+        )),
+      )}
+    </div>
+  );
+}
+
+function Gauge({ pct, label }: { pct: number; label: string }) {
+  const r = 34;
+  const c = 2 * Math.PI * r;
+  return (
+    <div className="relative h-24 w-24">
+      <svg viewBox="0 0 88 88" className="h-full w-full -rotate-90">
+        <circle
+          cx="44"
+          cy="44"
+          r={r}
+          fill="none"
+          stroke="#e8efff"
+          strokeWidth="10"
+        />
+        <circle
+          cx="44"
+          cy="44"
+          r={r}
+          fill="none"
+          stroke="#2563eb"
+          strokeWidth="10"
+          strokeLinecap="round"
+          strokeDasharray={`${(pct / 100) * c} ${c}`}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-lg font-extrabold text-lp-ink">{pct}%</span>
+        <span className="text-[9px] font-medium text-lp-gray">{label}</span>
       </div>
     </div>
   );
 }
 
-function HeroInvoiceVisual() {
+function MiniBars({
+  values,
+  highlight = -1,
+}: {
+  values: number[];
+  highlight?: number;
+}) {
+  const max = Math.max(...values);
   return (
-    <div
-      className="relative mx-auto w-full max-w-[min(100%,420px)] select-none"
-      aria-hidden
-    >
-      <div className="absolute inset-0 -z-10 rounded-[28px] bg-[radial-gradient(ellipse_at_center,#6ea8ff12,transparent_70%)] blur-2xl" />
-      <svg
-        viewBox="0 0 400 260"
-        className="h-auto w-full overflow-visible text-[#1a1a1a]"
-        role="img"
-      >
-        <defs>
-          <linearGradient id="paidlyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6ea8ff" />
-            <stop offset="100%" stopColor="#5b93e6" />
-          </linearGradient>
-        </defs>
-        {/* Floating sheet */}
-        <g className="transition-transform duration-300 ease-out">
-          <rect
-            x="48"
-            y="36"
-            width="304"
-            height="188"
-            rx="16"
-            fill="#0a0a0a"
-            stroke="#1a1a1a"
-            strokeWidth="1"
+    <div className="flex items-end gap-2.5">
+      {values.map((v, i) => (
+        <div key={i} className="flex flex-col items-center gap-1.5">
+          <div
+            className={`w-6 rounded-md ${
+              i === highlight
+                ? "bg-lp-accent"
+                : i % 2 === 0
+                  ? "bg-lp-ink"
+                  : "bg-[#bcd4ff]"
+            }`}
+            style={{ height: `${Math.round((v / max) * 72) + 14}px` }}
           />
-          <rect x="72" y="64" width="120" height="10" rx="4" fill="#1a1a1a" />
-          <rect x="72" y="84" width="180" height="8" rx="3" fill="#262626" />
-          <rect x="280" y="64" width="48" height="14" rx="6" fill="#6ea8ff22" />
-          <text
-            x="304"
-            y="74"
-            textAnchor="middle"
-            fill="#6ea8ff"
-            fontSize="9"
-            fontFamily="ui-sans-serif, system-ui"
-            fontWeight="700"
-          >
-            NEW
-          </text>
-          <rect x="72" y="118" width="256" height="1" fill="#1a1a1a" />
-          <rect x="72" y="132" width="140" height="8" rx="3" fill="#2a2a2a" />
-          <rect x="72" y="148" width="100" height="8" rx="3" fill="#2a2a2a" />
-          <rect x="280" y="132" width="48" height="8" rx="3" fill="#3a4353" />
-          <rect x="72" y="176" width="96" height="28" rx="14" fill="url(#paidlyGrad)" />
-          <text
-            x="120"
-            y="194"
-            textAnchor="middle"
-            fill="#ffffff"
-            fontSize="11"
-            fontFamily="ui-sans-serif, system-ui"
-            fontWeight="600"
-          >
-            Pay now →
-          </text>
-        </g>
-        {/* Cursor / pen */}
-        <g className="paidly-cursor-float">
-          <path
-            d="M312 48 L338 58 L318 92 L292 82 Z"
-            fill="#0a0a0a"
-            stroke="#1a1a1a"
-          />
-          <circle cx="326" cy="58" r="4" fill="#6ea8ff" />
-        </g>
-        <g opacity="0.35">
-          <rect
-            x="64"
-            y="28"
-            width="304"
-            height="188"
-            rx="16"
-            fill="none"
-            stroke="#6ea8ff"
-            strokeWidth="1"
-            strokeDasharray="6 6"
-          />
-        </g>
-      </svg>
-      <style>{`
-        @keyframes paidlyCursorFloat {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(-3px, 2px); }
-        }
-        .paidly-cursor-float {
-          animation: paidlyCursorFloat 6s ease-in-out infinite;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .paidly-cursor-float { animation: none; }
-        }
-      `}</style>
+        </div>
+      ))}
     </div>
   );
 }
 
+function Badge({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full bg-lp-accent py-1.5 pl-3.5 pr-1.5 text-[11px] font-semibold text-white shadow-lg shadow-lp-accent/30 ${className}`}
+    >
+      {children}
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
+        <ArrowUpRight size={11} strokeWidth={2.5} />
+      </span>
+    </span>
+  );
+}
+
+function PillSelect({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-lp-line px-3 py-1 text-[11px] font-medium text-lp-gray">
+      {children}
+      <span className="text-[8px]">▼</span>
+    </span>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden>
+      <path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2-.1-2 0-3.4 1.2-3.4 3.5V11H8.5v3H11v7h2.5Z" />
+    </svg>
+  );
+}
+
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+      <circle cx="12" cy="12" r="3.8" />
+      <circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden>
+      <path d="M17.2 4h2.6l-5.7 6.5L20.8 20h-5.3l-4.1-5.4L6.6 20H4l6.1-7L3.6 4H9l3.7 4.9L17.2 4Zm-.9 14.4h1.4L7.9 5.5H6.4l9.9 12.9Z" />
+    </svg>
+  );
+}
+
+function YoutubeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden>
+      <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.3 5 12 5 12 5s-6.3 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8c1.5.4 7.8.4 7.8.4s6.3 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15.2V8.8l5.2 3.2-5.2 3.2Z" />
+    </svg>
+  );
+}
+
+function LinkedinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden>
+      <path d="M6.9 8.6H4V20h2.9V8.6ZM5.4 7.3a1.7 1.7 0 1 0 0-3.4 1.7 1.7 0 0 0 0 3.4ZM9.5 20h2.9v-5.7c0-1.5.7-2.4 2-2.4 1.2 0 1.8.8 1.8 2.4V20h2.9v-6.2c0-2.9-1.5-4.3-3.8-4.3-1.7 0-2.6.9-2.9 1.6V8.6H9.5V20Z" />
+    </svg>
+  );
+}
+
+/* --------------------------------- page ----------------------------------- */
+
+const NAV_LINKS = [
+  { label: "Home", href: "/", active: true },
+  { label: "Features", href: "#features", active: false },
+  { label: "Why Paidly", href: "#why", active: false },
+  { label: "Pricing", href: "/pricing", active: false },
+];
+
+const LIGHT_FEATURES = [
+  {
+    icon: FileText,
+    text: "Send professional invoices with a Pay Now button — in about 60 seconds.",
+  },
+  {
+    icon: PenLine,
+    text: "Get service agreements signed in minutes with built-in e-signatures.",
+  },
+  {
+    icon: TrendingUp,
+    text: "Every payment is auto-tracked the moment it hits your account.",
+  },
+  {
+    icon: Download,
+    text: "Export your annual income summary as PDF or CSV in one click.",
+  },
+];
+
+const COUNTRIES = ["Nigeria", "Ghana", "Kenya", "South Africa"];
+const PARTNERS = ["Flutterwave", "Paystack"];
+
+const STATS: Array<{ value: string; label: string }> = [
+  { value: "60s", label: "Average invoice setup" },
+  { value: "4+", label: "African countries" },
+  { value: "7", label: "Currencies supported" },
+];
+
+const SOCIALS = [
+  { Icon: FacebookIcon, label: "Facebook" },
+  { Icon: InstagramIcon, label: "Instagram" },
+  { Icon: XIcon, label: "X (Twitter)" },
+  { Icon: YoutubeIcon, label: "YouTube" },
+  { Icon: LinkedinIcon, label: "LinkedIn" },
+];
+
 export default function Home() {
-  const navScrolled = useScrollPast(100);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [annual, setAnnual] = useState(false);
-  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -285,639 +349,889 @@ export default function Home() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <div
-      className="min-h-screen text-[#e4e4e7] antialiased"
-      style={{
-        backgroundColor: "#050505",
-        fontFamily:
-          'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        backgroundImage:
-          "radial-gradient(#ffffff03 1px, transparent 1px), radial-gradient(ellipse 80% 55% at 50% -10%, #6ea8ff08, transparent 55%)",
-        backgroundSize: "20px 20px, 100% 100%",
-        backgroundAttachment: "fixed, scroll",
-      }}
-    >
-      <style>{`
-        @keyframes paidlyHeroIn {
-          from { opacity: 0; transform: translateY(18px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .paidly-hero-item {
-          opacity: ${reducedMotion ? 1 : 0};
-          animation: ${reducedMotion ? "none" : "paidlyHeroIn 700ms ease-out forwards"};
-        }
-        .paidly-hero-0 { animation-delay: 0ms; }
-        .paidly-hero-1 { animation-delay: 90ms; }
-        .paidly-hero-2 { animation-delay: 180ms; }
-        .paidly-hero-3 { animation-delay: 270ms; }
-        .paidly-hero-4 { animation-delay: 360ms; }
-        .paidly-hero-5 { animation-delay: 450ms; }
-        @media (prefers-reduced-motion: reduce) {
-          .paidly-hero-item { opacity: 1; transform: none; animation: none; }
-        }
-      `}</style>
-
-      {/* NAV */}
-      <header
-        className={`fixed inset-x-0 top-0 z-50 h-16 border-b transition-[background-color,backdrop-filter,border-color] duration-300 ease-out ${
-          navScrolled
-            ? "border-[#1a1a1a] bg-[#050505]/80 backdrop-blur-md"
-            : "border-transparent bg-transparent"
-        }`}
-      >
-        <div className="mx-auto flex h-full max-w-[1100px] items-center justify-between px-4 sm:px-6">
-          <a
-            href="/"
-            className="text-[22px] font-bold tracking-tight text-[#6ea8ff]"
-            style={{ fontWeight: 700 }}
-          >
-            Paidly
-          </a>
-
-          <nav className="hidden items-center gap-8 md:flex">
-            <a
-              href="#features"
-              className="text-sm text-[#71717a] transition-colors duration-300 ease-out hover:text-[#e4e4e7]"
-            >
-              Features
-            </a>
-            <a
-              href="#pricing"
-              className="text-sm text-[#71717a] transition-colors duration-300 ease-out hover:text-[#e4e4e7]"
-            >
-              Pricing
-            </a>
-            <Link
-              href="/login"
-              className="text-sm text-[#71717a] transition-colors duration-300 ease-out hover:text-[#e4e4e7]"
-            >
-              Log in
+    <div className="min-h-screen bg-lp-page font-sans text-lp-ink antialiased">
+      {/* =============================== NAV =============================== */}
+      <header className="fixed inset-x-0 top-3 z-50 px-2 sm:top-4 sm:px-3">
+        <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-lp-ink/95 py-2.5 pl-4 pr-2.5 shadow-xl shadow-black/20 backdrop-blur-md sm:pl-6">
+            <Link href="/" aria-label="Paidly home">
+              <Logo />
             </Link>
-            <Link
-              href="/signup"
-              className="rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] px-5 py-2 text-sm font-semibold text-white shadow-none transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40] active:scale-[0.99]"
-            >
-              Start free →
-            </Link>
-          </nav>
 
-          <button
-            type="button"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-lg border border-transparent text-[#e4e4e7] transition-colors hover:border-[#1a1a1a] md:hidden"
-            onClick={() => setMobileOpen((o) => !o)}
-          >
-            <span
-              className={`block h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ease-out ${mobileOpen ? "translate-y-2 rotate-45" : ""}`}
-            />
-            <span
-              className={`block h-0.5 w-5 rounded-full bg-current transition-opacity duration-300 ease-out ${mobileOpen ? "opacity-0" : ""}`}
-            />
-            <span
-              className={`block h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ease-out ${mobileOpen ? "-translate-y-2 -rotate-45" : ""}`}
-            />
-          </button>
-        </div>
+            <nav className="hidden items-center gap-1 lg:flex">
+              {NAV_LINKS.map((l) =>
+                l.href.startsWith("#") ? (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    className={`rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-200 ${
+                      l.active
+                        ? "bg-lp-accent text-white"
+                        : "text-white/70 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    {l.active && (
+                      <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-white align-middle" />
+                    )}
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={l.label}
+                    href={l.href}
+                    className={`rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-200 ${
+                      l.active
+                        ? "bg-lp-accent text-white"
+                        : "text-white/70 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                ),
+              )}
+            </nav>
+
+            <div className="hidden items-center gap-2 lg:flex">
+              <Link
+                href="/login"
+                className="rounded-full border border-white/20 px-4 py-2 text-[13px] font-medium text-white transition-colors duration-200 hover:bg-white/10"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/signup"
+                className="rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-lp-ink transition-transform duration-200 hover:scale-[1.03]"
+              >
+                Get Started
+              </Link>
+            </div>
+
+            <button
+              type="button"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-white transition-colors hover:bg-white/10 lg:hidden"
+              onClick={() => setMobileOpen((o) => !o)}
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
       </header>
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-40 md:hidden ${mobileOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`fixed inset-0 z-40 lg:hidden ${mobileOpen ? "pointer-events-auto" : "pointer-events-none"}`}
         aria-hidden={!mobileOpen}
       >
         <button
           type="button"
-          className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ease-out ${mobileOpen ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${mobileOpen ? "opacity-100" : "opacity-0"}`}
           onClick={closeMobile}
           tabIndex={mobileOpen ? 0 : -1}
           aria-label="Close menu overlay"
         />
         <div
-          className={`absolute right-0 top-0 flex h-full w-[min(100%,320px)] flex-col border-l border-[#1a1a1a] bg-[#050505] px-6 pb-10 pt-20 transition-transform duration-300 ease-out ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}
+          className={`absolute right-0 top-0 flex h-full w-[min(100%,320px)] flex-col bg-lp-ink px-6 pb-10 pt-24 transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}
         >
-          <a
-            href="#features"
-            onClick={closeMobile}
-            className="py-3 text-sm uppercase tracking-widest text-[#8f9db1] transition-colors hover:text-white"
-          >
-            Features
-          </a>
-          <a
-            href="#pricing"
-            onClick={closeMobile}
-            className="py-3 text-sm uppercase tracking-widest text-[#8f9db1] transition-colors hover:text-white"
-          >
-            Pricing
-          </a>
-          <div className="my-6 h-px w-full bg-[#1a1a1a]" />
-          <Link
-            href="/login"
-            onClick={closeMobile}
-            className="py-2 text-base text-[#e4e4e7]"
-          >
-            Log in
-          </Link>
-          <Link
-            href="/signup"
-            onClick={closeMobile}
-            className="mt-4 rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] py-3 text-center text-sm font-semibold text-white transition-shadow duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40]"
-          >
-            Start free →
-          </Link>
-        </div>
-      </div>
-
-      {/* HERO */}
-      <section className="relative flex min-h-[calc(100dvh-4rem)] flex-col items-center justify-center px-4 pb-24 pt-28 sm:px-6">
-        <div className="mx-auto flex w-full max-w-[720px] flex-col items-center text-center">
-          <div className="paidly-hero-item paidly-hero-0 mb-8 inline-flex items-center rounded-full border border-[#6ea8ff30] bg-[#6ea8ff10] px-4 py-1.5 text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
-            ✦ Built for African freelancers
-          </div>
-
-          <h1 className="paidly-hero-item paidly-hero-1 text-balance text-[2.35rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white sm:text-[56px]">
-            Stop chasing payments.
-            <br />
-            <span className="text-[#6ea8ff]">Start getting paid.</span>
-          </h1>
-
-          <p className="paidly-hero-item paidly-hero-2 mx-auto mt-6 max-w-[520px] text-balance text-[18px] leading-relaxed text-[#71717a]">
-            Paidly replaces your WhatsApp invoices, Google Docs contracts, and
-            spreadsheet tracking with one clean tool.
-          </p>
-
-          <div className="paidly-hero-item paidly-hero-3 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+          {NAV_LINKS.map((l) =>
+            l.href.startsWith("#") ? (
+              <a
+                key={l.label}
+                href={l.href}
+                onClick={closeMobile}
+                className="border-b border-white/10 py-4 text-base font-medium text-white/80"
+              >
+                {l.label}
+              </a>
+            ) : (
+              <Link
+                key={l.label}
+                href={l.href}
+                onClick={closeMobile}
+                className="border-b border-white/10 py-4 text-base font-medium text-white/80"
+              >
+                {l.label}
+              </Link>
+            ),
+          )}
+          <div className="mt-8 flex flex-col gap-3">
+            <Link
+              href="/login"
+              onClick={closeMobile}
+              className="rounded-full border border-white/20 py-3 text-center text-sm font-medium text-white"
+            >
+              Log in
+            </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] px-8 py-3 text-sm font-semibold text-white transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40] active:scale-[0.99]"
+              onClick={closeMobile}
+              className="rounded-full bg-lp-accent py-3 text-center text-sm font-semibold text-white"
             >
-              Start for free →
+              Get Started
             </Link>
-            <a
-              href="#features"
-              className="text-[#71717a] underline decoration-transparent underline-offset-4 transition-colors duration-300 ease-out hover:text-white hover:decoration-current"
-            >
-              See how it works
-            </a>
-          </div>
-
-          <p className="paidly-hero-item paidly-hero-4 mt-8 text-[13px] font-medium tracking-wide text-[#52525b]">
-            No credit card · Free forever · 2 min setup
-          </p>
-
-          <div className="paidly-hero-item paidly-hero-5 mt-14 w-full max-w-[min(100%,460px)]">
-            <HeroInvoiceVisual />
           </div>
         </div>
-      </section>
-
-      {/* SOCIAL STRIP */}
-      <div className="border-y border-[#1a1a1a] py-4">
-        <p className="text-center text-[13px] font-medium uppercase tracking-widest text-[#52525b]">
-          Trusted by freelancers across Nigeria · Ghana · Kenya · South Africa
-        </p>
       </div>
 
-      {/* SHOWCASE */}
-      <section id="features" className="px-4 sm:px-6">
-        <div className="mx-auto max-w-[1100px] pt-24 pb-8 text-center">
-          <Reveal>
-            <h2 className="text-[40px] font-bold leading-tight tracking-tight text-white">
-              Everything you need.
-            </h2>
-            <p className="mt-3 text-base text-[#71717a]">Nothing you don&apos;t.</p>
-          </Reveal>
-        </div>
-
-        {/* Row 1 */}
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-12 py-20 lg:grid-cols-2 lg:gap-16">
-          <Reveal className="order-1 lg:order-1">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
-              Invoicing
-            </p>
-            <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
-              Send professional invoices in 60 seconds
-            </h3>
-            <p className="mt-4 max-w-[480px] text-[15px] leading-[1.7] text-[#71717a]">
-              Add your client, line items, and due date. Hit send. Your client
-              gets an email with a Pay Now button. Money goes straight to your
-              bank.
-            </p>
-          </Reveal>
-          <Reveal className="order-2 lg:order-2" delayMs={80}>
-            <MockShell rotateDeg={1}>
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-[#52525b]">
-                    Invoice
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-[#e4e4e7]">
-                    Acme Studios Ltd.
-                  </p>
-                </div>
-                <span className="rounded-md bg-[#6ea8ff14] px-2 py-1 text-xs font-bold text-[#6ea8ff]">
-                  INV-001
+      {/* =============================== HERO ============================== */}
+      <section className="px-2 pt-20 sm:px-3 sm:pt-24">
+        <div className="relative overflow-hidden rounded-[28px] bg-lp-ink">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-40"
+            style={{
+              background:
+                "radial-gradient(ellipse 60% 50% at 85% 20%, rgba(37,99,235,0.25), transparent 60%)",
+            }}
+          />
+          <div className="relative grid gap-12 px-6 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-8 lg:px-14 lg:py-20">
+            {/* Left */}
+            <div className="flex flex-col">
+              <h1 className="text-[2.6rem] font-extrabold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-[4.2rem]">
+                Take Control
+                <br />
+                <span className="inline-flex items-center gap-3">
+                  Of Your
+                  <CircleArrow size="lg" />
                 </span>
-              </div>
-              <div className="mt-6 space-y-3 border-t border-[#1a1a1a] pt-5">
-                <div className="flex justify-between text-sm text-[#8f9db1]">
-                  <span>Brand identity sprint</span>
-                  <span className="text-[#e4e4e7]">₦280,000</span>
-                </div>
-                <div className="flex justify-between text-sm text-[#8f9db1]">
-                  <span>Web design — 4 pages</span>
-                  <span className="text-[#e4e4e7]">₦170,000</span>
-                </div>
-              </div>
-              <div className="mt-6 flex items-center justify-between border-t border-[#1a1a1a] pt-5">
-                <span className="text-sm text-[#71717a]">Total due</span>
-                <span className="text-lg font-bold tracking-tight text-white">
-                  ₦450,000
-                </span>
-              </div>
-              {/* Decorative — part of the product mockup, not a real action */}
-              <div
-                aria-hidden="true"
-                className="mt-5 w-full rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] py-2.5 text-center text-sm font-semibold text-white select-none"
-              >
-                Pay Now →
-              </div>
-            </MockShell>
-          </Reveal>
-        </div>
+                <br />
+                Freelance Money
+              </h1>
 
-        {/* Row 2 */}
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-12 py-20 lg:grid-cols-2 lg:gap-16">
-          <Reveal className="order-2 lg:order-1" delayMs={80}>
-            <MockShell rotateDeg={-1}>
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-[#52525b]">
-                    Service agreement
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-[#e4e4e7]">
-                    Paidly × Client Co.
-                  </p>
-                </div>
-                <span className="rounded-full border border-[#6ea8ff40] bg-[#6ea8ff10] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#6ea8ff]">
-                  ✓ Signed
-                </span>
+              <div className="mt-9 flex items-center gap-3">
+                <Link
+                  href="/signup"
+                  className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-lp-ink transition-transform duration-200 hover:scale-[1.03]"
+                >
+                  Get Started Now
+                </Link>
+                <CircleArrow size="md" />
               </div>
-              <div className="mt-6 space-y-2 text-sm leading-relaxed text-[#71717a]">
-                <p>
-                  Both parties acknowledge deliverables, timelines, and payment
-                  milestones as outlined in Schedule A.
-                </p>
-              </div>
-              <div className="mt-8 grid grid-cols-2 gap-4 border-t border-dashed border-[#1a1a1a] pt-6">
-                <div>
-                  <p className="text-[11px] uppercase tracking-widest text-[#52525b]">
-                    Client
-                  </p>
-                  <div className="mt-4 h-10 rounded border border-[#262626] bg-[#14171d]" />
-                  <p className="mt-2 text-xs text-[#52525b]">Signature</p>
-                </div>
-                <div>
-                  <p className="text-[11px] uppercase tracking-widest text-[#52525b]">
-                    You
-                  </p>
-                  <div className="mt-4 h-10 rounded border border-[#6ea8ff40] bg-[#6ea8ff08]" />
-                  <p className="mt-2 text-xs text-[#6ea8ff]">Signed Apr 12</p>
-                </div>
-              </div>
-            </MockShell>
-          </Reveal>
-          <Reveal className="order-1 lg:order-2">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
-              Contracts
-            </p>
-            <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
-              Contracts signed in minutes, not days
-            </h3>
-            <p className="mt-4 max-w-[480px] text-[15px] leading-[1.7] text-[#71717a]">
-              Pick a template. Fill in the details. Send for digital signature.
-              Both parties sign. PDF stored forever.
-            </p>
-          </Reveal>
-        </div>
 
-        {/* Row 3 */}
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-12 py-20 lg:grid-cols-2 lg:gap-16">
-          <Reveal className="order-1">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
-              Earnings
-            </p>
-            <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
-              Know exactly what you&apos;ve earned
-            </h3>
-            <p className="mt-4 max-w-[480px] text-[15px] leading-[1.7] text-[#71717a]">
-              Every payment auto-tracked. See monthly breakdown, per-client
-              income, and export your annual summary in one click.
-            </p>
-          </Reveal>
-          <Reveal className="order-2" delayMs={80}>
-            <MockShell rotateDeg={0.5}>
-              <div className="flex items-end justify-between gap-2 px-2 pt-2">
-                {[40, 64, 48, 88, 56, 72].map((h, i) => (
-                  <div
-                    key={i}
-                    className="w-[12%] rounded-t-md bg-gradient-to-t from-[#5b93e6] to-[#6ea8ff] opacity-90"
-                    style={{ height: `${h}px` }}
-                  />
-                ))}
-              </div>
-              <div className="mt-8 border-t border-[#1a1a1a] pt-5">
-                <p className="text-xs uppercase tracking-widest text-[#52525b]">
-                  Year to date
-                </p>
-                <p className="mt-2 text-2xl font-bold tracking-tight text-white">
-                  ₦2,450,000{" "}
-                  <span className="text-base font-medium text-[#71717a]">
-                    this year
-                  </span>
-                </p>
-              </div>
-            </MockShell>
-          </Reveal>
-        </div>
+              <p className="mt-10 max-w-sm text-[13px] leading-relaxed text-lp-gray-dark">
+                We understand your freelance journey is unique. Paidly handles
+                your invoices, contracts, and earnings — so you can focus on
+                the work and get paid faster.
+              </p>
 
-        {/* Row 4 */}
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-12 py-20 lg:grid-cols-2 lg:gap-16">
-          <Reveal className="order-2 lg:order-1" delayMs={80}>
-            <MockShell rotateDeg={-0.75}>
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-11 shrink-0 items-center justify-center rounded-lg border border-[#1a1a1a] bg-[#14171d]">
-                  <svg width="22" height="26" viewBox="0 0 24 28" aria-hidden>
-                    <path
-                      fill="#ef4444"
-                      d="M4 2h12l6 6v18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"
-                    />
-                    <path fill="#fecaca" d="M16 2v6h6" opacity="0.35" />
-                    <text
-                      x="12"
-                      y="19"
-                      textAnchor="middle"
-                      fill="white"
-                      fontSize="8"
-                      fontWeight="700"
-                    >
-                      PDF
-                    </text>
-                  </svg>
+              <p className="mt-auto pt-14 text-[11px] font-medium text-white/35">
+                © 2026 Paidly
+              </p>
+            </div>
+
+            {/* Right — dashboard composition */}
+            <div
+              className="relative mx-auto w-full max-w-[560px] lg:my-auto"
+              aria-hidden
+            >
+              <div className="absolute -right-6 top-16 hidden h-40 w-40 rounded-full bg-lp-accent/25 blur-3xl lg:block" />
+
+              {/* Card A — income overview */}
+              <div className="relative z-10 ml-auto w-[94%]">
+                <Badge className="absolute -left-6 top-[42%] z-30">
+                  Invoicing
+                </Badge>
+                <Badge className="absolute -left-3 top-[68%] z-30">
+                  E-Sign Contracts
+                </Badge>
+                <div className="rounded-2xl bg-white p-5 shadow-2xl shadow-black/40">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-[11px] font-medium text-lp-gray">
+                        Income Sources
+                      </p>
+                      <p className="mt-1 text-2xl font-extrabold tracking-tight text-lp-ink">
+                        ₦ 772K
+                      </p>
+                      <p className="mt-0.5 text-[10px] text-lp-gray">
+                        Statistics in a month
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[11px] font-bold text-lp-ink">
+                        Welcome back, Ada!
+                      </p>
+                      <p className="text-[10px] text-lp-gray">
+                        Financial Overview
+                      </p>
+                      <div className="ml-auto mt-3 grid w-[104px] grid-cols-6 gap-1">
+                        {Array.from({ length: 18 }).map((_, i) => (
+                          <span
+                            key={i}
+                            className={`h-2 w-2 rounded-full ${
+                              i % 4 === 0
+                                ? "bg-lp-accent"
+                                : i % 3 === 0
+                                  ? "bg-lp-ink"
+                                  : "bg-lp-line"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center justify-end gap-2">
+                    <span className="rounded-md bg-lp-accent-soft px-2 py-1 text-[10px] font-bold text-lp-accent">
+                      +73.6%
+                    </span>
+                    <span className="text-[10px] text-lp-gray">
+                      better than last month
+                    </span>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-[#e4e4e7]">
-                    paidly-earnings-2026.pdf
-                  </p>
-                  <p className="text-xs text-[#52525b]">Ready to download</p>
-                </div>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1a1a1a] text-[#6ea8ff] transition-colors duration-300 ease-out hover:border-[#6ea8ff40] hover:bg-[#6ea8ff10]">
-                  ↓
-                </span>
               </div>
-            </MockShell>
-          </Reveal>
-          <Reveal className="order-1 lg:order-2">
-            <p className="text-[12px] font-semibold uppercase tracking-widest text-[#6ea8ff]">
-              Tax export
-            </p>
-            <h3 className="mt-3 text-[28px] font-bold leading-snug tracking-tight text-white">
-              Tax season in 30 seconds
-            </h3>
-            <p className="mt-4 max-w-[480px] text-[15px] leading-[1.7] text-[#71717a]">
-              Download your annual income summary as PDF or CSV. Hand it to your
-              accountant. Done.
-            </p>
-          </Reveal>
+
+              {/* Card B — financial report */}
+              <div className="relative z-20 -mt-6 w-[94%]">
+                <Badge className="absolute -right-5 bottom-[30%] z-30">
+                  Auto Tracking
+                </Badge>
+                <Badge className="absolute right-8 -bottom-4 z-30">
+                  Tax Export
+                </Badge>
+                <div className="overflow-hidden rounded-2xl bg-white shadow-2xl shadow-black/40">
+                  <div className="flex items-center justify-between bg-lp-ink px-5 py-3">
+                    <p className="text-[11px] font-semibold text-white">
+                      Financial Report
+                    </p>
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15 text-white">
+                      <X size={11} />
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 p-5">
+                    <Gauge pct={22} label="of goal" />
+                    <div>
+                      <p className="text-[11px] font-medium text-lp-gray">
+                        Paid Today
+                      </p>
+                      <p className="text-xl font-extrabold tracking-tight text-lp-ink">
+                        ₦ 552,921
+                      </p>
+                      <div className="mt-3 flex items-end justify-end gap-2">
+                        <div className="h-9 w-5 rounded-md bg-lp-ink" />
+                        <div className="h-14 w-5 rounded-md bg-lp-accent" />
+                        <div className="h-7 w-5 rounded-md bg-[#bcd4ff]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* COMPARISON */}
-      <section className="px-4 pb-24 sm:px-6">
-        <Reveal className="mx-auto max-w-[800px] text-center">
-          <h2 className="text-[36px] font-bold tracking-tight text-white">
-            The old way vs the Paidly way
-          </h2>
+      {/* ============================ LOGO STRIP =========================== */}
+      <section className="px-4 py-12 sm:px-6">
+        <Reveal className="mx-auto max-w-6xl">
+          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-lp-gray">
+            Trusted by freelancers across Africa · Powered by
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 sm:gap-x-14">
+            {PARTNERS.map((p) => (
+              <span
+                key={p}
+                className="text-lg font-extrabold tracking-tight text-[#b3b6bd]"
+              >
+                {p}
+              </span>
+            ))}
+            {COUNTRIES.map((c) => (
+              <span
+                key={c}
+                className="text-lg font-bold uppercase tracking-widest text-[#c3c6cd]"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
         </Reveal>
-        <Reveal className="mx-auto mt-12 max-w-[800px]" delayMs={60}>
-          <div className="overflow-x-auto rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a]">
-            <div className="min-w-[520px]">
-              <div className="grid grid-cols-2 border-b border-[#1a1a1a]">
-                <div className="px-5 py-4 text-left text-[14px] font-semibold text-[#ef4444]">
-                  Without Paidly
+      </section>
+
+      {/* ========================== SPLIT FEATURE ========================== */}
+      <section id="how" className="px-4 py-16 sm:px-6 lg:py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2 lg:gap-20">
+          {/* Left visual */}
+          <Reveal className="relative" aria-hidden>
+            <div className="relative mx-auto max-w-[440px]">
+              <div className="rounded-[28px] bg-gradient-to-br from-lp-accent-soft to-white p-8 shadow-sm ring-1 ring-lp-line">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-lp-accent text-white">
+                    <Wallet size={20} />
+                  </span>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-lp-ink text-white">
+                    <ArrowUpRight size={15} />
+                  </span>
                 </div>
-                <div className="border-l border-[#1a1a1a] px-5 py-4 text-left text-[14px] font-semibold text-[#6ea8ff]">
-                  With Paidly
+
+                <div className="mt-6 rounded-2xl bg-white p-5 shadow-lg shadow-lp-accent/10 ring-1 ring-lp-line">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-medium text-lp-gray">
+                        Paid Today
+                      </p>
+                      <p className="text-2xl font-extrabold tracking-tight text-lp-ink">
+                        ₦ 552,921
+                      </p>
+                    </div>
+                    <Gauge pct={22} label="of goal" />
+                  </div>
+                  <div className="mt-4 flex items-center justify-between border-t border-lp-line pt-4">
+                    <span className="text-[11px] text-lp-gray">
+                      Profit margin
+                    </span>
+                    <span className="rounded-full bg-lp-accent-soft px-2.5 py-1 text-[10px] font-bold text-lp-accent">
+                      +12% this week
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex items-center justify-between rounded-2xl bg-lp-ink p-5">
+                  <div>
+                    <p className="text-[11px] text-white/50">
+                      Track and Export
+                    </p>
+                    <p className="mt-0.5 text-sm font-bold text-white">
+                      Earnings Report
+                    </p>
+                  </div>
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-lp-accent text-white">
+                    <Download size={15} />
+                  </span>
                 </div>
               </div>
-              {[
-                [
-                  "WhatsApp invoice",
-                  "Professional PDF with Pay Now button",
-                ],
-                ["No contracts", "Digital contracts with e-signature"],
-                ["Spreadsheet tracking", "Automatic income dashboard"],
-                ["Tax panic", "One-click annual export"],
-                ["Chase payments for weeks", "Client pays in hours"],
-              ].map(([left, right], i) => (
-                <div
-                  key={i}
-                  className="grid grid-cols-2 border-b border-[#1a1a1a] last:border-b-0"
-                >
-                  <div className="px-5 py-5 text-[15px] leading-snug text-[#71717a] line-through">
-                    {left}
-                  </div>
-                  <div className="border-l border-[#1a1a1a] px-5 py-5 text-[15px] leading-snug text-[#e4e4e7]">
-                    {right}
-                  </div>
+
+              <Badge className="absolute -right-3 top-8 shadow-xl lg:-right-8">
+                Financial Report
+              </Badge>
+            </div>
+          </Reveal>
+
+          {/* Right copy */}
+          <Reveal delayMs={80}>
+            <h2 className="text-4xl font-extrabold leading-[1.08] tracking-tight text-lp-ink sm:text-5xl">
+              Experience admin in a whole{" "}
+              <span className="text-lp-accent">new light</span>
+            </h2>
+            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-lp-gray">
+              Every invoice, contract, and payment in one clean tool —
+              accessible anywhere, on any device, built for African
+              freelancers.
+            </p>
+
+            <div className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+              {LIGHT_FEATURES.map((f) => (
+                <div key={f.text} className="flex items-start gap-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-lp-accent text-white">
+                    <f.icon size={18} />
+                  </span>
+                  <p className="pt-1 text-[13px] leading-relaxed text-lp-gray">
+                    {f.text}
+                  </p>
                 </div>
               ))}
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
       </section>
 
-      {/* PRICING */}
-      <section id="pricing" className="px-4 pb-28 sm:px-6">
-        <div className="mx-auto max-w-[700px] text-center">
-          <Reveal>
-            <h2 className="text-[36px] font-bold tracking-tight text-white">
-              Simple pricing
-            </h2>
-            <p className="mt-3 text-base text-[#71717a]">
-              Start free. Upgrade when you&apos;re ready.
-            </p>
-          </Reveal>
+      {/* ========================== DARK FEATURES ========================== */}
+      <section id="features" className="px-2 sm:px-3">
+        <div className="rounded-[28px] bg-lp-ink px-6 py-12 sm:px-10 lg:px-14 lg:py-16">
+          <div className="mx-auto max-w-[1400px]">
+          {/* Header */}
+          <div className="grid gap-10 lg:grid-cols-2">
+            <Reveal>
+              <h2 className="text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl">
+                Our
+                <br />
+                Featu
+                <span className="mx-1 inline-flex h-12 w-12 items-center justify-center rounded-full bg-lp-accent align-middle text-white sm:h-14 sm:w-14">
+                  <ArrowUpRight size={22} strokeWidth={2.4} />
+                </span>
+                res
+              </h2>
+            </Reveal>
+            <Reveal delayMs={80} className="lg:pt-2">
+              <div className="flex flex-col items-start gap-4 lg:items-end">
+                <Badge>Invoicing · Contracts · Earnings</Badge>
+                <p className="max-w-xs text-[13px] leading-relaxed text-lp-gray-dark lg:text-right">
+                  Run your entire back office with interactive dashboards and
+                  clean reports.
+                </p>
+                <div className="text-right">
+                  <p className="text-sm font-bold text-white">( 02 )</p>
+                  <p className="text-[11px] text-lp-gray-dark">
+                    Journey to financial freedom
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          </div>
 
-          <Reveal className="mt-10 flex justify-center" delayMs={50}>
-            <div className="inline-flex items-center gap-3 rounded-full border border-[#1a1a1a] bg-[#0a0a0a] p-1">
-              <button
-                type="button"
-                onClick={() => setAnnual(false)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 ease-out ${
-                  !annual
-                    ? "bg-[#141414] text-white shadow-sm"
-                    : "text-[#71717a] hover:text-[#e4e4e7]"
-                }`}
-              >
-                Monthly
-              </button>
-              <button
-                type="button"
-                onClick={() => setAnnual(true)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 ease-out ${
-                  annual
-                    ? "bg-[#141414] text-white shadow-sm"
-                    : "text-[#71717a] hover:text-[#e4e4e7]"
-                }`}
-              >
-                Annual
-              </button>
+          {/* Content */}
+          <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
+            {/* Column 1 */}
+            <div>
+              <Reveal>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-bold text-white">( 01 )</span>
+                  <span className="rounded-full bg-white/10 px-3.5 py-1.5 text-[11px] font-semibold text-white">
+                    Invoices
+                  </span>
+                  <span className="rounded-full bg-lp-accent px-3.5 py-1.5 text-[11px] font-semibold text-white">
+                    E-Sign
+                  </span>
+                </div>
+                <p className="mt-4 max-w-sm text-[13px] leading-relaxed text-lp-gray-dark">
+                  Professional invoices and contracts. Send in seconds —
+                  clarity and convenience to manage your money.
+                </p>
+              </Reveal>
+
+              <Reveal delayMs={80} className="mt-8">
+                <div className="rounded-2xl bg-white p-6 shadow-2xl shadow-black/40">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-bold text-lp-ink">
+                      Invoice Breakdown
+                    </p>
+                    <PillSelect>This Month</PillSelect>
+                  </div>
+                  <p className="mt-3 text-3xl font-extrabold tracking-tight text-lp-ink">
+                    ₦ 450K
+                  </p>
+                  <div className="mt-6">
+                    <DotMatrix />
+                  </div>
+                  <div className="mt-5 flex items-center gap-5 border-t border-lp-line pt-4 text-[10px] font-medium text-lp-gray">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-lp-accent" />
+                      Paid
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-lp-ink" />
+                      Sent
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-lp-line" />
+                      Draft
+                    </span>
+                  </div>
+                  <div className="mt-3 grid grid-cols-7 text-center text-[10px] font-semibold text-lp-gray">
+                    {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+                      <span key={i}>{d}</span>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
+            {/* Column 2 */}
+            <div>
+              <Reveal>
+                <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex-1 rounded-2xl bg-white p-5 shadow-2xl shadow-black/40">
+                    <p className="text-[11px] font-medium text-lp-gray">
+                      Today Received
+                    </p>
+                    <p className="mt-1 text-2xl font-extrabold tracking-tight text-lp-ink">
+                      ₦ 552,921
+                    </p>
+                    <p className="mt-1 text-[10px] text-lp-gray">12% of goal</p>
+                  </div>
+                  <div className="flex-1 rounded-2xl bg-lp-ink-2 p-5 ring-1 ring-white/10">
+                    <p className="text-[11px] text-white/50">
+                      Track and Run Report
+                    </p>
+                    <p className="mt-1 text-sm font-bold text-white">
+                      Earnings Report
+                    </p>
+                    <span className="mt-3 inline-flex h-7 w-12 items-center rounded-full bg-lp-accent px-1">
+                      <span className="ml-auto h-5 w-5 rounded-full bg-white" />
+                    </span>
+                  </div>
+                  <CircleArrow size="md" />
+                </div>
+              </Reveal>
+
+              <Reveal delayMs={80} className="mt-6">
+                <div className="rounded-2xl bg-white p-6 shadow-2xl shadow-black/40">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-bold text-lp-ink">
+                      Income Sources
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <PillSelect>Sort By Month</PillSelect>
+                      <PillSelect>All Sources</PillSelect>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap items-end justify-between gap-6">
+                    <div>
+                      <span className="rounded-md bg-lp-line px-2 py-1 text-[10px] font-bold text-lp-gray">
+                        ₦ 0 Day
+                      </span>
+                      <p className="mt-2 text-3xl font-extrabold tracking-tight text-lp-ink">
+                        ₦ 772K
+                      </p>
+                      <p className="mt-1 text-[10px] text-lp-gray">
+                        Income Sources · Statistics in a month
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-2xl font-extrabold text-lp-accent">
+                        +73,6%
+                      </p>
+                      <p className="text-[10px] text-lp-gray">
+                        better than last month
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex items-end justify-center gap-8 border-t border-lp-line pt-6">
+                    <div className="flex flex-col items-center gap-1.5">
+                      <span className="rounded bg-lp-accent-soft px-1.5 py-0.5 text-[9px] font-bold text-lp-accent">
+                        ₦ 450K
+                      </span>
+                      <div className="h-24 w-10 rounded-lg bg-[repeating-linear-gradient(45deg,#2563eb_0_6px,#4f83f0_6px_12px)]" />
+                    </div>
+                    <div className="flex flex-col items-center gap-1.5">
+                      <span className="rounded bg-lp-line px-1.5 py-0.5 text-[9px] font-bold text-lp-gray">
+                        ₦ 180K
+                      </span>
+                      <div className="h-14 w-10 rounded-lg bg-lp-ink" />
+                    </div>
+                    <div className="flex flex-col items-center gap-1.5">
+                      <span className="rounded bg-lp-line px-1.5 py-0.5 text-[9px] font-bold text-lp-gray">
+                        ₦ 320K
+                      </span>
+                      <div className="h-20 w-10 rounded-lg bg-[#bcd4ff]" />
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================ STATEMENT ============================ */}
+      <section id="why" className="px-4 pt-20 sm:px-6 lg:pt-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <Reveal>
+            <p className="max-w-md text-[15px] leading-relaxed text-lp-gray">
+              We know every freelance journey is different. Paidly gives you
+              the tools to invoice, get signed, and get paid — so you can
+              focus on the work you love, not the admin behind it.
+            </p>
+            <Link
+              href="/pricing"
+              className="mt-8 inline-flex items-center gap-2.5 rounded-full bg-lp-accent py-2 pl-5 pr-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-lp-accent-strong"
+            >
+              See More
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+                <ArrowUpRight size={14} strokeWidth={2.4} />
+              </span>
+            </Link>
+          </Reveal>
+          <Reveal delayMs={80}>
+            <h2 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-lp-ink sm:text-5xl">
+              Strengthening Your Pathway To{" "}
+              <span className="text-lp-accent">Getting Paid</span> Faster
+            </h2>
+          </Reveal>
+        </div>
+        <div className="mx-auto mt-16 max-w-6xl border-t border-[#c9cbd2] sm:mt-20" />
+      </section>
+
+      {/* ============================== STATS ============================== */}
+      <section className="px-4 py-16 sm:px-6 lg:py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1fr_1.6fr]">
+          <Reveal>
+            <h2 className="text-3xl font-bold tracking-tight text-lp-ink sm:text-4xl">
+              Our Journey
+            </h2>
+          </Reveal>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
+            {STATS.map((s, i) => (
+              <Reveal key={s.label} delayMs={i * 80}>
+                <p className="text-5xl font-extrabold tracking-tight text-lp-ink sm:text-[3.4rem]">
+                  {s.value}
+                </p>
+                <p className="mt-2 text-sm text-lp-gray">{s.label}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================= SHOWCASE ============================ */}
+      <section className="px-4 pb-20 sm:px-6 lg:pb-28">
+        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-2">
+          {/* Left stack */}
+          <div className="flex flex-col gap-4">
+            <Reveal>
+              <div className="flex items-center justify-between rounded-2xl bg-white p-5 ring-1 ring-lp-line">
+                <div className="flex items-center gap-4">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-lp-accent-soft text-lp-accent">
+                    <PenLine size={18} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-lp-ink">
+                      For African Freelancers
+                    </p>
+                    <p className="text-[12px] text-lp-gray">
+                      Designers, Developers, Writers
+                    </p>
+                  </div>
+                </div>
+                <ArrowUpRight size={18} className="text-lp-ink" />
+              </div>
+            </Reveal>
+
+            <Reveal delayMs={60}>
+              <div className="flex min-h-[240px] flex-col justify-between rounded-2xl bg-lp-accent p-7 text-white">
+                <p className="max-w-xs text-3xl font-extrabold leading-tight tracking-tight">
+                  Your Entire Back Office, One Clean Display
+                </p>
+                <div className="mt-8 flex items-end justify-between">
+                  <span className="inline-flex h-9 w-16 items-center rounded-full bg-white/25 px-1">
+                    <span className="h-7 w-7 rounded-full bg-white" />
+                  </span>
+                  <p className="text-right text-[11px] font-bold uppercase tracking-[0.18em]">
+                    Let&apos;s get you
+                    <br />
+                    paid faster
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            {[
+              {
+                title: "Bills & Vendors",
+                sub: "Track what you owe",
+                cta: "See more",
+              },
+              {
+                title: "Expenses",
+                sub: "Log, track, and export",
+                cta: "See more",
+              },
+            ].map((row, i) => (
+              <Reveal key={row.title} delayMs={i * 60}>
+                <div className="flex items-center justify-between rounded-2xl bg-white p-5 ring-1 ring-lp-line">
+                  <div className="flex items-center gap-4">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-lp-accent-soft text-lp-accent">
+                      <Wallet size={18} />
+                    </span>
+                    <div>
+                      <p className="text-sm font-bold text-lp-ink">
+                        {row.title}
+                      </p>
+                      <p className="text-[12px] text-lp-gray">{row.sub}</p>
+                    </div>
+                  </div>
+                  <span className="flex items-center gap-1.5 text-[12px] font-semibold text-lp-ink">
+                    {row.cta}
+                    <ArrowUpRight size={14} />
+                  </span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Right dark card */}
+          <Reveal delayMs={100}>
+            <div className="relative h-full overflow-hidden rounded-[24px] bg-lp-ink p-7 sm:p-9">
+              <div
+                className="pointer-events-none absolute inset-0 opacity-50"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 55% 45% at 80% 10%, rgba(37,99,235,0.3), transparent 60%)",
+                }}
+              />
+              <div className="relative">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-bold text-white">( 02 )</p>
+                    <p className="mt-0.5 text-[11px] text-lp-gray-dark">
+                      Journey to Financial Freedom
+                    </p>
+                  </div>
+                  <CircleArrow size="md" />
+                </div>
+
+                <h3 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-white">
+                  Forefront of
+                  <br />
+                  Getting You{" "}
+                  <span className="text-lp-accent">Paid</span>
+                </h3>
+
+                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-white p-5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-[12px] font-bold text-lp-ink">
+                        Financial Overview
+                      </p>
+                      <span className="text-[9px] font-semibold text-lp-gray">
+                        For Week
+                      </span>
+                    </div>
+                    <div className="mt-3 flex items-center justify-between">
+                      <Gauge pct={22} label="of goal" />
+                      <div>
+                        <p className="text-[10px] text-lp-gray">Profit Today</p>
+                        <p className="text-lg font-extrabold text-lp-ink">
+                          ₦ 552,921
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-white p-5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-[12px] font-bold text-lp-ink">
+                        Income Sources
+                      </p>
+                      <span className="rounded bg-lp-accent-soft px-1.5 py-0.5 text-[9px] font-bold text-lp-accent">
+                        +73.6%
+                      </span>
+                    </div>
+                    <p className="mt-2 text-xl font-extrabold text-lp-ink">
+                      ₦ 772K
+                    </p>
+                    <div className="mt-3">
+                      <MiniBars values={[40, 68, 30, 90]} highlight={3} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* =========================== CTA + FOOTER ========================== */}
+      <section className="px-2 pb-2 sm:px-3 sm:pb-3">
+        <div className="rounded-[28px] bg-lp-ink px-6 py-12 sm:px-10 lg:px-14 lg:py-16">
+          <div className="mx-auto max-w-[1400px]">
+          <Reveal>
+            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+              <h2 className="max-w-2xl text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl">
+                Keep Your Freelance{" "}
+                <span className="text-lp-accent">Money Growing</span> and
+                Stable
+              </h2>
+              <div className="flex items-center gap-4">
+                <span className="hidden h-9 w-16 items-center rounded-full bg-white/15 px-1 sm:inline-flex">
+                  <span className="ml-auto h-7 w-7 rounded-full bg-white" />
+                </span>
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center gap-2.5 rounded-full bg-lp-accent py-2.5 pl-6 pr-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-lp-accent-strong"
+                >
+                  Get Started Now
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+                    <ArrowUpRight size={14} strokeWidth={2.4} />
+                  </span>
+                </Link>
+              </div>
             </div>
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-            <Reveal>
-              <div className="flex h-full flex-col rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-8 text-left">
-                <p className="text-sm font-semibold uppercase tracking-widest text-[#52525b]">
-                  Free
+          <div className="mt-12 border-t border-dashed border-white/15 pt-12">
+            <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
+              <div>
+                <Logo />
+                <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-lp-gray-dark">
+                  Invoices, contracts, earnings, and tax export — the admin
+                  side of freelancing, handled. Built for Africa.
                 </p>
-                <p className="mt-4 text-4xl font-bold text-white">₦0</p>
-                <div className="mt-8 space-y-3 text-sm leading-relaxed text-[#8f9db1]">
-                  <p>3 invoices per month</p>
-                  <p>1 contract per month</p>
-                  <p>Earnings tracking</p>
-                  <p>5% platform fee</p>
-                </div>
-                <div className="flex-1" />
-                <Link
-                  href="/signup"
-                  className="mt-10 inline-flex w-full items-center justify-center rounded-full border border-[#1a1a1a] py-3 text-sm font-semibold text-[#e4e4e7] transition-colors duration-300 ease-out hover:border-[#2a2a2a] hover:bg-[#14171d]"
-                >
-                  Get started
-                </Link>
+                <p className="mt-8 text-[11px] text-white/35">© 2026 Paidly</p>
               </div>
-            </Reveal>
 
-            <Reveal delayMs={80}>
-              <div
-                className="flex h-full flex-col rounded-2xl border border-[#6ea8ff40] bg-[#0a0a0a] p-8 text-left transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.01]"
-                style={{ boxShadow: "0 0 60px #6ea8ff10" }}
-              >
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold uppercase tracking-widest text-[#6ea8ff]">
-                    Pro
-                  </p>
-                  <span className="rounded-full bg-[#6ea8ff14] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#6ea8ff]">
-                    Popular
-                  </span>
-                </div>
-                <p className="mt-4 text-4xl font-bold text-white">
-                  {annual ? "₦130,000" : "₦15,000"}
-                  <span className="text-base font-medium text-[#71717a]">
-                    {annual ? "/yr" : "/mo"}
-                  </span>
-                </p>
-                <div className="mt-8 space-y-3 text-sm leading-relaxed text-[#d4d4d8]">
-                  <p>Unlimited invoices</p>
-                  <p>Unlimited contracts</p>
-                  <p>0% platform fee</p>
-                  <p>Custom branding</p>
-                  <p>Tax export</p>
-                  <p>Priority support</p>
-                </div>
-                <div className="flex-1" />
-                <Link
-                  href="/signup"
-                  className="mt-10 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] py-3 text-sm font-semibold text-white transition-shadow duration-300 ease-out hover:shadow-[0_0_24px_#6ea8ff40]"
-                >
-                  Upgrade to Pro →
-                </Link>
+              <div>
+                <p className="text-sm font-bold text-white">Quick Links</p>
+                <ul className="mt-4 space-y-3 text-[13px] text-lp-gray-dark">
+                  <li>
+                    <a
+                      href="#features"
+                      className="transition-colors hover:text-white"
+                    >
+                      Features
+                    </a>
+                  </li>
+                  <li>
+                    <Link
+                      href="/pricing"
+                      className="transition-colors hover:text-white"
+                    >
+                      Pricing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/login"
+                      className="transition-colors hover:text-white"
+                    >
+                      Log in
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/signup"
+                      className="transition-colors hover:text-white"
+                    >
+                      Get Started
+                    </Link>
+                  </li>
+                </ul>
               </div>
-            </Reveal>
+
+              <div>
+                <p className="text-sm font-bold text-white">Company</p>
+                <ul className="mt-4 space-y-3 text-[13px] text-lp-gray-dark">
+                  <li>
+                    <Link
+                      href="/privacy"
+                      className="transition-colors hover:text-white"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/terms"
+                      className="transition-colors hover:text-white"
+                    >
+                      Terms of Services
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-sm font-bold text-white">Get It Free</p>
+                <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-lp-gray-dark">
+                  Paidly is free to start — 3 invoices and 1 contract every
+                  month, forever. Upgrade only when you outgrow it.
+                </p>
+                <div className="mt-5 flex items-center gap-2.5">
+                  {SOCIALS.map(({ Icon, label }) => (
+                    <span
+                      key={label}
+                      aria-label={label}
+                      className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-lp-accent"
+                    >
+                      <Icon />
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
       </section>
-
-      {/* FINAL CTA */}
-      <section className="border-t border-[#1a1a1a] px-4 py-28 sm:px-6">
-        <Reveal className="mx-auto max-w-[720px] text-center">
-          <h2 className="text-balance text-[44px] font-bold leading-tight tracking-tight text-white">
-            Your talent deserves better admin.
-          </h2>
-          <p className="mx-auto mt-5 max-w-[560px] text-balance text-base leading-relaxed text-[#71717a]">
-            Join freelancers across Africa who stopped chasing payments and
-            started getting paid.
-          </p>
-          <Link
-            href="/signup"
-            className="mt-10 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6ea8ff] to-[#5b93e6] px-10 py-4 text-base font-semibold text-white transition-[box-shadow,transform] duration-300 ease-out hover:shadow-[0_0_28px_#6ea8ff45] active:scale-[0.99]"
-          >
-            Start for free →
-          </Link>
-          <p className="mt-8 text-sm tracking-wide text-[#52525b]">
-            Free forever · No credit card · 2 minutes to start
-          </p>
-        </Reveal>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="border-t border-[#1a1a1a] px-4 py-14 sm:px-6">
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-10 text-sm text-[#52525b] md:grid-cols-3 md:gap-8">
-          <div>
-            <p className="text-lg font-bold text-[#6ea8ff]">Paidly</p>
-            <p className="mt-3 max-w-xs leading-relaxed transition-colors duration-300 ease-out">
-              Built for African freelancers
-            </p>
-            <p className="mt-6">© 2026 Paidly</p>
-          </div>
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#3a4353]">
-              Product
-            </p>
-            <ul className="mt-4 space-y-3">
-              <li>
-                <a
-                  href="#features"
-                  className="transition-colors duration-300 ease-out hover:text-[#e4e4e7]"
-                >
-                  Features
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#pricing"
-                  className="transition-colors duration-300 ease-out hover:text-[#e4e4e7]"
-                >
-                  Pricing
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#3a4353]">
-              Legal
-            </p>
-            <ul className="mt-4 space-y-3">
-              <li>
-                <Link
-                  href="/privacy"
-                  className="transition-colors duration-300 ease-out hover:text-[#e4e4e7]"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="transition-colors duration-300 ease-out hover:text-[#e4e4e7]"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

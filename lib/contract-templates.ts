@@ -94,15 +94,15 @@ export const contractTemplates: ContractTemplate[] = [
           <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 8px; color: #0f0f0f;">Freelance Services Agreement</h1>
           <p style="color: #6b7280; font-size: 14px; margin-bottom: 32px;">Hourly Rate Contract</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">1. Parties</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">1. Parties</h2>
           <p>This Agreement is made between <strong>${contractorName}</strong> ("Contractor") and <strong>${clientName}</strong> ("Client"), effective as of <strong>${startDateFormatted}</strong>.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">2. Scope of Work</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">2. Scope of Work</h2>
           <p>${projectDescription}</p>
           <p style="margin-top: 12px;">The Contractor agrees to perform the following services:</p>
           <p style="white-space: pre-wrap; background: #f9fafb; padding: 16px; border-radius: 8px; margin-top: 8px;">${scopeOfWork}</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">3. Compensation</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">3. Compensation</h2>
           <p>The Client agrees to pay the Contractor at the following rate:</p>
           <ul style="margin: 12px 0; padding-left: 24px;">
             <li><strong>Hourly Rate:</strong> ${symbol}${hourlyRateDisplay} per hour</li>
@@ -111,26 +111,26 @@ export const contractTemplates: ContractTemplate[] = [
           </ul>
           <p style="margin-top: 12px; font-size: 14px; color: #6b7280;">Note: This is an estimate. Final billing will be based on actual hours worked. Contractor will notify Client if estimated hours are likely to be exceeded by more than 10%.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">4. Payment Terms</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">4. Payment Terms</h2>
           <p>${paymentTermsDisplay}</p>
           <p style="margin-top: 12px;">Invoices will be issued ${fields.paymentTerms.includes("weekly") ? "weekly" : fields.paymentTerms.includes("monthly") ? "monthly" : "upon completion"} and are payable within the agreed timeframe. Late payments may incur a 5% monthly interest charge.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">5. Time Tracking</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">5. Time Tracking</h2>
           <p>The Contractor will maintain accurate records of time spent on the project and provide timesheets upon request. Time will be tracked in 15-minute increments.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">6. Intellectual Property</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">6. Intellectual Property</h2>
           <p>Upon full payment, all work product, including but not limited to code, designs, documents, and deliverables created under this Agreement, shall be the exclusive property of the Client. The Contractor retains the right to display the work in their professional portfolio unless otherwise agreed in writing.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">7. Confidentiality</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">7. Confidentiality</h2>
           <p>Both parties agree to keep confidential all proprietary information exchanged during the course of this engagement. This includes, but is not limited to, business strategies, client data, trade secrets, and technical specifications. This obligation survives termination of this Agreement for a period of two (2) years.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">8. Independent Contractor</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">8. Independent Contractor</h2>
           <p>The Contractor is an independent contractor, not an employee. Nothing in this Agreement shall be construed to create a partnership, joint venture, or employer-employee relationship.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">9. Termination</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">9. Termination</h2>
           <p>Either party may terminate this Agreement with seven (7) days written notice. Upon termination, the Client shall pay for all hours worked up to the termination date. The Contractor shall deliver all completed work in progress.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">10. Governing Law</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">10. Governing Law</h2>
           <p>This Agreement shall be governed by and construed in accordance with the laws of <strong>${governingLaw}</strong>. Any disputes arising under this Agreement shall be resolved through good faith negotiation before pursuing legal action.</p>
 
           <div style="margin-top: 48px; padding-top: 24px; border-top: 2px solid #e5e7eb;">
@@ -197,32 +197,32 @@ export const contractTemplates: ContractTemplate[] = [
           <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 8px; color: #0f0f0f;">Project-Based Services Agreement</h1>
           <p style="color: #6b7280; font-size: 14px; margin-bottom: 32px;">Fixed-Fee Contract</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">1. Parties</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">1. Parties</h2>
           <p>This Agreement is made between <strong>${contractorName}</strong> ("Contractor") and <strong>${clientName}</strong> ("Client"), effective as of <strong>${startDateFormatted}</strong>.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">2. Project Description</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">2. Project Description</h2>
           <p>${projectDescription}</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">3. Scope of Work & Deliverables</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">3. Scope of Work & Deliverables</h2>
           <p>The Contractor agrees to deliver the following:</p>
           <p style="white-space: pre-wrap; background: #f9fafb; padding: 16px; border-radius: 8px; margin-top: 8px;">${scopeOfWork}</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">4. Timeline</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">4. Timeline</h2>
           <p><strong>Start Date:</strong> ${startDateFormatted}</p>
           <p><strong>Estimated Completion:</strong> ${endDateStr}</p>
           <p style="margin-top: 12px;">The Contractor will provide regular progress updates. Any delays will be communicated promptly with revised timelines.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">5. Compensation</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">5. Compensation</h2>
           <p>The Client agrees to pay a fixed project fee of <strong>${symbol}${projectFeeDisplay}</strong> for the complete scope of work outlined in this Agreement.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">6. Payment Schedule</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">6. Payment Schedule</h2>
           <p>${paymentTermsDisplay}</p>
           <p style="margin-top: 12px;">Payments are due within the agreed timeframe. Work may be paused if payments are not received on time. Late payments may incur a 5% monthly interest charge.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">7. Revisions</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">7. Revisions</h2>
           <p>This Agreement includes <strong>${revisionsDisplay} rounds of revisions</strong>. Additional revisions beyond this limit will be billed at the Contractor's standard hourly rate. Revision requests must be specific and consolidated.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">8. Client Responsibilities</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">8. Client Responsibilities</h2>
           <p>The Client agrees to:</p>
           <ul style="margin: 12px 0; padding-left: 24px;">
             <li>Provide all necessary materials, information, and access in a timely manner</li>
@@ -230,19 +230,19 @@ export const contractTemplates: ContractTemplate[] = [
             <li>Designate a single point of contact for project communications</li>
           </ul>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">9. Intellectual Property</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">9. Intellectual Property</h2>
           <p>Upon full payment, all deliverables and work product created under this Agreement shall be the exclusive property of the Client. The Contractor retains the right to display the work in their professional portfolio unless otherwise agreed in writing. Pre-existing intellectual property of either party remains the property of that party.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">10. Confidentiality</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">10. Confidentiality</h2>
           <p>Both parties agree to maintain strict confidentiality regarding all proprietary information shared during this engagement, including business strategies, client data, technical specifications, and financial information. This obligation survives termination for a period of two (2) years.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">11. Independent Contractor</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">11. Independent Contractor</h2>
           <p>The Contractor is an independent contractor. This Agreement does not create a partnership, joint venture, franchise, or employer-employee relationship. The Contractor is solely responsible for their own taxes, insurance, and benefits.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">12. Scope Changes</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">12. Scope Changes</h2>
           <p>Any changes to the scope of work must be agreed upon in writing. Significant scope changes may result in adjustments to the project fee and timeline. The Contractor will provide a written estimate for any additional work before proceeding.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">13. Termination</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">13. Termination</h2>
           <p>Either party may terminate this Agreement with fourteen (14) days written notice. Upon termination:</p>
           <ul style="margin: 12px 0; padding-left: 24px;">
             <li>The Client shall pay for all work completed to date</li>
@@ -250,10 +250,10 @@ export const contractTemplates: ContractTemplate[] = [
             <li>If terminated by Client without cause, a termination fee of 25% of the remaining project fee may apply</li>
           </ul>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">14. Limitation of Liability</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">14. Limitation of Liability</h2>
           <p>The Contractor's total liability under this Agreement shall not exceed the total amount paid by the Client. The Contractor shall not be liable for any indirect, incidental, or consequential damages.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">15. Governing Law</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">15. Governing Law</h2>
           <p>This Agreement shall be governed by the laws of <strong>${governingLaw}</strong>. Disputes shall first be addressed through good faith negotiation, then mediation if necessary, before pursuing legal action.</p>
 
           <div style="margin-top: 48px; padding-top: 24px; border-top: 2px solid #e5e7eb;">
@@ -308,48 +308,48 @@ export const contractTemplates: ContractTemplate[] = [
           <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 8px; color: #0f0f0f;">Monthly Retainer Agreement</h1>
           <p style="color: #6b7280; font-size: 14px; margin-bottom: 32px;">Ongoing Services Contract</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">1. Parties</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">1. Parties</h2>
           <p>This Retainer Agreement is made between <strong>${contractorName}</strong> ("Contractor") and <strong>${clientName}</strong> ("Client"), effective as of <strong>${startDateFormatted}</strong>.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">2. Scope of Services</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">2. Scope of Services</h2>
           <p>${projectDescription}</p>
           <p style="margin-top: 12px;">The Contractor will provide the following services on an ongoing monthly basis:</p>
           <p style="white-space: pre-wrap; background: #f9fafb; padding: 16px; border-radius: 8px; margin-top: 8px;">${scopeOfWork}</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">3. Monthly Retainer Fee</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">3. Monthly Retainer Fee</h2>
           <p>The Client agrees to pay a monthly retainer fee of <strong>${symbol}${retainerFeeDisplay}</strong>.</p>
           <p style="margin-top: 12px;">This fee covers the services outlined in Section 2. Additional work outside the agreed scope will be billed separately at the Contractor's standard rates.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">4. Payment Terms</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">4. Payment Terms</h2>
           <p>${paymentTermsDisplay}</p>
           <p style="margin-top: 12px;">Invoices will be issued on the first day of each month and are payable within the agreed timeframe. Services may be suspended if payment is not received within seven (7) days of the due date. Late payments may incur a 5% monthly interest charge.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">5. Term and Renewal</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">5. Term and Renewal</h2>
           <p>This Agreement shall commence on <strong>${startDateFormatted}</strong> and continue on a month-to-month basis until terminated by either party.</p>
           <p style="margin-top: 12px;">Either party may terminate this Agreement by providing thirty (30) days written notice prior to the end of the current billing cycle.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">6. Availability and Response Time</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">6. Availability and Response Time</h2>
           <p>The Contractor agrees to be available during standard business hours (9:00 AM - 6:00 PM, Monday through Friday). Urgent requests will be addressed within 24 hours. Regular requests will be addressed within two (2) business days.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">7. Unused Hours</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">7. Unused Hours</h2>
           <p>Unused retainer hours do not roll over to the following month. The retainer fee is a fixed monthly commitment regardless of actual usage, ensuring the Contractor's availability for the Client's needs.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">8. Intellectual Property</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">8. Intellectual Property</h2>
           <p>All work product created under this Agreement shall be the exclusive property of the Client upon payment of the retainer fee. The Contractor retains the right to display the work in their professional portfolio unless otherwise agreed in writing.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">9. Confidentiality</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">9. Confidentiality</h2>
           <p>Both parties agree to maintain strict confidentiality regarding all proprietary information exchanged during this engagement. This includes business strategies, client data, trade secrets, technical information, and financial data. This obligation survives termination for a period of two (2) years.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">10. Independent Contractor</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">10. Independent Contractor</h2>
           <p>The Contractor is an independent contractor, not an employee. This Agreement does not create a partnership, joint venture, or employer-employee relationship. The Contractor is responsible for their own taxes, insurance, benefits, and work methods.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">11. Reporting and Communication</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">11. Reporting and Communication</h2>
           <p>The Contractor will provide monthly reports detailing work completed, time invested, and recommendations. Regular check-in meetings will be scheduled as mutually agreed. Communication will primarily occur via email and scheduled video calls.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">12. Fee Adjustments</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">12. Fee Adjustments</h2>
           <p>The retainer fee may be adjusted with sixty (60) days written notice. Fee adjustments will reflect changes in scope, market rates, or the value of services provided. The Client may terminate the Agreement rather than accept a fee increase.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">13. Termination</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">13. Termination</h2>
           <p>Either party may terminate this Agreement with thirty (30) days written notice. Upon termination:</p>
           <ul style="margin: 12px 0; padding-left: 24px;">
             <li>The Client shall pay for the current month's retainer fee</li>
@@ -357,10 +357,10 @@ export const contractTemplates: ContractTemplate[] = [
             <li>The Contractor will provide reasonable transition assistance during the notice period</li>
           </ul>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">14. Limitation of Liability</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">14. Limitation of Liability</h2>
           <p>The Contractor's total liability under this Agreement shall not exceed the retainer fee paid for the three (3) months preceding the claim. The Contractor shall not be liable for indirect, incidental, special, or consequential damages.</p>
 
-          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #3b7ae0; padding-bottom: 8px;">15. Governing Law</h2>
+          <h2 style="font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #2563eb; padding-bottom: 8px;">15. Governing Law</h2>
           <p>This Agreement shall be governed by the laws of <strong>${governingLaw}</strong>. Any disputes shall first be addressed through good faith negotiation, then mediation, before pursuing legal action.</p>
 
           <div style="margin-top: 48px; padding-top: 24px; border-top: 2px solid #e5e7eb;">

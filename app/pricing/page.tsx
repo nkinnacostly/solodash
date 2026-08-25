@@ -3,7 +3,54 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Check, X, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowUpRight, Check, Loader2, X } from "lucide-react";
+
+function LogoMark({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
+      <circle cx="8.5" cy="8.5" r="4.5" fill="#2563eb" />
+      <circle cx="15.5" cy="8.5" r="4.5" fill="#2563eb" opacity="0.75" />
+      <circle cx="8.5" cy="15.5" r="4.5" fill="#2563eb" opacity="0.75" />
+      <circle cx="15.5" cy="15.5" r="4.5" fill="#2563eb" />
+    </svg>
+  );
+}
+
+function FeatureItem({ text, excluded = false }: { text: string; excluded?: boolean }) {
+  return (
+    <li className="flex items-start gap-3">
+      {excluded ? (
+        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lp-line text-lp-gray">
+          <X size={11} strokeWidth={2.5} />
+        </span>
+      ) : (
+        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lp-accent text-white">
+          <Check size={11} strokeWidth={3} />
+        </span>
+      )}
+      <span
+        className={`text-sm leading-relaxed ${excluded ? "text-lp-gray/70" : "text-lp-ink"}`}
+      >
+        {text}
+      </span>
+    </li>
+  );
+}
+
+const FAQS = [
+  {
+    q: "Can I cancel anytime?",
+    a: "Yes, cancel anytime. Your account reverts to the free plan immediately. You won't lose any data.",
+  },
+  {
+    q: "What payment methods do you accept?",
+    a: "Card payments via Flutterwave in NGN. International cards accepted.",
+  },
+  {
+    q: "Do you offer refunds?",
+    a: "Yes, within 7 days of payment if you haven't used Pro features. Contact us at support@getpaidly.co",
+  },
+];
 
 export default function PricingPage() {
   const router = useRouter();
@@ -36,301 +83,208 @@ export default function PricingPage() {
 
       // Redirect to Flutterwave payment page
       window.location.href = data.payment_link;
-    } catch (err: any) {
-      alert(err.message || "Failed to start upgrade");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to start upgrade";
+      alert(message);
       setUpgrading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#14171d]">
+    <div className="min-h-screen bg-lp-page font-sans text-lp-ink antialiased">
       {/* Navbar */}
-      <nav className="border-b border-[#2a303c] bg-[#14171d]">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-[#6ea8ff]">
-            Paidly
+      <header className="fixed inset-x-0 top-3 z-50 px-2 sm:top-4 sm:px-3">
+        <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-lp-ink/95 py-2.5 pl-4 pr-2.5 shadow-xl shadow-black/20 backdrop-blur-md sm:pl-6">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <LogoMark />
+            <span className="text-lg font-extrabold tracking-tight text-white">
+              Paidly
+            </span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="text-sm text-[#8f9db1] hover:text-white transition-colors"
+              className="rounded-full border border-white/20 px-4 py-2 text-[13px] font-medium text-white transition-colors duration-200 hover:bg-white/10"
             >
               Log in
             </Link>
             <Link
               href="/signup"
-              className="text-sm px-4 py-2 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+              className="rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-lp-ink transition-transform duration-200 hover:scale-[1.03]"
             >
-              Start free
+              Get Started
             </Link>
           </div>
         </div>
-      </nav>
+      </header>
 
-      <div className="max-w-5xl mx-auto px-6 py-20">
+      <div className="px-2 pb-3 pt-28 sm:px-3 sm:pt-36">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Simple pricing. No surprises.
+        <div className="mx-auto max-w-3xl px-2 text-center">
+          <h1 className="text-4xl font-extrabold leading-[1.08] tracking-tight text-lp-ink sm:text-6xl">
+            Simple pricing.{" "}
+            <span className="text-lp-accent">No surprises.</span>
           </h1>
-          <p className="text-lg text-[#8f9db1]">
+          <p className="mx-auto mt-5 max-w-md text-[15px] leading-relaxed text-lp-gray">
             Start free. Upgrade when your business grows.
           </p>
-        </div>
 
-        {/* Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-12">
-          <span
-            className={`text-sm font-medium ${
-              !isAnnual ? "text-white" : "text-[#8f9db1]"
-            }`}
-          >
-            Monthly
-          </span>
-          <button
-            onClick={() => setIsAnnual(!isAnnual)}
-            className={`relative w-14 h-7 rounded-full transition-colors ${
-              isAnnual ? "bg-[#6ea8ff]" : "bg-[#2a303c]"
-            }`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full transition-transform ${
-                isAnnual ? "translate-x-7" : "translate-x-0"
-              }`}
-            />
-          </button>
-          <span
-            className={`text-sm font-medium ${
-              isAnnual ? "text-white" : "text-[#8f9db1]"
-            }`}
-          >
-            Annual <span className="text-[#6ea8ff]">(save 30%)</span>
-          </span>
-        </div>
-
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-20">
-          {/* Free Plan */}
-          <div className="bg-[#1c202a] border border-[#2a303c] rounded-2xl p-8">
-            <h3 className="text-xl font-semibold text-white mb-2">Free</h3>
-            <p className="text-sm text-[#8f9db1] mb-6">
-              For freelancers just getting started
-            </p>
-            <div className="mb-8">
-              <span className="text-5xl font-bold text-white">$0</span>
-              <span className="text-[#8f9db1]">/mo</span>
-              <p className="text-xs text-[#8f9db1] mt-1">Free forever</p>
-            </div>
-
-            <ul className="space-y-4 mb-8">
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">3 invoices per month</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">1 contract per month</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">Earnings tracking</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">
-                  Flutterwave payments (5% fee)
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">PDF exports</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#8f9db1]">
-                  Unlimited invoices
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#8f9db1]">Custom branding</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#8f9db1]">0% platform fee</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <X size={18} className="text-[#8f9db1] mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-[#8f9db1]">Priority support</span>
-              </li>
-            </ul>
-
-            <Link
-              href="/signup"
-              className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors flex items-center justify-center gap-2"
-            >
-              Get started free
-            </Link>
-          </div>
-
-          {/* Pro Plan */}
-          <div className="bg-[#1c202a] border-2 border-[#6ea8ff] rounded-2xl p-8 relative shadow-lg shadow-[#6ea8ff]/10">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#6ea8ff] text-[#0e1116] text-xs font-semibold rounded-full">
-              Most popular
-            </div>
-
-            <h3 className="text-xl font-semibold text-white mb-2">Pro</h3>
-            <p className="text-sm text-[#8f9db1] mb-6">
-              For serious freelancers
-            </p>
-            <div className="mb-8">
-              <span className="text-5xl font-bold text-white">
-                {isAnnual ? "₦130,000" : "₦15,000"}
-              </span>
-              <span className="text-[#8f9db1]">/mo</span>
-              {isAnnual && (
-                <>
-                  <span className="text-[#8f9db1]">/yr</span>
-                  <p className="text-xs text-[#6ea8ff] mt-1">Save ₦50,000</p>
-                </>
-              )}
-              <p className="text-xs text-[#8f9db1] mt-1">
-                ~$9/mo at current exchange rate
-              </p>
-            </div>
-
-            <ul className="space-y-4 mb-8">
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">Unlimited invoices</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">Unlimited contracts</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">Earnings tracking</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">
-                  Flutterwave payments (0% fee — you keep 100%)
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">PDF exports</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">Custom branding</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">Priority support</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check
-                  size={18}
-                  className="text-[#6ea8ff] mt-0.5 flex-shrink-0"
-                />
-                <span className="text-sm text-white">Tax export</span>
-              </li>
-            </ul>
-
+          {/* Toggle */}
+          <div className="mt-8 inline-flex items-center rounded-full bg-lp-ink p-1">
             <button
-              onClick={handleUpgrade}
-              disabled={upgrading}
-              className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              type="button"
+              onClick={() => setIsAnnual(false)}
+              className={`rounded-full px-5 py-2 text-[13px] font-semibold transition-colors duration-200 ${
+                !isAnnual
+                  ? "bg-lp-accent text-white"
+                  : "text-white/60 hover:text-white"
+              }`}
             >
-              {upgrading ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  Upgrade to Pro <ArrowRight size={18} />
-                </>
-              )}
+              Monthly
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsAnnual(true)}
+              className={`rounded-full px-5 py-2 text-[13px] font-semibold transition-colors duration-200 ${
+                isAnnual
+                  ? "bg-lp-accent text-white"
+                  : "text-white/60 hover:text-white"
+              }`}
+            >
+              Annual · save 30%
             </button>
           </div>
         </div>
 
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-8">
-            Frequently asked questions
-          </h2>
-
-          <div className="space-y-4">
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Can I cancel anytime?
+        {/* Dark panel with plans */}
+        <div className="mx-auto mt-12 max-w-[1100px] rounded-[28px] bg-lp-ink px-4 py-10 sm:px-8 sm:py-14 lg:px-12">
+          <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+            {/* Free Plan */}
+            <div className="flex flex-col rounded-2xl bg-white p-7 sm:p-8">
+              <h3 className="text-xl font-extrabold tracking-tight text-lp-ink">
+                Free
               </h3>
-              <p className="text-sm text-[#8f9db1]">
-                Yes, cancel anytime. Your account reverts to the free plan
-                immediately. You won't lose any data.
+              <p className="mt-1 text-[13px] text-lp-gray">
+                For freelancers just getting started
               </p>
+              <div className="mt-6">
+                <span className="text-5xl font-extrabold tracking-tight text-lp-ink">
+                  $0
+                </span>
+                <span className="text-lp-gray">/mo</span>
+                <p className="mt-1 text-xs text-lp-gray">Free forever</p>
+              </div>
+
+              <ul className="mt-8 flex-1 space-y-4">
+                <FeatureItem text="3 invoices per month" />
+                <FeatureItem text="1 contract per month" />
+                <FeatureItem text="Earnings tracking" />
+                <FeatureItem text="Flutterwave payments (5% fee)" />
+                <FeatureItem text="PDF exports" />
+                <FeatureItem excluded text="Unlimited invoices" />
+                <FeatureItem excluded text="Custom branding" />
+                <FeatureItem excluded text="0% platform fee" />
+                <FeatureItem excluded text="Priority support" />
+              </ul>
+
+              <Link
+                href="/signup"
+                className="mt-10 flex w-full items-center justify-center rounded-full border border-lp-ink/15 py-3 text-sm font-semibold text-lp-ink transition-colors duration-200 hover:bg-lp-ink hover:text-white"
+              >
+                Get started free
+              </Link>
             </div>
 
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-2">
-                What payment methods do you accept?
-              </h3>
-              <p className="text-sm text-[#8f9db1]">
-                Card payments via Flutterwave in NGN. International cards
-                accepted.
-              </p>
-            </div>
+            {/* Pro Plan */}
+            <div className="relative flex flex-col rounded-2xl bg-white p-7 ring-2 ring-lp-accent sm:p-8">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-lp-accent px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white shadow-lg shadow-lp-accent/40">
+                Most popular
+              </div>
 
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Do you offer refunds?
+              <h3 className="text-xl font-extrabold tracking-tight text-lp-ink">
+                Pro
               </h3>
-              <p className="text-sm text-[#8f9db1]">
-                Yes, within 7 days of payment if you haven't used Pro features.
-                Contact us at support@getpaidly.co
+              <p className="mt-1 text-[13px] text-lp-gray">
+                For serious freelancers
               </p>
+              <div className="mt-6">
+                <span className="text-5xl font-extrabold tracking-tight text-lp-ink">
+                  {isAnnual ? "₦130,000" : "₦15,000"}
+                </span>
+                <span className="text-lp-gray">/mo</span>
+                {isAnnual && (
+                  <>
+                    <span className="text-lp-gray">/yr</span>
+                    <p className="mt-1 text-xs font-semibold text-lp-accent">
+                      Save ₦50,000
+                    </p>
+                  </>
+                )}
+                <p className="mt-1 text-xs text-lp-gray">
+                  ~$9/mo at current exchange rate
+                </p>
+              </div>
+
+              <ul className="mt-8 flex-1 space-y-4">
+                <FeatureItem text="Unlimited invoices" />
+                <FeatureItem text="Unlimited contracts" />
+                <FeatureItem text="Earnings tracking" />
+                <FeatureItem text="Flutterwave payments (0% fee — you keep 100%)" />
+                <FeatureItem text="PDF exports" />
+                <FeatureItem text="Custom branding" />
+                <FeatureItem text="Priority support" />
+                <FeatureItem text="Tax export" />
+              </ul>
+
+              <button
+                type="button"
+                onClick={handleUpgrade}
+                disabled={upgrading}
+                className="mt-10 flex w-full items-center justify-center gap-2.5 rounded-full bg-lp-accent py-2 pl-6 pr-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-lp-accent-strong disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {upgrading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Upgrade to Pro
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+                      <ArrowUpRight size={14} strokeWidth={2.4} />
+                    </span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
+
+          {/* FAQ */}
+          <div className="mx-auto mt-16 max-w-3xl">
+            <h2 className="text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+              Frequently asked{" "}
+              <span className="text-lp-accent">questions</span>
+            </h2>
+
+            <div className="mt-8 space-y-4">
+              {FAQS.map((f) => (
+                <div
+                  key={f.q}
+                  className="rounded-2xl bg-white/[0.05] p-6 ring-1 ring-white/10"
+                >
+                  <h3 className="text-base font-bold text-white">{f.q}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-lp-gray-dark">
+                    {f.a}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="mt-14 text-center text-[11px] font-medium text-white/35">
+            © 2026 Paidly
+          </p>
         </div>
       </div>
     </div>

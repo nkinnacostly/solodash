@@ -42,7 +42,7 @@ interface Bill {
 const statusColors: Record<string, string> = {
   unpaid: "bg-[#3d2e00] text-[#e6b566]",
   paid: "bg-[#0c2e26] text-[#57c9b0]",
-  cancelled: "bg-[#2a303c] text-[#6b7280]",
+  cancelled: "bg-[#26262e] text-[#6b7280]",
 };
 
 const getCurrencySymbol = (code: string) =>
@@ -131,7 +131,7 @@ export default function BillDetailPage() {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto flex items-center justify-center py-20">
-        <Loader2 size={28} className="text-[#6ea8ff] animate-spin" />
+        <Loader2 size={28} className="text-[#3b82f6] animate-spin" />
       </div>
     );
   }
@@ -142,7 +142,7 @@ export default function BillDetailPage() {
         <p className="text-[#ef4444] text-lg mb-6">Bill not found</p>
         <Link
           href="/bills"
-          className="inline-flex items-center gap-2 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
         >
           <ArrowLeft size={18} />
           Back to Bills
@@ -163,9 +163,9 @@ export default function BillDetailPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/bills"
-            className="p-2 hover:bg-[#1c202a] rounded-lg transition-colors"
+            className="p-2 hover:bg-[#141419] rounded-lg transition-colors"
           >
-            <ArrowLeft size={20} className="text-[#8f9db1]" />
+            <ArrowLeft size={20} className="text-[#a1a1aa]" />
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-white">
@@ -173,7 +173,7 @@ export default function BillDetailPage() {
             </h1>
             <span
               className={`inline-block mt-1 px-2 py-1 rounded text-xs font-medium ${
-                statusColors[bill.status] || "bg-[#2a303c] text-[#8f9db1]"
+                statusColors[bill.status] || "bg-[#26262e] text-[#a1a1aa]"
               }`}
             >
               {bill.status}
@@ -185,7 +185,7 @@ export default function BillDetailPage() {
             <button
               onClick={handleMarkPaid}
               disabled={updating}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50"
             >
               {updating ? (
                 <Loader2 size={18} className="animate-spin" />
@@ -208,37 +208,37 @@ export default function BillDetailPage() {
       </div>
 
       {/* Document */}
-      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-8">
+      <div className="bg-[#141419] border border-[#26262e] rounded-xl p-8">
         {/* Vendor + meta */}
         <div className="flex justify-between flex-wrap gap-6 mb-8">
           <div>
-            <p className="text-xs uppercase text-[#8f9db1] mb-1">Bill from</p>
+            <p className="text-xs uppercase text-[#a1a1aa] mb-1">Bill from</p>
             <p className="text-white font-semibold">
               {bill.vendors?.name || "—"}
             </p>
             {bill.vendors?.email && (
-              <p className="text-sm text-[#8f9db1]">{bill.vendors.email}</p>
+              <p className="text-sm text-[#a1a1aa]">{bill.vendors.email}</p>
             )}
             {bill.vendors?.address && (
-              <p className="text-sm text-[#8f9db1]">{bill.vendors.address}</p>
+              <p className="text-sm text-[#a1a1aa]">{bill.vendors.address}</p>
             )}
           </div>
           <div className="text-right">
             {bill.category && (
-              <p className="text-sm text-[#8f9db1]">
+              <p className="text-sm text-[#a1a1aa]">
                 Category: <span className="text-white">{bill.category}</span>
               </p>
             )}
-            <p className="text-sm text-[#8f9db1]">
+            <p className="text-sm text-[#a1a1aa]">
               Issued: {new Date(bill.issue_date).toLocaleDateString()}
             </p>
             {bill.due_date && (
-              <p className="text-sm text-[#8f9db1]">
+              <p className="text-sm text-[#a1a1aa]">
                 Due: {new Date(bill.due_date).toLocaleDateString()}
               </p>
             )}
             {bill.paid_at && (
-              <p className="text-sm text-[#6ea8ff]">
+              <p className="text-sm text-[#3b82f6]">
                 Paid: {new Date(bill.paid_at).toLocaleDateString()}
               </p>
             )}
@@ -248,29 +248,29 @@ export default function BillDetailPage() {
         {/* Items */}
         <table className="w-full mb-6">
           <thead>
-            <tr className="border-b border-[#2a303c] text-left">
-              <th className="py-2 text-xs font-medium text-[#8f9db1] uppercase">
+            <tr className="border-b border-[#26262e] text-left">
+              <th className="py-2 text-xs font-medium text-[#a1a1aa] uppercase">
                 Description
               </th>
-              <th className="py-2 text-xs font-medium text-[#8f9db1] uppercase text-right">
+              <th className="py-2 text-xs font-medium text-[#a1a1aa] uppercase text-right">
                 Qty
               </th>
-              <th className="py-2 text-xs font-medium text-[#8f9db1] uppercase text-right">
+              <th className="py-2 text-xs font-medium text-[#a1a1aa] uppercase text-right">
                 Rate
               </th>
-              <th className="py-2 text-xs font-medium text-[#8f9db1] uppercase text-right">
+              <th className="py-2 text-xs font-medium text-[#a1a1aa] uppercase text-right">
                 Amount
               </th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.id} className="border-b border-[#2a303c]">
+              <tr key={item.id} className="border-b border-[#26262e]">
                 <td className="py-3 text-sm text-white">{item.description}</td>
-                <td className="py-3 text-sm text-[#8f9db1] text-right">
+                <td className="py-3 text-sm text-[#a1a1aa] text-right">
                   {Number(item.quantity)}
                 </td>
-                <td className="py-3 text-sm text-[#8f9db1] text-right">
+                <td className="py-3 text-sm text-[#a1a1aa] text-right">
                   {symbol}
                   {Number(item.rate).toLocaleString("en-US", {
                     minimumFractionDigits: 2,
@@ -290,7 +290,7 @@ export default function BillDetailPage() {
         {/* Totals */}
         <div className="flex justify-end">
           <div className="w-full max-w-xs space-y-2">
-            <div className="flex justify-between text-sm text-[#8f9db1]">
+            <div className="flex justify-between text-sm text-[#a1a1aa]">
               <span>Subtotal</span>
               <span>
                 {symbol}
@@ -299,7 +299,7 @@ export default function BillDetailPage() {
                 })}
               </span>
             </div>
-            <div className="flex justify-between text-sm text-[#8f9db1]">
+            <div className="flex justify-between text-sm text-[#a1a1aa]">
               <span>Tax ({Number(bill.tax_rate)}%)</span>
               <span>
                 {symbol}
@@ -308,7 +308,7 @@ export default function BillDetailPage() {
                 })}
               </span>
             </div>
-            <div className="flex justify-between text-lg font-bold text-white border-t border-[#2a303c] pt-2">
+            <div className="flex justify-between text-lg font-bold text-white border-t border-[#26262e] pt-2">
               <span>Total</span>
               <span>
                 {symbol}
@@ -321,8 +321,8 @@ export default function BillDetailPage() {
         </div>
 
         {bill.notes && (
-          <div className="mt-8 pt-6 border-t border-[#2a303c]">
-            <p className="text-xs uppercase text-[#8f9db1] mb-1">Notes</p>
+          <div className="mt-8 pt-6 border-t border-[#26262e]">
+            <p className="text-xs uppercase text-[#a1a1aa] mb-1">Notes</p>
             <p className="text-sm text-white whitespace-pre-wrap">
               {bill.notes}
             </p>

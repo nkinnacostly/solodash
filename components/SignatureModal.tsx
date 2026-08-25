@@ -210,7 +210,7 @@ export default function SignatureModal({
     >
       <div
         ref={dialogRef}
-        className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 max-w-[560px] w-full mx-4 shadow-2xl"
+        className="bg-[#141419] border border-[#26262e] rounded-xl p-6 max-w-[560px] w-full mx-4 shadow-2xl"
         style={{
           animation: "sigModalIn 0.2s ease-out",
         }}
@@ -220,7 +220,7 @@ export default function SignatureModal({
           <h3 className="text-lg font-bold text-white">{title}</h3>
           <button
             onClick={onClose}
-            className="p-1 text-[#8f9db1] hover:text-white transition-colors"
+            className="p-1 text-[#a1a1aa] hover:text-white transition-colors"
             aria-label="Close"
           >
             <X size={20} />
@@ -228,13 +228,13 @@ export default function SignatureModal({
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-4 bg-[#14171d] rounded-lg p-1">
+        <div className="flex gap-1 mb-4 bg-[#0a0a0b] rounded-lg p-1">
           <button
             onClick={() => setActiveTab("draw")}
             className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === "draw"
-                ? "bg-[#2a303c] text-white"
-                : "text-[#8f9db1] hover:text-white"
+                ? "bg-[#26262e] text-white"
+                : "text-[#a1a1aa] hover:text-white"
             }`}
           >
             Draw
@@ -243,8 +243,8 @@ export default function SignatureModal({
             onClick={() => setActiveTab("type")}
             className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === "type"
-                ? "bg-[#2a303c] text-white"
-                : "text-[#8f9db1] hover:text-white"
+                ? "bg-[#26262e] text-white"
+                : "text-[#a1a1aa] hover:text-white"
             }`}
           >
             Type
@@ -254,7 +254,7 @@ export default function SignatureModal({
         {/* Draw Tab */}
         {activeTab === "draw" && (
           <div>
-            <div className="relative rounded-lg overflow-hidden border border-[#2a303c]">
+            <div className="relative rounded-lg overflow-hidden border border-[#26262e]">
               <canvas
                 ref={canvasRef}
                 className="w-full cursor-crosshair"
@@ -269,12 +269,12 @@ export default function SignatureModal({
               />
             </div>
             <div className="flex items-center justify-between mt-2">
-              <p className="text-xs text-[#8f9db1]">
+              <p className="text-xs text-[#a1a1aa]">
                 Sign with your mouse or finger
               </p>
               <button
                 onClick={clearCanvas}
-                className="text-xs text-[#8f9db1] hover:text-white transition-colors"
+                className="text-xs text-[#a1a1aa] hover:text-white transition-colors"
               >
                 Clear
               </button>
@@ -290,10 +290,10 @@ export default function SignatureModal({
               value={typedName}
               onChange={(e) => setTypedName(e.target.value)}
               placeholder="Type your full name"
-              className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] transition-colors"
+              className="w-full px-4 py-3 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#3b82f6] transition-colors"
             />
             {typedName && (
-              <div className="mt-4 p-4 bg-white rounded-lg border border-[#2a303c]">
+              <div className="mt-4 p-4 bg-white rounded-lg border border-[#26262e]">
                 <p
                   style={{
                     fontFamily: "'Brush Script MT', 'Dancing Script', cursive",
@@ -314,7 +314,7 @@ export default function SignatureModal({
           <button
             onClick={handleSign}
             disabled={!canSign || loading}
-            className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -328,7 +328,7 @@ export default function SignatureModal({
           <button
             onClick={onClose}
             disabled={loading}
-            className="w-full py-3 border border-[#2a303c] text-[#8f9db1] font-medium rounded-lg hover:border-[#52525b] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 border border-[#26262e] text-[#a1a1aa] font-medium rounded-lg hover:border-[#52525b] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

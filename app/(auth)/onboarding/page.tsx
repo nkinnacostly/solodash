@@ -79,12 +79,12 @@ export default function OnboardingPage() {
       fallback={
         <div className="w-full max-w-lg">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-[#6ea8ff]">Paidly</h1>
+            <h1 className="text-3xl font-bold text-[#3b82f6]">Paidly</h1>
           </div>
-          <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-8 text-center">
+          <div className="bg-[#141419] border border-[#26262e] rounded-xl p-8 text-center">
             <Loader2
               size={32}
-              className="text-[#6ea8ff] animate-spin mx-auto mb-4"
+              className="text-[#3b82f6] animate-spin mx-auto mb-4"
             />
             <p className="text-white">Loading...</p>
           </div>
@@ -262,11 +262,11 @@ function OnboardingContent() {
     <div className="w-full max-w-lg">
       {/* Logo */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-[#6ea8ff]">Paidly</h1>
+        <h1 className="text-3xl font-bold text-[#3b82f6]">Paidly</h1>
       </div>
 
       {/* Card */}
-      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-8">
+      <div className="bg-[#141419] border border-[#26262e] rounded-xl p-8">
         {/* Progress Indicator */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -275,10 +275,10 @@ function OnboardingContent() {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center font-medium transition-colors ${
                     s === step
-                      ? "bg-[#6ea8ff] text-[#0e1116]"
+                      ? "bg-[#2563eb] text-[#ffffff]"
                       : s < step
-                        ? "bg-[#6ea8ff]/20 text-[#6ea8ff]"
-                        : "bg-[#2a303c] text-[#52525b]"
+                        ? "bg-[#3b82f6]/20 text-[#3b82f6]"
+                        : "bg-[#26262e] text-[#52525b]"
                   }`}
                 >
                   {s < step ? <Check size={20} /> : s}
@@ -286,14 +286,14 @@ function OnboardingContent() {
                 {s < 3 && (
                   <div
                     className={`flex-1 h-1 mx-2 rounded ${
-                      s < step ? "bg-[#6ea8ff]" : "bg-[#2a303c]"
+                      s < step ? "bg-[#3b82f6]" : "bg-[#26262e]"
                     }`}
                   />
                 )}
               </div>
             ))}
           </div>
-          <p className="text-sm text-[#8f9db1] text-center">Step {step} of 3</p>
+          <p className="text-sm text-[#a1a1aa] text-center">Step {step} of 3</p>
         </div>
 
         {/* Step 1: Personal Info */}
@@ -303,7 +303,7 @@ function OnboardingContent() {
               <h2 className="text-2xl font-bold text-white mb-2">
                 Tell us about yourself
               </h2>
-              <p className="text-[#8f9db1]">
+              <p className="text-[#a1a1aa]">
                 Let's start with some basic information
               </p>
             </div>
@@ -318,7 +318,7 @@ function OnboardingContent() {
                 value={formData.name}
                 onChange={(e) => updateField("name", e.target.value)}
                 placeholder="John Doe"
-                className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
+                className="w-full px-4 py-3 bg-[#0a0a0b] border border-[#26262e] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors"
               />
             </div>
 
@@ -332,7 +332,7 @@ function OnboardingContent() {
                 value={formData.businessName}
                 onChange={(e) => updateField("businessName", e.target.value)}
                 placeholder="Acme Design Studio"
-                className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
+                className="w-full px-4 py-3 bg-[#0a0a0b] border border-[#26262e] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors"
               />
             </div>
 
@@ -340,7 +340,7 @@ function OnboardingContent() {
             <button
               onClick={handleNext}
               disabled={!formData.name.trim()}
-              className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               Next
               <ChevronRight size={20} />
@@ -355,7 +355,7 @@ function OnboardingContent() {
               <h2 className="text-2xl font-bold text-white mb-2">
                 Where are you based?
               </h2>
-              <p className="text-[#8f9db1]">
+              <p className="text-[#a1a1aa]">
                 Help us customize your experience
               </p>
             </div>
@@ -368,7 +368,7 @@ function OnboardingContent() {
               <select
                 value={formData.country}
                 onChange={(e) => updateField("country", e.target.value)}
-                className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors appearance-none cursor-pointer"
+                className="w-full px-4 py-3 bg-[#0a0a0b] border border-[#26262e] rounded-lg text-white focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors appearance-none cursor-pointer"
               >
                 {countries.map((country) => (
                   <option key={country} value={country}>
@@ -386,7 +386,7 @@ function OnboardingContent() {
               <select
                 value={formData.timezone}
                 onChange={(e) => updateField("timezone", e.target.value)}
-                className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors appearance-none cursor-pointer"
+                className="w-full px-4 py-3 bg-[#0a0a0b] border border-[#26262e] rounded-lg text-white focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors appearance-none cursor-pointer"
               >
                 {Intl.supportedValuesOf("timeZone").map((tz) => (
                   <option key={tz} value={tz}>
@@ -400,14 +400,14 @@ function OnboardingContent() {
             <div className="flex gap-3">
               <button
                 onClick={handleBack}
-                className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3 border border-[#26262e] text-white font-medium rounded-lg hover:border-[#3b82f6] transition-colors flex items-center justify-center gap-2"
               >
                 <ChevronLeft size={20} />
                 Back
               </button>
               <button
                 onClick={handleNext}
-                className="flex-1 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors flex items-center justify-center gap-2"
               >
                 Next
                 <ChevronRight size={20} />
@@ -423,7 +423,7 @@ function OnboardingContent() {
               <h2 className="text-2xl font-bold text-white mb-2">
                 Set your defaults
               </h2>
-              <p className="text-[#8f9db1]">
+              <p className="text-[#a1a1aa]">
                 You can change these anytime in settings
               </p>
             </div>
@@ -436,7 +436,7 @@ function OnboardingContent() {
               <select
                 value={formData.currency}
                 onChange={(e) => updateField("currency", e.target.value)}
-                className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors appearance-none cursor-pointer"
+                className="w-full px-4 py-3 bg-[#0a0a0b] border border-[#26262e] rounded-lg text-white focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors appearance-none cursor-pointer"
               >
                 {currencies.map((currency) => (
                   <option key={currency.code} value={currency.code}>
@@ -456,7 +456,7 @@ function OnboardingContent() {
                 onChange={(e) =>
                   updateField("defaultPaymentTerms", e.target.value)
                 }
-                className="w-full px-4 py-3 bg-[#14171d] border border-[#2a303c] rounded-lg text-white focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors appearance-none cursor-pointer"
+                className="w-full px-4 py-3 bg-[#0a0a0b] border border-[#26262e] rounded-lg text-white focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors appearance-none cursor-pointer"
               >
                 {paymentTerms.map((term) => (
                   <option key={term.value} value={term.value}>
@@ -478,7 +478,7 @@ function OnboardingContent() {
               <button
                 onClick={handleBack}
                 disabled={loading}
-                className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3 border border-[#26262e] text-white font-medium rounded-lg hover:border-[#3b82f6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <ChevronLeft size={20} />
                 Back
@@ -486,7 +486,7 @@ function OnboardingContent() {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex-1 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>

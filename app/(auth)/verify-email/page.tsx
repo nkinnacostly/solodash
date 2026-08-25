@@ -63,24 +63,24 @@ function VerifyEmailContent() {
     <div className="w-full max-w-md">
       {/* Logo */}
       <div className="text-center mb-8">
-        <Link href="/" className="text-3xl font-bold text-[#6ea8ff]">
+        <Link href="/" className="text-3xl font-bold text-[#3b82f6]">
           Paidly
         </Link>
       </div>
 
       {/* Card */}
-      <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-8">
+      <div className="bg-[#141419] border border-[#26262e] rounded-xl p-8">
         {/* Email Icon */}
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-[#6ea8ff]/10 border border-[#6ea8ff]/30 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Mail size={32} className="text-[#6ea8ff]" />
+          <div className="w-16 h-16 bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Mail size={32} className="text-[#3b82f6]" />
           </div>
 
           <h1 className="text-2xl font-bold text-white mb-2">
             Check your inbox
           </h1>
           {email && (
-            <p className="text-[#8f9db1] text-sm mb-1">
+            <p className="text-[#a1a1aa] text-sm mb-1">
               We sent a confirmation link to
             </p>
           )}
@@ -88,12 +88,12 @@ function VerifyEmailContent() {
             <p className="text-white font-medium text-sm mb-2">{email}</p>
           )}
           {!email && (
-            <p className="text-[#8f9db1] mb-2">
+            <p className="text-[#a1a1aa] mb-2">
               Click the link to verify your account and get started.
             </p>
           )}
           {email && (
-            <p className="text-[#8f9db1] text-sm">
+            <p className="text-[#a1a1aa] text-sm">
               Click the link to verify your account and get started.
             </p>
           )}
@@ -104,7 +104,7 @@ function VerifyEmailContent() {
           {/* Open Gmail */}
           <button
             onClick={openGmail}
-            className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] hover:text-[#6ea8ff] transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 border border-[#26262e] text-white font-medium rounded-lg hover:border-[#3b82f6] hover:text-[#3b82f6] transition-colors flex items-center justify-center gap-2"
           >
             <Mail size={18} />
             Open Gmail
@@ -114,7 +114,7 @@ function VerifyEmailContent() {
           <button
             onClick={handleResendEmail}
             disabled={loading || countdown > 0}
-            className="w-full py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] hover:text-[#6ea8ff] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 border border-[#26262e] text-white font-medium rounded-lg hover:border-[#3b82f6] hover:text-[#3b82f6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -134,7 +134,7 @@ function VerifyEmailContent() {
           <div
             className={`p-3 rounded-lg mb-6 flex items-center gap-2 ${
               message.type === "success"
-                ? "bg-[#6ea8ff]/10 border border-[#6ea8ff]/30 text-[#6ea8ff]"
+                ? "bg-[#3b82f6]/10 border border-[#3b82f6]/30 text-[#3b82f6]"
                 : "bg-[#ef4444]/10 border border-[#ef4444]/30 text-[#ef4444]"
             }`}
           >
@@ -146,29 +146,29 @@ function VerifyEmailContent() {
         {/* Divider */}
         <div className="relative mb-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-[#2a303c]" />
+            <div className="w-full border-t border-[#26262e]" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-[#1c202a] text-[#8f9db1]">or</span>
+            <span className="px-4 bg-[#141419] text-[#a1a1aa]">or</span>
           </div>
         </div>
 
         {/* Links */}
         <div className="space-y-3 mb-6">
-          <p className="text-center text-sm text-[#8f9db1]">
+          <p className="text-center text-sm text-[#a1a1aa]">
             Already verified?{" "}
             <Link
               href="/login"
-              className="text-[#6ea8ff] hover:underline font-medium"
+              className="text-[#3b82f6] hover:underline font-medium"
             >
               Log in
             </Link>
           </p>
-          <p className="text-center text-sm text-[#8f9db1]">
+          <p className="text-center text-sm text-[#a1a1aa]">
             Wrong email?{" "}
             <Link
               href="/signup"
-              className="text-[#6ea8ff] hover:underline font-medium"
+              className="text-[#3b82f6] hover:underline font-medium"
             >
               Sign up again
             </Link>
@@ -176,8 +176,8 @@ function VerifyEmailContent() {
         </div>
 
         {/* Spam Note */}
-        <div className="p-3 bg-[#2a303c]/50 rounded-lg">
-          <p className="text-xs text-[#8f9db1] text-center">
+        <div className="p-3 bg-[#26262e]/50 rounded-lg">
+          <p className="text-xs text-[#a1a1aa] text-center">
             Can't find the email? Check your spam folder.
           </p>
         </div>
@@ -192,12 +192,12 @@ export default function VerifyEmailPage() {
       fallback={
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="text-3xl font-bold text-[#6ea8ff]">Paidly</div>
+            <div className="text-3xl font-bold text-[#3b82f6]">Paidly</div>
           </div>
-          <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-8 text-center">
+          <div className="bg-[#141419] border border-[#26262e] rounded-xl p-8 text-center">
             <Loader2
               size={32}
-              className="text-[#6ea8ff] animate-spin mx-auto mb-4"
+              className="text-[#3b82f6] animate-spin mx-auto mb-4"
             />
             <p className="text-white">Loading...</p>
           </div>

@@ -65,7 +65,7 @@ export default function DashboardPricingPage() {
   if (loadingProfile) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 size={32} className="text-[#6ea8ff] animate-spin" />
+        <Loader2 size={32} className="text-[#3b82f6] animate-spin" />
       </div>
     );
   }
@@ -77,7 +77,7 @@ export default function DashboardPricingPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white mb-2">Plans & Pricing</h1>
-        <p className="text-[#8f9db1]">Choose the plan that works for you</p>
+        <p className="text-[#a1a1aa]">Choose the plan that works for you</p>
       </div>
 
       {/* Current Plan Badge */}
@@ -85,24 +85,24 @@ export default function DashboardPricingPage() {
         <div
           className={`p-4 rounded-lg border ${
             isPro
-              ? "bg-[#6ea8ff]/10 border-[#6ea8ff]/30"
-              : "bg-[#2a303c]/50 border-[#2a303c]"
+              ? "bg-[#3b82f6]/10 border-[#3b82f6]/30"
+              : "bg-[#26262e]/50 border-[#26262e]"
           }`}
         >
           <div className="flex items-center gap-2">
             {isPro ? (
               <>
-                <Check size={20} className="text-[#6ea8ff]" />
+                <Check size={20} className="text-[#3b82f6]" />
                 <span className="text-sm text-white font-medium">
                   Your current plan:{" "}
-                  <span className="text-[#6ea8ff]">Pro ✓</span>
+                  <span className="text-[#3b82f6]">Pro ✓</span>
                 </span>
               </>
             ) : (
               <>
                 <span className="text-sm text-white font-medium">
                   Your current plan:{" "}
-                  <span className="text-[#8f9db1]">Free</span>
+                  <span className="text-[#a1a1aa]">Free</span>
                 </span>
               </>
             )}
@@ -112,17 +112,17 @@ export default function DashboardPricingPage() {
 
       {/* Pro users message */}
       {isPro && (
-        <div className="bg-[#6ea8ff]/10 border border-[#6ea8ff]/30 rounded-xl p-8 text-center">
-          <Zap size={48} className="text-[#6ea8ff] mx-auto mb-4" />
+        <div className="bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-xl p-8 text-center">
+          <Zap size={48} className="text-[#3b82f6] mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">
             You're already on Pro! 🎉
           </h2>
-          <p className="text-[#8f9db1] mb-6">
+          <p className="text-[#a1a1aa] mb-6">
             Enjoy unlimited invoices, contracts, and 0% platform fees.
           </p>
           <Link
             href="/dashboard"
-            className="inline-block px-6 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+            className="inline-block px-6 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
           >
             Go to Dashboard →
           </Link>
@@ -136,7 +136,7 @@ export default function DashboardPricingPage() {
           <div className="flex items-center justify-center gap-4">
             <span
               className={`text-sm ${
-                !isAnnual ? "text-white font-medium" : "text-[#8f9db1]"
+                !isAnnual ? "text-white font-medium" : "text-[#a1a1aa]"
               }`}
             >
               Monthly
@@ -144,7 +144,7 @@ export default function DashboardPricingPage() {
             <button
               onClick={() => setIsAnnual(!isAnnual)}
               className={`relative w-14 h-7 rounded-full transition-colors ${
-                isAnnual ? "bg-[#6ea8ff]" : "bg-[#2a303c]"
+                isAnnual ? "bg-[#3b82f6]" : "bg-[#26262e]"
               }`}
             >
               <div
@@ -155,19 +155,19 @@ export default function DashboardPricingPage() {
             </button>
             <span
               className={`text-sm ${
-                isAnnual ? "text-white font-medium" : "text-[#8f9db1]"
+                isAnnual ? "text-white font-medium" : "text-[#a1a1aa]"
               }`}
             >
               Annual
-              <span className="ml-2 text-xs text-[#6ea8ff]">Save ₦50,000</span>
+              <span className="ml-2 text-xs text-[#3b82f6]">Save ₦50,000</span>
             </span>
           </div>
 
           {/* Pricing Card */}
           <div className="max-w-md mx-auto">
-            <div className="bg-[#1c202a] border-2 border-[#6ea8ff] rounded-xl p-8 relative">
+            <div className="bg-[#141419] border-2 border-[#3b82f6] rounded-xl p-8 relative">
               {/* Popular Badge */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#6ea8ff] text-[#0e1116] text-xs font-medium rounded-full">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#2563eb] text-[#ffffff] text-xs font-medium rounded-full">
                 Pro
               </div>
 
@@ -175,14 +175,14 @@ export default function DashboardPricingPage() {
                 <span className="text-5xl font-bold text-white">
                   {isAnnual ? "₦130,000" : "₦15,000"}
                 </span>
-                <span className="text-[#8f9db1]">/mo</span>
+                <span className="text-[#a1a1aa]">/mo</span>
                 {isAnnual && (
                   <>
-                    <span className="text-[#8f9db1]">/yr</span>
-                    <p className="text-xs text-[#6ea8ff] mt-1">Save ₦50,000</p>
+                    <span className="text-[#a1a1aa]">/yr</span>
+                    <p className="text-xs text-[#3b82f6] mt-1">Save ₦50,000</p>
                   </>
                 )}
-                <p className="text-xs text-[#8f9db1] mt-1">
+                <p className="text-xs text-[#a1a1aa] mt-1">
                   ~$9/mo at current exchange rate
                 </p>
               </div>
@@ -199,9 +199,9 @@ export default function DashboardPricingPage() {
                 ].map((feature) => (
                   <li
                     key={feature}
-                    className="flex items-center gap-3 text-sm text-[#8f9db1]"
+                    className="flex items-center gap-3 text-sm text-[#a1a1aa]"
                   >
-                    <Check size={16} className="text-[#6ea8ff] flex-shrink-0" />
+                    <Check size={16} className="text-[#3b82f6] flex-shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -211,7 +211,7 @@ export default function DashboardPricingPage() {
               <button
                 onClick={handleUpgrade}
                 disabled={loading}
-                className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -223,7 +223,7 @@ export default function DashboardPricingPage() {
                 )}
               </button>
 
-              <p className="text-xs text-[#8f9db1] text-center mt-4">
+              <p className="text-xs text-[#a1a1aa] text-center mt-4">
                 Free forever. No credit card required.
               </p>
             </div>
@@ -231,7 +231,7 @@ export default function DashboardPricingPage() {
 
           {/* Payment Methods */}
           <div className="text-center">
-            <p className="text-sm text-[#8f9db1] mb-2">
+            <p className="text-sm text-[#a1a1aa] mb-2">
               Accepted payment methods:
             </p>
             <p className="text-xs text-[#52525b]">

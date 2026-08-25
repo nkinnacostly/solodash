@@ -1,26 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  /* Harbor — calm slate-blue on cool ink (rebrand). Single source of truth;
-     prefer these tokens (bg-brand, text-muted, …) over raw hex in new code. */
-  --color-brand: #6ea8ff;
-  --color-brand-dark: #5b93e6;
-  --color-brand-ink: #0e1116; /* text on a solid brand fill */
-  --color-bg: #14171d;
-  --color-sidebar: #171b23;
-  --color-card: #1c202a;
-  --color-border: #2a303c;
-  --color-muted: #8f9db1;
+  /* App palette — electric blue on ink (2026 rebrand, matches marketing site).
+     Single source of truth; prefer these tokens (bg-brand, text-muted, …)
+     over raw hex in new code. */
+  --color-brand: #3b82f6;
+  --color-brand-dark: #1d4ed8;
+  --color-brand-ink: #ffffff; /* text on a solid brand fill */
+  --color-bg: #0a0a0b;
+  --color-sidebar: #0d0d10;
+  --color-card: #141419;
+  --color-border: #26262e;
+  --color-muted: #a1a1aa;
   --color-success: #57c9b0;
   --color-warning: #e6b566;
   --color-danger: #ee8b86;
+
+  /* Landing (marketing) palette — electric blue on ink, per 2026 site rebrand */
+  --color-lp-accent: #2563eb;
+  --color-lp-accent-strong: #1d4ed8;
+  --color-lp-accent-soft: #e8efff;
+  --color-lp-ink: #0a0a0b;
+  --color-lp-ink-2: #131318;
+  --color-lp-page: #ececf1;
+  --color-lp-line: #e4e4ea;
+  --color-lp-gray: #6b7280;
+  --color-lp-gray-dark: #a1a1aa;
   --font-sans:
     var(--font-jakarta), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 body {
-  background: #14171d;
-  color: #eef2f8;
+  background: #0a0a0b;
+  color: #f4f4f5;
   font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
   font-feature-settings: "tnum" 1; /* tabular figures — money columns align */
   -webkit-font-smoothing: antialiased;
@@ -146,10 +158,10 @@ body {
     inset: -2px;
     background: linear-gradient(
       45deg,
-      #6ea8ff,
-      #5b93e6,
-      #6ea8ff,
-      #5b93e6
+      #3b82f6,
+      #1d4ed8,
+      #3b82f6,
+      #1d4ed8
     );
     background-size: 400% 400%;
     border-radius: inherit;
@@ -179,7 +191,7 @@ body {
   }
 
   .feature-card:hover {
-    border-color: #6ea8ff;
+    border-color: #3b82f6;
     box-shadow: 0 0 20px rgba(110, 168, 255, 0.1);
   }
 

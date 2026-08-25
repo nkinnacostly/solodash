@@ -125,8 +125,8 @@ export default function DashboardPage() {
           errorTitle="Could not load profile"
           loadingFallback={
             <div className="animate-pulse space-y-2">
-              <div className="h-9 bg-[#1c202a] rounded w-64" />
-              <div className="h-4 bg-[#1c202a] rounded w-48" />
+              <div className="h-9 bg-[#141419] rounded w-64" />
+              <div className="h-4 bg-[#141419] rounded w-48" />
             </div>
           }
         >
@@ -138,7 +138,7 @@ export default function DashboardPage() {
                 <h1 className="text-3xl font-bold text-white">
                   {getGreeting()}, {firstName}
                 </h1>
-                <p className="text-[#8f9db1] mt-1">
+                <p className="text-[#a1a1aa] mt-1">
                   Here&apos;s what&apos;s happening with your business
                 </p>
               </div>
@@ -147,7 +147,7 @@ export default function DashboardPage() {
         </WidgetWrapper>
         <Link
           href="/invoices/new"
-          className="inline-flex items-center gap-2 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors shrink-0"
+          className="inline-flex items-center gap-2 px-5 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors shrink-0"
         >
           <Plus size={18} />
           New Invoice
@@ -163,7 +163,7 @@ export default function DashboardPage() {
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="animate-pulse bg-[#1c202a] border border-[#2a303c] rounded-xl h-24"
+                className="animate-pulse bg-[#141419] border border-[#26262e] rounded-xl h-24"
               />
             ))}
           </div>
@@ -173,8 +173,8 @@ export default function DashboardPage() {
           const symbol = getCurrencySymbol(stats.currency);
           return (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-5">
-                <p className="text-sm text-[#8f9db1] mb-2">This month</p>
+              <div className="bg-[#141419] border border-[#26262e] rounded-xl p-5">
+                <p className="text-sm text-[#a1a1aa] mb-2">This month</p>
                 <p className="text-2xl font-bold text-white">
                   {symbol}
                   {stats.monthlyTotal.toLocaleString(undefined, {
@@ -183,14 +183,14 @@ export default function DashboardPage() {
                   })}
                 </p>
               </div>
-              <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-5">
-                <p className="text-sm text-[#8f9db1] mb-2">Outstanding</p>
+              <div className="bg-[#141419] border border-[#26262e] rounded-xl p-5">
+                <p className="text-sm text-[#a1a1aa] mb-2">Outstanding</p>
                 <p className="text-2xl font-bold text-white">
                   {stats.outstandingCount}
                 </p>
               </div>
-              <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-5">
-                <p className="text-sm text-[#8f9db1] mb-2">Paid this year</p>
+              <div className="bg-[#141419] border border-[#26262e] rounded-xl p-5">
+                <p className="text-sm text-[#a1a1aa] mb-2">Paid this year</p>
                 <p className="text-2xl font-bold text-white">
                   {symbol}
                   {stats.yearlyTotal.toLocaleString(undefined, {
@@ -199,8 +199,8 @@ export default function DashboardPage() {
                   })}
                 </p>
               </div>
-              <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-5">
-                <p className="text-sm text-[#8f9db1] mb-2">Active contracts</p>
+              <div className="bg-[#141419] border border-[#26262e] rounded-xl p-5">
+                <p className="text-sm text-[#a1a1aa] mb-2">Active contracts</p>
                 <p className="text-2xl font-bold text-white">
                   {stats.activeContracts}
                 </p>
@@ -224,7 +224,7 @@ export default function DashboardPage() {
         errorTitle="Could not load monthly chart"
         className="mb-8"
         loadingFallback={
-          <div className="animate-pulse bg-[#1c202a] border border-[#2a303c] rounded-xl h-[340px]" />
+          <div className="animate-pulse bg-[#141419] border border-[#26262e] rounded-xl h-[340px]" />
         }
       >
         {(data) => {
@@ -238,28 +238,28 @@ export default function DashboardPage() {
           });
 
           return (
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
+            <div className="bg-[#141419] border border-[#26262e] rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-6">
                 Monthly earnings
               </h2>
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2a303c" />
-                  <XAxis dataKey="name" stroke="#8f9db1" />
-                  <YAxis stroke="#8f9db1" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#26262e" />
+                  <XAxis dataKey="name" stroke="#a1a1aa" />
+                  <YAxis stroke="#a1a1aa" />
                   <Tooltip
                     formatter={(value) => [
                       `${symbol}${Number(value).toLocaleString()}`,
                       "Amount",
                     ]}
                     contentStyle={{
-                      backgroundColor: "#1c202a",
-                      border: "1px solid #2a303c",
+                      backgroundColor: "#141419",
+                      border: "1px solid #26262e",
                       borderRadius: "8px",
                       color: "#fff",
                     }}
                   />
-                  <Bar dataKey="amount" fill="#6ea8ff" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="amount" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -272,18 +272,18 @@ export default function DashboardPage() {
           fetcher={() => fetchJson("/api/dashboard/recent-invoices")}
           errorTitle="Could not load recent invoices"
           loadingFallback={
-            <div className="animate-pulse bg-[#1c202a] border border-[#2a303c] rounded-xl h-64" />
+            <div className="animate-pulse bg-[#141419] border border-[#26262e] rounded-xl h-64" />
           }
         >
           {(data) => (
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl">
-              <div className="flex items-center justify-between p-5 border-b border-[#2a303c]">
+            <div className="bg-[#141419] border border-[#26262e] rounded-xl">
+              <div className="flex items-center justify-between p-5 border-b border-[#26262e]">
                 <h2 className="text-lg font-semibold text-white">
                   Recent invoices
                 </h2>
                 <Link
                   href="/invoices"
-                  className="text-sm text-[#6ea8ff] hover:underline flex items-center gap-1"
+                  className="text-sm text-[#3b82f6] hover:underline flex items-center gap-1"
                 >
                   View all <ArrowRight size={14} />
                 </Link>
@@ -291,10 +291,10 @@ export default function DashboardPage() {
               <div className="p-5">
                 {data.invoices.length === 0 ? (
                   <div className="text-center py-12">
-                    <p className="text-[#8f9db1] mb-4">No invoices yet</p>
+                    <p className="text-[#a1a1aa] mb-4">No invoices yet</p>
                     <Link
                       href="/invoices/new"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#6ea8ff] text-[#0e1116] text-sm font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#2563eb] text-[#ffffff] text-sm font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
                     >
                       <Plus size={16} />
                       Create your first invoice
@@ -311,7 +311,7 @@ export default function DashboardPage() {
                           <p className="text-sm font-medium text-white truncate">
                             {invoice.invoice_number}
                           </p>
-                          <p className="text-xs text-[#8f9db1]">
+                          <p className="text-xs text-[#a1a1aa]">
                             {clientName(invoice.clients)}
                           </p>
                         </div>
@@ -338,18 +338,18 @@ export default function DashboardPage() {
           fetcher={() => fetchJson("/api/dashboard/recent-contracts")}
           errorTitle="Could not load recent contracts"
           loadingFallback={
-            <div className="animate-pulse bg-[#1c202a] border border-[#2a303c] rounded-xl h-64" />
+            <div className="animate-pulse bg-[#141419] border border-[#26262e] rounded-xl h-64" />
           }
         >
           {(data) => (
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl">
-              <div className="flex items-center justify-between p-5 border-b border-[#2a303c]">
+            <div className="bg-[#141419] border border-[#26262e] rounded-xl">
+              <div className="flex items-center justify-between p-5 border-b border-[#26262e]">
                 <h2 className="text-lg font-semibold text-white">
                   Recent contracts
                 </h2>
                 <Link
                   href="/contracts"
-                  className="text-sm text-[#6ea8ff] hover:underline flex items-center gap-1"
+                  className="text-sm text-[#3b82f6] hover:underline flex items-center gap-1"
                 >
                   View all <ArrowRight size={14} />
                 </Link>
@@ -357,10 +357,10 @@ export default function DashboardPage() {
               <div className="p-5">
                 {data.contracts.length === 0 ? (
                   <div className="text-center py-12">
-                    <p className="text-[#8f9db1] mb-4">No contracts yet</p>
+                    <p className="text-[#a1a1aa] mb-4">No contracts yet</p>
                     <Link
                       href="/contracts/new"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#6ea8ff] text-[#0e1116] text-sm font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#2563eb] text-[#ffffff] text-sm font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
                     >
                       <Plus size={16} />
                       Create your first contract
@@ -377,7 +377,7 @@ export default function DashboardPage() {
                           <p className="text-sm font-medium text-white truncate">
                             {contract.title}
                           </p>
-                          <p className="text-xs text-[#8f9db1]">
+                          <p className="text-xs text-[#a1a1aa]">
                             {clientName(contract.clients)}
                           </p>
                         </div>
@@ -410,7 +410,7 @@ export default function DashboardPage() {
         }}
         errorTitle="Could not load top clients"
         loadingFallback={
-          <div className="animate-pulse bg-[#1c202a] border border-[#2a303c] rounded-xl h-48" />
+          <div className="animate-pulse bg-[#141419] border border-[#26262e] rounded-xl h-48" />
         }
       >
         {(data) => {
@@ -421,12 +421,12 @@ export default function DashboardPage() {
           );
 
           return (
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6">
+            <div className="bg-[#141419] border border-[#26262e] rounded-xl p-6">
               <h2 className="text-lg font-semibold text-white mb-4">
                 Top clients this year
               </h2>
               {data.clients.length === 0 ? (
-                <p className="text-sm text-[#8f9db1] py-8 text-center">
+                <p className="text-sm text-[#a1a1aa] py-8 text-center">
                   No client income recorded yet this year
                 </p>
               ) : (
@@ -434,13 +434,13 @@ export default function DashboardPage() {
                   {data.clients.map((client, idx) => (
                     <div
                       key={client.client_id ?? `manual-${idx}`}
-                      className="flex items-center justify-between py-2 border-b border-[#2a303c] last:border-0"
+                      className="flex items-center justify-between py-2 border-b border-[#26262e] last:border-0"
                     >
                       <div>
                         <p className="text-sm font-medium text-white">
                           {client.client_name || "Manual Entry"}
                         </p>
-                        <p className="text-xs text-[#8f9db1]">
+                        <p className="text-xs text-[#a1a1aa]">
                           {client.invoice_count} invoice
                           {client.invoice_count === 1 ? "" : "s"}
                         </p>
@@ -454,7 +454,7 @@ export default function DashboardPage() {
                           })}
                         </p>
                         {yearTotal > 0 && (
-                          <p className="text-xs text-[#8f9db1]">
+                          <p className="text-xs text-[#a1a1aa]">
                             {Math.round(
                               (Number(client.total) / yearTotal) * 100,
                             )}
@@ -482,20 +482,20 @@ function StatusBadge({
   status: string;
 }) {
   const invoiceStyles: Record<string, string> = {
-    draft: "bg-[#2a303c] text-[#8f9db1]",
+    draft: "bg-[#26262e] text-[#a1a1aa]",
     sent: "bg-[#1e3a5f] text-[#60a5fa]",
     viewed: "bg-[#3d2e00] text-[#e6b566]",
     paid: "bg-[#0c2e26] text-[#57c9b0]",
     overdue: "bg-[#3d0a0a] text-[#ef4444]",
-    cancelled: "bg-[#2a303c] text-[#6b7280]",
+    cancelled: "bg-[#26262e] text-[#6b7280]",
   };
 
   const contractStyles: Record<string, string> = {
-    draft: "bg-[#2a303c] text-[#8f9db1]",
+    draft: "bg-[#26262e] text-[#a1a1aa]",
     sent: "bg-[#1e3a5f] text-[#60a5fa]",
     signed: "bg-[#0c2e26] text-[#57c9b0]",
     active: "bg-[#0c2e26] text-[#57c9b0]",
-    completed: "bg-[#2a303c] text-[#6b7280]",
+    completed: "bg-[#26262e] text-[#6b7280]",
   };
 
   const styles = type === "invoice" ? invoiceStyles : contractStyles;
@@ -503,7 +503,7 @@ function StatusBadge({
   return (
     <span
       className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-        styles[status] || "bg-[#2a303c] text-[#8f9db1]"
+        styles[status] || "bg-[#26262e] text-[#a1a1aa]"
       }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}

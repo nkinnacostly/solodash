@@ -212,34 +212,34 @@ export default function DatePicker({
           }
         }}
         disabled={disabled}
-        className={`w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-left flex items-center justify-between transition-colors ${
+        className={`w-full px-4 py-3 bg-[#0d0d10] border border-[#26262e] rounded-lg text-left flex items-center justify-between transition-colors ${
           isOpen
-            ? "border-[#6ea8ff] ring-1 ring-[#6ea8ff]"
-            : "border-[#2a303c] hover:border-[#52525b]"
+            ? "border-[#3b82f6] ring-1 ring-[#3b82f6]"
+            : "border-[#26262e] hover:border-[#52525b]"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       >
         <span className={value ? "text-white" : "text-[#52525b]"}>
           {value ? formatDate(value) : placeholder}
         </span>
-        <CalendarDays size={20} className="text-[#8f9db1] flex-shrink-0" />
+        <CalendarDays size={20} className="text-[#a1a1aa] flex-shrink-0" />
       </button>
 
       {/* Calendar Dropdown */}
       {isOpen && (
         <div
-          className="absolute z-50 w-full mt-2 bg-[#1c202a] border border-[#2a303c] rounded-xl shadow-2xl min-w-[280px]"
+          className="absolute z-50 w-full mt-2 bg-[#141419] border border-[#26262e] rounded-xl shadow-2xl min-w-[280px]"
           style={{
             animation: "fadeIn 0.2s ease-out forwards",
           }}
         >
           {/* Calendar Header */}
-          <div className="p-3 border-b border-[#2a303c]">
+          <div className="p-3 border-b border-[#26262e]">
             <div className="flex items-center justify-between">
               <button
                 onClick={prevMonth}
-                className="p-1.5 hover:bg-[#2a303c] rounded-lg transition-colors"
+                className="p-1.5 hover:bg-[#26262e] rounded-lg transition-colors"
               >
-                <ChevronLeft size={18} className="text-[#8f9db1]" />
+                <ChevronLeft size={18} className="text-[#a1a1aa]" />
               </button>
 
               <div className="flex items-center gap-1">
@@ -248,7 +248,7 @@ export default function DatePicker({
                     setShowMonthPicker(!showMonthPicker);
                     setShowYearPicker(false);
                   }}
-                  className="px-2 py-1 text-sm font-semibold text-white hover:bg-[#2a303c] rounded-lg transition-colors"
+                  className="px-2 py-1 text-sm font-semibold text-white hover:bg-[#26262e] rounded-lg transition-colors"
                 >
                   {MONTHS[currentMonth]}
                 </button>
@@ -257,7 +257,7 @@ export default function DatePicker({
                     setShowYearPicker(!showYearPicker);
                     setShowMonthPicker(false);
                   }}
-                  className="px-2 py-1 text-sm font-semibold text-white hover:bg-[#2a303c] rounded-lg transition-colors"
+                  className="px-2 py-1 text-sm font-semibold text-white hover:bg-[#26262e] rounded-lg transition-colors"
                 >
                   {currentYear}
                 </button>
@@ -265,9 +265,9 @@ export default function DatePicker({
 
               <button
                 onClick={nextMonth}
-                className="p-1.5 hover:bg-[#2a303c] rounded-lg transition-colors"
+                className="p-1.5 hover:bg-[#26262e] rounded-lg transition-colors"
               >
-                <ChevronRight size={18} className="text-[#8f9db1]" />
+                <ChevronRight size={18} className="text-[#a1a1aa]" />
               </button>
             </div>
           </div>
@@ -282,8 +282,8 @@ export default function DatePicker({
                     onClick={() => handleMonthSelect(index)}
                     className={`px-3 py-2 text-sm rounded-lg transition-colors ${
                       index === currentMonth
-                        ? "bg-[#6ea8ff] text-[#0e1116] font-semibold"
-                        : "text-white hover:bg-[#2a303c]"
+                        ? "bg-[#2563eb] text-[#ffffff] font-semibold"
+                        : "text-white hover:bg-[#26262e]"
                     }`}
                   >
                     {month.slice(0, 3)}
@@ -301,8 +301,8 @@ export default function DatePicker({
                     onClick={() => handleYearSelect(year)}
                     className={`px-3 py-2 text-sm rounded-lg transition-colors ${
                       year === currentYear
-                        ? "bg-[#6ea8ff] text-[#0e1116] font-semibold"
-                        : "text-white hover:bg-[#2a303c]"
+                        ? "bg-[#2563eb] text-[#ffffff] font-semibold"
+                        : "text-white hover:bg-[#26262e]"
                     }`}
                   >
                     {year}
@@ -319,7 +319,7 @@ export default function DatePicker({
                   {DAYS.map((day) => (
                     <div
                       key={day}
-                      className="text-center text-xs text-[#8f9db1] font-medium py-1"
+                      className="text-center text-xs text-[#a1a1aa] font-medium py-1"
                     >
                       {day}
                     </div>
@@ -343,12 +343,12 @@ export default function DatePicker({
                         className={`w-9 h-9 text-sm rounded-full flex items-center justify-center transition-colors ${
                           disabled
                             ? "opacity-30 cursor-not-allowed"
-                            : "hover:bg-[#2a303c] cursor-pointer"
+                            : "hover:bg-[#26262e] cursor-pointer"
                         } ${
                           selected
-                            ? "bg-[#6ea8ff] text-[#0e1116] font-semibold hover:bg-[#6ea8ff]"
+                            ? "bg-[#2563eb] text-[#ffffff] font-semibold hover:bg-[#3b82f6]"
                             : today
-                              ? "border-2 border-[#6ea8ff] text-white"
+                              ? "border-2 border-[#3b82f6] text-white"
                               : dayInfo.currentMonth
                                 ? "text-white"
                                 : "text-[#52525b]"

@@ -86,7 +86,7 @@ export async function GET(
         phone: profile?.phone || null,
         address: null,
         logo_url: profile?.logo_url || null,
-        brand_color: profile?.brand_color || "#3b7ae0",
+        brand_color: profile?.brand_color || "#2563eb",
         plan: profile?.plan || "free",
       },
       lineItems:

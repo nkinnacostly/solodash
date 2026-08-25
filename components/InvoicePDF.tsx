@@ -33,7 +33,7 @@ const createStyles = (brandColor: string) =>
       padding: 40,
       fontFamily: "Helvetica",
       fontSize: 10,
-      color: "#1c202a",
+      color: "#141419",
       backgroundColor: "#ffffff",
     },
     header: {
@@ -71,7 +71,7 @@ const createStyles = (brandColor: string) =>
     invoiceLabel: {
       fontSize: 18,
       fontWeight: "bold",
-      color: "#8f9db1",
+      color: "#a1a1aa",
       marginBottom: 4,
       letterSpacing: 2,
     },
@@ -299,7 +299,7 @@ export const InvoicePDF: React.FC<InvoicePDFProps> = ({
   lineItems,
 }) => {
   const currencySymbol = getCurrencySymbol(invoice.currency);
-  const brandColor = profile.brand_color || "#3b7ae0";
+  const brandColor = profile.brand_color || "#2563eb";
   const styles = createStyles(brandColor);
 
   const formatDate = (dateStr: string) => {

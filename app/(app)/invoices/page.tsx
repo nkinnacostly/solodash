@@ -33,13 +33,13 @@ interface Invoice {
 }
 
 const statusColors: Record<string, string> = {
-  draft: "bg-[#2a303c] text-[#8f9db1]",
-  sending: "bg-[#2a303c] text-[#8f9db1]",
+  draft: "bg-[#26262e] text-[#a1a1aa]",
+  sending: "bg-[#26262e] text-[#a1a1aa]",
   sent: "bg-[#1e3a5f] text-[#60a5fa]",
   viewed: "bg-[#3d2e00] text-[#e6b566]",
   paid: "bg-[#0c2e26] text-[#57c9b0]",
   overdue: "bg-[#3d0a0a] text-[#ef4444]",
-  cancelled: "bg-[#2a303c] text-[#6b7280]",
+  cancelled: "bg-[#26262e] text-[#6b7280]",
 };
 
 const statusTabs = [
@@ -66,7 +66,7 @@ function InvoiceStatusBadge({ status }: { status: string }) {
   return (
     <span
       className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
-        statusColors[status] || "bg-[#2a303c] text-[#8f9db1]"
+        statusColors[status] || "bg-[#26262e] text-[#a1a1aa]"
       }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -218,7 +218,7 @@ export default function InvoicesPage() {
         <h1 className="text-3xl font-bold text-white">Invoices</h1>
         <Link
           href="/invoices/new"
-          className="inline-flex items-center gap-2 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
         >
           <Plus size={18} />
           New Invoice
@@ -227,18 +227,18 @@ export default function InvoicesPage() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-4">
-          <p className="text-sm text-[#8f9db1] mb-1">Total</p>
+        <div className="bg-[#141419] border border-[#26262e] rounded-xl p-4">
+          <p className="text-sm text-[#a1a1aa] mb-1">Total</p>
           <p className="text-2xl font-bold text-white">{stats.total}</p>
         </div>
-        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-4">
-          <p className="text-sm text-[#8f9db1] mb-1">Total Paid</p>
-          <p className="text-2xl font-bold text-[#6ea8ff]">
+        <div className="bg-[#141419] border border-[#26262e] rounded-xl p-4">
+          <p className="text-sm text-[#a1a1aa] mb-1">Total Paid</p>
+          <p className="text-2xl font-bold text-[#3b82f6]">
             {stats.totalPaid > 0 ? `$${stats.totalPaid.toLocaleString()}` : "—"}
           </p>
         </div>
-        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-4">
-          <p className="text-sm text-[#8f9db1] mb-1">Outstanding</p>
+        <div className="bg-[#141419] border border-[#26262e] rounded-xl p-4">
+          <p className="text-sm text-[#a1a1aa] mb-1">Outstanding</p>
           <p className="text-2xl font-bold text-white">
             {stats.outstanding > 0 ? stats.outstanding : "—"}
           </p>
@@ -258,8 +258,8 @@ export default function InvoicesPage() {
               }}
               className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
                 statusFilter === tab.value
-                  ? "bg-[#6ea8ff] text-[#0e1116]"
-                  : "bg-[#1c202a] text-[#8f9db1] hover:text-white border border-[#2a303c]"
+                  ? "bg-[#2563eb] text-[#ffffff]"
+                  : "bg-[#141419] text-[#a1a1aa] hover:text-white border border-[#26262e]"
               }`}
             >
               {tab.label}
@@ -271,7 +271,7 @@ export default function InvoicesPage() {
         <div className="relative flex-1 max-w-sm">
           <Search
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8f9db1]"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a1a1aa]"
           />
           <input
             type="text"
@@ -281,7 +281,7 @@ export default function InvoicesPage() {
               setSearchQuery(e.target.value);
               setPage(1);
             }}
-            className="w-full pl-10 pr-4 py-2 bg-[#1c202a] border border-[#2a303c] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#6ea8ff] focus:ring-1 focus:ring-[#6ea8ff] transition-colors"
+            className="w-full pl-10 pr-4 py-2 bg-[#141419] border border-[#26262e] rounded-lg text-white placeholder-[#52525b] focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors"
           />
         </div>
       </div>
@@ -300,14 +300,14 @@ export default function InvoicesPage() {
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-4 animate-pulse"
+              className="bg-[#141419] border border-[#26262e] rounded-xl p-4 animate-pulse"
             >
               <div className="flex justify-between">
                 <div className="space-y-2 flex-1">
-                  <div className="h-4 bg-[#2a303c] rounded w-24" />
-                  <div className="h-3 bg-[#2a303c] rounded w-32" />
+                  <div className="h-4 bg-[#26262e] rounded w-24" />
+                  <div className="h-3 bg-[#26262e] rounded w-32" />
                 </div>
-                <div className="h-6 bg-[#2a303c] rounded w-16" />
+                <div className="h-6 bg-[#26262e] rounded w-16" />
               </div>
             </div>
           ))}
@@ -315,18 +315,18 @@ export default function InvoicesPage() {
       ) : filteredInvoices.length === 0 ? (
         /* Empty State */
         <div className="text-center py-20">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#1c202a] border border-[#2a303c] rounded-full mb-6">
-            <FileText size={40} className="text-[#2a303c]" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#141419] border border-[#26262e] rounded-full mb-6">
+            <FileText size={40} className="text-[#26262e]" />
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">
             No invoices yet
           </h3>
-          <p className="text-[#8f9db1] mb-6">
+          <p className="text-[#a1a1aa] mb-6">
             Create your first invoice to get started
           </p>
           <Link
             href="/invoices/new"
-            className="inline-flex items-center gap-2 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
           >
             <Plus size={18} />
             Create Invoice
@@ -335,26 +335,26 @@ export default function InvoicesPage() {
       ) : (
         <>
           {/* Desktop Table */}
-          <div className="hidden md:block bg-[#1c202a] border border-[#2a303c] rounded-xl overflow-hidden">
+          <div className="hidden md:block bg-[#141419] border border-[#26262e] rounded-xl overflow-hidden">
             <table className="w-full">
-              <thead className="border-b border-[#2a303c]">
+              <thead className="border-b border-[#26262e]">
                 <tr>
-                  <th className="text-left py-4 px-6 text-sm font-medium text-[#8f9db1]">
+                  <th className="text-left py-4 px-6 text-sm font-medium text-[#a1a1aa]">
                     Invoice
                   </th>
-                  <th className="text-left py-4 px-6 text-sm font-medium text-[#8f9db1]">
+                  <th className="text-left py-4 px-6 text-sm font-medium text-[#a1a1aa]">
                     Client
                   </th>
-                  <th className="text-right py-4 px-6 text-sm font-medium text-[#8f9db1]">
+                  <th className="text-right py-4 px-6 text-sm font-medium text-[#a1a1aa]">
                     Amount
                   </th>
-                  <th className="text-center py-4 px-6 text-sm font-medium text-[#8f9db1]">
+                  <th className="text-center py-4 px-6 text-sm font-medium text-[#a1a1aa]">
                     Status
                   </th>
-                  <th className="text-left py-4 px-6 text-sm font-medium text-[#8f9db1]">
+                  <th className="text-left py-4 px-6 text-sm font-medium text-[#a1a1aa]">
                     Due Date
                   </th>
-                  <th className="text-right py-4 px-6 text-sm font-medium text-[#8f9db1]">
+                  <th className="text-right py-4 px-6 text-sm font-medium text-[#a1a1aa]">
                     Actions
                   </th>
                 </tr>
@@ -363,12 +363,12 @@ export default function InvoicesPage() {
                 {filteredInvoices.map((invoice) => (
                   <tr
                     key={invoice.id}
-                    className="border-b border-[#2a303c] last:border-0 hover:bg-[#171b23] transition-colors"
+                    className="border-b border-[#26262e] last:border-0 hover:bg-[#0d0d10] transition-colors"
                   >
                     <td className="py-4 px-6">
                       <Link
                         href={`/invoices/${invoice.id}`}
-                        className="text-[#6ea8ff] hover:underline font-medium"
+                        className="text-[#3b82f6] hover:underline font-medium"
                       >
                         {invoice.invoice_number}
                       </Link>
@@ -388,7 +388,7 @@ export default function InvoicesPage() {
                         className={
                           isOverdue(invoice)
                             ? "text-[#ef4444] font-medium"
-                            : "text-[#8f9db1]"
+                            : "text-[#a1a1aa]"
                         }
                       >
                         {new Date(invoice.due_date).toLocaleDateString()}
@@ -398,19 +398,19 @@ export default function InvoicesPage() {
                       <div className="flex items-center justify-end gap-1">
                         <Link
                           href={`/invoices/${invoice.id}`}
-                          className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors"
+                          className="p-2 hover:bg-[#26262e] rounded-lg transition-colors"
                           title="View"
                         >
-                          <Eye size={16} className="text-[#8f9db1]" />
+                          <Eye size={16} className="text-[#a1a1aa]" />
                         </Link>
 
                         {invoice.status === "draft" && (
                           <Link
                             href={`/invoices/${invoice.id}/edit`}
-                            className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors"
+                            className="p-2 hover:bg-[#26262e] rounded-lg transition-colors"
                             title="Edit"
                           >
-                            <Edit size={16} className="text-[#8f9db1]" />
+                            <Edit size={16} className="text-[#a1a1aa]" />
                           </Link>
                         )}
 
@@ -420,16 +420,16 @@ export default function InvoicesPage() {
                           <button
                             onClick={() => handleMarkAsPaid(invoice.id)}
                             disabled={updating === invoice.id}
-                            className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors disabled:opacity-50"
+                            className="p-2 hover:bg-[#26262e] rounded-lg transition-colors disabled:opacity-50"
                             title="Mark as paid"
                           >
                             {updating === invoice.id ? (
                               <Loader2
                                 size={16}
-                                className="text-[#8f9db1] animate-spin"
+                                className="text-[#a1a1aa] animate-spin"
                               />
                             ) : (
-                              <CheckCircle size={16} className="text-[#6ea8ff]" />
+                              <CheckCircle size={16} className="text-[#3b82f6]" />
                             )}
                           </button>
                         )}
@@ -441,10 +441,10 @@ export default function InvoicesPage() {
                               "_blank",
                             )
                           }
-                          className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors"
+                          className="p-2 hover:bg-[#26262e] rounded-lg transition-colors"
                           title="Download PDF"
                         >
-                          <Download size={16} className="text-[#8f9db1]" />
+                          <Download size={16} className="text-[#a1a1aa]" />
                         </button>
 
                         {invoice.status === "draft" && (
@@ -470,12 +470,12 @@ export default function InvoicesPage() {
             {filteredInvoices.map((invoice) => (
               <div
                 key={invoice.id}
-                className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-4"
+                className="bg-[#141419] border border-[#26262e] rounded-xl p-4"
               >
                 <div className="flex justify-between items-start mb-3">
                   <Link
                     href={`/invoices/${invoice.id}`}
-                    className="text-[#6ea8ff] hover:underline font-medium"
+                    className="text-[#3b82f6] hover:underline font-medium"
                   >
                     {invoice.invoice_number}
                   </Link>
@@ -493,17 +493,17 @@ export default function InvoicesPage() {
                     className={
                       isOverdue(invoice)
                         ? "text-[#ef4444] text-sm"
-                        : "text-[#8f9db1] text-sm"
+                        : "text-[#a1a1aa] text-sm"
                     }
                   >
                     Due: {new Date(invoice.due_date).toLocaleDateString()}
                   </span>
                 </div>
 
-                <div className="flex gap-2 mt-4 pt-4 border-t border-[#2a303c]">
+                <div className="flex gap-2 mt-4 pt-4 border-t border-[#26262e]">
                   <Link
                     href={`/invoices/${invoice.id}`}
-                    className="flex-1 py-2 text-center text-sm text-[#8f9db1] hover:text-white border border-[#2a303c] rounded-lg transition-colors"
+                    className="flex-1 py-2 text-center text-sm text-[#a1a1aa] hover:text-white border border-[#26262e] rounded-lg transition-colors"
                   >
                     View
                   </Link>
@@ -513,7 +513,7 @@ export default function InvoicesPage() {
                     <button
                       onClick={() => handleMarkAsPaid(invoice.id)}
                       disabled={updating === invoice.id}
-                      className="flex-1 py-2 text-center text-sm text-[#6ea8ff] hover:text-white border border-[#2a303c] rounded-lg transition-colors disabled:opacity-50"
+                      className="flex-1 py-2 text-center text-sm text-[#3b82f6] hover:text-white border border-[#26262e] rounded-lg transition-colors disabled:opacity-50"
                     >
                       {updating === invoice.id ? "Updating..." : "Mark Paid"}
                     </button>
@@ -524,8 +524,8 @@ export default function InvoicesPage() {
           </div>
 
           {pagination && pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-[#2a303c] px-4 py-3 mt-6 rounded-xl bg-[#1c202a]">
-              <p className="text-sm text-[#8f9db1]">
+            <div className="flex items-center justify-between border-t border-[#26262e] px-4 py-3 mt-6 rounded-xl bg-[#141419]">
+              <p className="text-sm text-[#a1a1aa]">
                 Showing page {page} of {pagination.totalPages} (
                 {pagination.total} total)
               </p>
@@ -533,14 +533,14 @@ export default function InvoicesPage() {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3 py-1.5 rounded-md text-sm bg-[#1c202a] border border-[#2a303c] hover:border-[#6ea8ff] disabled:opacity-40 disabled:cursor-not-allowed text-white"
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#141419] border border-[#26262e] hover:border-[#3b82f6] disabled:opacity-40 disabled:cursor-not-allowed text-white"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setPage((p) => p + 1)}
                   disabled={!pagination.hasMore}
-                  className="px-3 py-1.5 rounded-md text-sm bg-[#1c202a] border border-[#2a303c] hover:border-[#6ea8ff] disabled:opacity-40 disabled:cursor-not-allowed text-white"
+                  className="px-3 py-1.5 rounded-md text-sm bg-[#141419] border border-[#26262e] hover:border-[#3b82f6] disabled:opacity-40 disabled:cursor-not-allowed text-white"
                 >
                   Next
                 </button>

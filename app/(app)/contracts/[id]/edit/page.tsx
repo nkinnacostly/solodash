@@ -165,10 +165,10 @@ export default function EditContractPage() {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="animate-pulse space-y-8">
-          <div className="h-8 bg-[#1c202a] rounded w-48" />
+          <div className="h-8 bg-[#141419] rounded w-48" />
           <div className="space-y-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 bg-[#1c202a] rounded-xl" />
+              <div key={i} className="h-32 bg-[#141419] rounded-xl" />
             ))}
           </div>
         </div>
@@ -183,12 +183,12 @@ export default function EditContractPage() {
           <h3 className="text-xl font-semibold text-white mb-2">
             This contract can no longer be edited
           </h3>
-          <p className="text-[#8f9db1] mb-6">
+          <p className="text-[#a1a1aa] mb-6">
             It has already been signed.
           </p>
           <Link
             href={`/contracts/${contractId}`}
-            className="inline-flex items-center gap-2 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
           >
             <ArrowLeft size={18} />
             Back to Contract
@@ -205,7 +205,7 @@ export default function EditContractPage() {
           <p className="text-[#ef4444] text-lg">{error}</p>
           <Link
             href="/contracts"
-            className="inline-flex items-center gap-2 mt-6 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+            className="inline-flex items-center gap-2 mt-6 px-5 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
           >
             <ArrowLeft size={18} />
             Back to Contracts
@@ -221,15 +221,15 @@ export default function EditContractPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href={`/contracts/${contractId}`}
-          className="p-2 hover:bg-[#1c202a] rounded-lg transition-colors"
+          className="p-2 hover:bg-[#141419] rounded-lg transition-colors"
         >
-          <ArrowLeft size={20} className="text-[#8f9db1]" />
+          <ArrowLeft size={20} className="text-[#a1a1aa]" />
         </Link>
         <h1 className="text-3xl font-bold text-white">Edit Contract</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
+        <div className="bg-[#141419] border border-[#26262e] rounded-xl p-6 space-y-6">
           {/* Client */}
           <div>
             <label className="block text-sm font-medium text-white mb-2">
@@ -256,7 +256,7 @@ export default function EditContractPage() {
             </label>
             <input
               {...register("title")}
-              className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+              className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
               placeholder="Contract title"
             />
             {errors.title && (
@@ -276,7 +276,7 @@ export default function EditContractPage() {
                 {...register("value", { valueAsNumber: true })}
                 type="number"
                 step="0.01"
-                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                 placeholder="0.00"
               />
               {errors.value && (
@@ -291,7 +291,7 @@ export default function EditContractPage() {
               </label>
               <select
                 {...register("currency")}
-                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white focus:border-[#3b82f6] focus:outline-none"
               >
                 {currencies.map((c) => (
                   <option key={c.code} value={c.code}>
@@ -333,7 +333,7 @@ export default function EditContractPage() {
             <label className="block text-sm font-medium text-white mb-2">
               Contract Body
             </label>
-            <p className="text-xs text-[#8f9db1] mb-3">
+            <p className="text-xs text-[#a1a1aa] mb-3">
               Edit the document text directly. Formatting from the template is
               preserved.
             </p>
@@ -342,7 +342,7 @@ export default function EditContractPage() {
                 ref={contentRef}
                 contentEditable
                 suppressContentEditableWarning
-                className="contract-content max-h-[600px] overflow-y-auto rounded-lg bg-white p-8 focus:outline-none focus:ring-2 focus:ring-[#6ea8ff]"
+                className="contract-content max-h-[600px] overflow-y-auto rounded-lg bg-white p-8 focus:outline-none focus:ring-2 focus:ring-[#3b82f6]"
                 style={{
                   fontFamily: "Georgia, serif",
                   fontSize: "14px",
@@ -363,14 +363,14 @@ export default function EditContractPage() {
         <div className="flex gap-4 mt-6">
           <Link
             href={`/contracts/${contractId}`}
-            className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors text-center"
+            className="flex-1 py-3 border border-[#26262e] text-white font-medium rounded-lg hover:border-[#3b82f6] transition-colors text-center"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {saving ? (
               <Loader2 size={20} className="animate-spin" />

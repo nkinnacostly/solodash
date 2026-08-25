@@ -177,7 +177,7 @@ const ACCENT: Record<ToastType, string> = {
   success: "#57c9b0",
   error: "#f0817d",
   warning: "#e6b566",
-  info: "#6ea8ff",
+  info: "#3b82f6",
 };
 
 const ICONS: Record<ToastType, ReactNode> = {
@@ -296,7 +296,7 @@ function ToastCard({
     >
       <div
         role={toast.type === "error" ? "alert" : "status"}
-        className="flex items-start gap-3 rounded-[14px] border border-[#2a303c] bg-[#1c202a]/95 p-3.5 pr-10 backdrop-blur-sm"
+        className="flex items-start gap-3 rounded-[14px] border border-[#26262e] bg-[#141419]/95 p-3.5 pr-10 backdrop-blur-sm"
         style={{
           boxShadow:
             "0 8px 24px -6px rgba(0,0,0,0.5), 0 2px 6px -2px rgba(0,0,0,0.4), inset 0 1px 0 0 rgba(255,255,255,0.03)",
@@ -312,11 +312,11 @@ function ToastCard({
 
         {/* Content */}
         <div className="min-w-0 flex-1 pt-0.5">
-          <p className="text-sm font-semibold leading-tight text-[#eef2f8]">
+          <p className="text-sm font-semibold leading-tight text-[#f4f4f5]">
             {toast.title}
           </p>
           {toast.message && (
-            <p className="mt-1 text-[13px] leading-snug text-[#8f9db1]">
+            <p className="mt-1 text-[13px] leading-snug text-[#a1a1aa]">
               {toast.message}
             </p>
           )}
@@ -328,7 +328,7 @@ function ToastCard({
           data-toast-close
           onClick={close}
           aria-label="Dismiss notification"
-          className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-md text-[#8f9db1] opacity-0 transition-all hover:bg-white/5 hover:text-[#eef2f8] focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6ea8ff] group-hover:opacity-100"
+          className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-md text-[#a1a1aa] opacity-0 transition-all hover:bg-white/5 hover:text-[#f4f4f5] focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3b82f6] group-hover:opacity-100"
         >
           <X size={14} strokeWidth={2.5} />
         </button>

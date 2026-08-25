@@ -98,8 +98,8 @@ export default function SignContractPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
-          <Loader2 size={32} className="text-[#6ea8ff] animate-spin" />
+        <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
+          <Loader2 size={32} className="text-[#3b82f6] animate-spin" />
         </div>
       }
     >
@@ -292,12 +292,12 @@ function SignContractContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
         <div className="max-w-2xl w-full">
           <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-[#1c202a] rounded w-48 mx-auto" />
-            <div className="h-64 bg-[#1c202a] rounded" />
-            <div className="h-40 bg-[#1c202a] rounded" />
+            <div className="h-8 bg-[#141419] rounded w-48 mx-auto" />
+            <div className="h-64 bg-[#141419] rounded" />
+            <div className="h-40 bg-[#141419] rounded" />
           </div>
         </div>
       </div>
@@ -306,12 +306,12 @@ function SignContractContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
         <div className="max-w-md text-center">
           <h1 className="text-2xl font-bold text-white mb-2">
             Contract not found
           </h1>
-          <p className="text-[#8f9db1]">
+          <p className="text-[#a1a1aa]">
             This contract may have been cancelled or removed.
           </p>
         </div>
@@ -323,16 +323,16 @@ function SignContractContent() {
 
   if (signingSuccess) {
     return (
-      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-[#1c202a] border border-[#2a303c] rounded-xl p-8 text-center">
-          <CheckCircle size={64} className="text-[#6ea8ff] mx-auto mb-6" />
+      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-[#141419] border border-[#26262e] rounded-xl p-8 text-center">
+          <CheckCircle size={64} className="text-[#3b82f6] mx-auto mb-6" />
           <h1 className="text-2xl font-bold text-white mb-2">
             Contract signed successfully!
           </h1>
-          <p className="text-[#8f9db1] mb-6">
+          <p className="text-[#a1a1aa] mb-6">
             A copy has been sent to your email.
           </p>
-          <p className="text-lg text-[#6ea8ff] font-medium">
+          <p className="text-lg text-[#3b82f6] font-medium">
             Thank you, {signerName}
           </p>
         </div>
@@ -354,10 +354,10 @@ function SignContractContent() {
   };
 
   const brandColor =
-    (contract.is_pro && contract.freelancer.brand_color) || "#6ea8ff";
+    (contract.is_pro && contract.freelancer.brand_color) || "#3b82f6";
 
   return (
-    <div className="min-h-screen bg-[#14171d] p-4">
+    <div className="min-h-screen bg-[#0a0a0b] p-4">
       <div className="max-w-2xl mx-auto">
         {/* Header — Pro users show their own branding, else Paidly */}
         <div className="text-center mb-8 pt-8">
@@ -384,28 +384,28 @@ function SignContractContent() {
                 : "Paidly"}
             </h1>
           )}
-          <p className="text-[#8f9db1]">Contract for signature</p>
+          <p className="text-[#a1a1aa]">Contract for signature</p>
         </div>
 
         {/* Already Signed Banner */}
         {contract.client_signed_at && (
           <div className="bg-[#0c2e26] border border-[#57c9b0]/30 rounded-xl p-6 text-center mb-6">
-            <CheckCircle size={32} className="text-[#6ea8ff] mx-auto mb-3" />
-            <p className="text-lg font-semibold text-[#6ea8ff] mb-1">
+            <CheckCircle size={32} className="text-[#3b82f6] mx-auto mb-3" />
+            <p className="text-lg font-semibold text-[#3b82f6] mb-1">
               This contract has already been signed
             </p>
-            <p className="text-sm text-[#8f9db1]">
+            <p className="text-sm text-[#a1a1aa]">
               Signed on {formatDate(contract.client_signed_at)}
             </p>
           </div>
         )}
 
         {/* Contract Info */}
-        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 mb-6">
+        <div className="bg-[#141419] border border-[#26262e] rounded-xl p-6 mb-6">
           <h2 className="text-xl font-bold text-white mb-2">
             {contract.title}
           </h2>
-          <p className="text-sm text-[#8f9db1]">
+          <p className="text-sm text-[#a1a1aa]">
             From:{" "}
             {contract.freelancer.business_name || contract.freelancer.name}
           </p>
@@ -486,7 +486,7 @@ function SignContractContent() {
                     fontSize: "16px",
                     fontWeight: 600,
                     marginBottom: "20px",
-                    color: "#14171d",
+                    color: "#0a0a0b",
                   }}
                 >
                   Digital Signatures
@@ -559,7 +559,7 @@ function SignContractContent() {
         <button
           type="button"
           onClick={handleDownloadPdf}
-          className="w-full py-3 mb-6 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 mb-6 border border-[#26262e] text-white font-medium rounded-lg hover:border-[#3b82f6] transition-colors flex items-center justify-center gap-2"
         >
           <Download size={16} />
           Download PDF
@@ -568,7 +568,7 @@ function SignContractContent() {
         {/* Signature Section */}
         {!contract.client_signed_at && (
           <>
-            <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
+            <div className="bg-[#141419] border border-[#26262e] rounded-xl p-6 space-y-6">
               <h3 className="text-lg font-semibold text-white">
                 Sign this contract
               </h3>
@@ -580,8 +580,8 @@ function SignContractContent() {
                   onClick={() => setActiveTab("draw")}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeTab === "draw"
-                      ? "bg-[#6ea8ff] text-[#0e1116]"
-                      : "bg-[#171b23] text-[#8f9db1] hover:text-white"
+                      ? "bg-[#2563eb] text-[#ffffff]"
+                      : "bg-[#0d0d10] text-[#a1a1aa] hover:text-white"
                   }`}
                 >
                   <PenTool size={16} />
@@ -592,8 +592,8 @@ function SignContractContent() {
                   onClick={() => setActiveTab("type")}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeTab === "type"
-                      ? "bg-[#6ea8ff] text-[#0e1116]"
-                      : "bg-[#171b23] text-[#8f9db1] hover:text-white"
+                      ? "bg-[#2563eb] text-[#ffffff]"
+                      : "bg-[#0d0d10] text-[#a1a1aa] hover:text-white"
                   }`}
                 >
                   <Type size={16} />
@@ -627,7 +627,7 @@ function SignContractContent() {
                       <X size={16} />
                     </button>
                   </div>
-                  <p className="text-xs text-[#8f9db1] mt-2">
+                  <p className="text-xs text-[#a1a1aa] mt-2">
                     Sign with your mouse or finger
                   </p>
                 </div>
@@ -641,7 +641,7 @@ function SignContractContent() {
                     value={typedName}
                     onChange={(e) => handleTypeSignature(e.target.value)}
                     placeholder="Type your full name"
-                    className="w-full px-4 py-3 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none mb-3"
+                    className="w-full px-4 py-3 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none mb-3"
                   />
                   {typedName && (
                     <div className="bg-white rounded-lg p-6 text-center">
@@ -665,9 +665,9 @@ function SignContractContent() {
                   type="checkbox"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-1 w-4 h-4 text-[#6ea8ff] border-[#2a303c] rounded focus:ring-[#6ea8ff]"
+                  className="mt-1 w-4 h-4 text-[#3b82f6] border-[#26262e] rounded focus:ring-[#3b82f6]"
                 />
-                <label className="text-sm text-[#8f9db1]">
+                <label className="text-sm text-[#a1a1aa]">
                   I agree to the terms of this contract and understand this is a
                   legally binding digital signature
                 </label>
@@ -684,7 +684,7 @@ function SignContractContent() {
                     value={signerName}
                     onChange={(e) => setSignerName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                    className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -696,7 +696,7 @@ function SignContractContent() {
                     value={signerEmail}
                     onChange={(e) => setSignerEmail(e.target.value)}
                     placeholder="john@example.com"
-                    className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                    className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                   />
                 </div>
               </div>
@@ -706,7 +706,7 @@ function SignContractContent() {
                 type="button"
                 onClick={handleSignContract}
                 disabled={!canSign || signingLoading}
-                className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {signingLoading ? (
                   <Loader2 size={20} className="animate-spin" />

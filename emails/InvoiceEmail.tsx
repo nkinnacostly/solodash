@@ -113,13 +113,13 @@ const container = {
 };
 
 const header = {
-  backgroundColor: "#14171d",
+  backgroundColor: "#0a0a0b",
   padding: "32px 24px",
   textAlign: "center" as const,
 };
 
 const logo = {
-  color: "#6ea8ff",
+  color: "#3b82f6",
   fontSize: "28px",
   fontWeight: "bold",
   margin: "0",
@@ -132,7 +132,7 @@ const content = {
 const greeting = {
   fontSize: "18px",
   fontWeight: "600",
-  color: "#1c202a",
+  color: "#141419",
   margin: "0 0 16px 0",
 };
 
@@ -165,7 +165,7 @@ const summaryLabel = {
 const summaryValue = {
   fontSize: "14px",
   fontWeight: "600",
-  color: "#1c202a",
+  color: "#141419",
   margin: "0",
 };
 
@@ -175,9 +175,9 @@ const buttonContainer = {
 };
 
 const button = {
-  backgroundColor: "#6ea8ff",
+  backgroundColor: "#3b82f6",
   borderRadius: "8px",
-  color: "#0e1116",
+  color: "#ffffff",
   fontSize: "16px",
   fontWeight: "600",
   textDecoration: "none",
@@ -194,7 +194,7 @@ const linkText = {
 };
 
 const link = {
-  color: "#6ea8ff",
+  color: "#3b82f6",
   textDecoration: "underline",
 };
 
@@ -205,13 +205,13 @@ const divider = {
 
 const footer = {
   fontSize: "12px",
-  color: "#8f9db1",
+  color: "#a1a1aa",
   textAlign: "center" as const,
   padding: "16px 24px 32px",
   margin: "0",
 };
 
 const footerLink = {
-  color: "#8f9db1",
+  color: "#a1a1aa",
   textDecoration: "underline",
 };

@@ -137,7 +137,7 @@ export async function GET(request: Request) {
           fontSize: 24,
           fontWeight: "bold",
           marginBottom: 8,
-          color: "#3b7ae0",
+          color: "#2563eb",
         },
         subtitle: { fontSize: 12, color: "#666", marginBottom: 4 },
         totalSection: {
@@ -147,7 +147,7 @@ export async function GET(request: Request) {
           marginBottom: 30,
         },
         totalLabel: { fontSize: 12, color: "#666", marginBottom: 4 },
-        totalAmount: { fontSize: 32, fontWeight: "bold", color: "#3b7ae0" },
+        totalAmount: { fontSize: 32, fontWeight: "bold", color: "#2563eb" },
         section: { marginBottom: 20 },
         sectionTitle: {
           fontSize: 16,
@@ -159,7 +159,7 @@ export async function GET(request: Request) {
         tableHeader: {
           flexDirection: "row",
           borderBottomWidth: 2,
-          borderBottomColor: "#2a303c",
+          borderBottomColor: "#26262e",
           paddingBottom: 8,
           marginBottom: 4,
         },
@@ -175,7 +175,7 @@ export async function GET(request: Request) {
         col3: {
           flex: 1,
           fontSize: 10,
-          color: "#3b7ae0",
+          color: "#2563eb",
           fontWeight: "bold",
           textAlign: "right",
         },

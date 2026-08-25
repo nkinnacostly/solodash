@@ -170,15 +170,15 @@ export default function NewBillPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/bills"
-          className="p-2 hover:bg-[#1c202a] rounded-lg transition-colors"
+          className="p-2 hover:bg-[#141419] rounded-lg transition-colors"
         >
-          <ArrowLeft size={20} className="text-[#8f9db1]" />
+          <ArrowLeft size={20} className="text-[#a1a1aa]" />
         </Link>
         <h1 className="text-3xl font-bold text-white">New Bill</h1>
       </div>
 
       <form onSubmit={handleSubmit(() => onSubmit())}>
-        <div className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-6 space-y-6">
+        <div className="bg-[#141419] border border-[#26262e] rounded-xl p-6 space-y-6">
           {/* Vendor */}
           <div>
             <label className="block text-sm font-medium text-white mb-2">
@@ -206,18 +206,18 @@ export default function NewBillPage() {
                 <input
                   {...register("vendorName")}
                   placeholder="Vendor name"
-                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                 />
                 <input
                   {...register("vendorEmail")}
                   type="email"
                   placeholder="Vendor email (optional)"
-                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                 />
                 <input
                   {...register("vendorAddress")}
                   placeholder="Address (optional)"
-                  className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                  className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                 />
               </div>
             )}
@@ -232,7 +232,7 @@ export default function NewBillPage() {
               <input
                 {...register("billNumber")}
                 placeholder="Auto-generated if blank"
-                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
               />
             </div>
             <div>
@@ -242,7 +242,7 @@ export default function NewBillPage() {
               <input
                 {...register("category")}
                 placeholder="e.g. Design, Software, Subcontractor"
-                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
               />
             </div>
           </div>
@@ -277,7 +277,7 @@ export default function NewBillPage() {
               </label>
               <select
                 {...register("currency")}
-                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white focus:border-[#6ea8ff] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white focus:border-[#3b82f6] focus:outline-none"
               >
                 {currencies.map((c) => (
                   <option key={c.code} value={c.code}>
@@ -299,7 +299,7 @@ export default function NewBillPage() {
                 onClick={() =>
                   append({ description: "", quantity: 1, rate: 0 })
                 }
-                className="inline-flex items-center gap-1 text-sm text-[#6ea8ff] hover:underline"
+                className="inline-flex items-center gap-1 text-sm text-[#3b82f6] hover:underline"
               >
                 <Plus size={16} />
                 Add item
@@ -313,7 +313,7 @@ export default function NewBillPage() {
                     <input
                       {...register(`lineItems.${index}.description`)}
                       placeholder="Description"
-                      className="w-full px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                      className="w-full px-3 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                     />
                     {errors.lineItems?.[index]?.description && (
                       <p className="text-xs text-[#ef4444] mt-1">
@@ -326,14 +326,14 @@ export default function NewBillPage() {
                     type="number"
                     step="0.01"
                     placeholder="Qty"
-                    className="w-20 px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                    className="w-20 px-3 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                   />
                   <input
                     {...register(`lineItems.${index}.rate`)}
                     type="number"
                     step="0.01"
                     placeholder="Rate"
-                    className="w-28 px-3 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                    className="w-28 px-3 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
                   />
                   <button
                     type="button"
@@ -364,7 +364,7 @@ export default function NewBillPage() {
                 {...register("taxRate")}
                 type="number"
                 step="0.01"
-                className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none"
+                className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none"
               />
             </div>
           </div>
@@ -376,20 +376,20 @@ export default function NewBillPage() {
               {...register("notes")}
               rows={3}
               placeholder="Anything worth noting about this bill..."
-              className="w-full px-4 py-2 bg-[#171b23] border border-[#2a303c] rounded-lg text-white placeholder-[#8f9db1] focus:border-[#6ea8ff] focus:outline-none resize-none"
+              className="w-full px-4 py-2 bg-[#0d0d10] border border-[#26262e] rounded-lg text-white placeholder-[#a1a1aa] focus:border-[#3b82f6] focus:outline-none resize-none"
             />
           </div>
 
           {/* Totals */}
-          <div className="border-t border-[#2a303c] pt-4 space-y-2">
-            <div className="flex justify-between text-sm text-[#8f9db1]">
+          <div className="border-t border-[#26262e] pt-4 space-y-2">
+            <div className="flex justify-between text-sm text-[#a1a1aa]">
               <span>Subtotal</span>
               <span>
                 {symbol}
                 {subtotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </span>
             </div>
-            <div className="flex justify-between text-sm text-[#8f9db1]">
+            <div className="flex justify-between text-sm text-[#a1a1aa]">
               <span>Tax ({taxRate}%)</span>
               <span>
                 {symbol}
@@ -411,14 +411,14 @@ export default function NewBillPage() {
         <div className="flex gap-4 mt-6">
           <Link
             href="/bills"
-            className="flex-1 py-3 border border-[#2a303c] text-white font-medium rounded-lg hover:border-[#6ea8ff] transition-colors text-center"
+            className="flex-1 py-3 border border-[#26262e] text-white font-medium rounded-lg hover:border-[#3b82f6] transition-colors text-center"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? (
               <Loader2 size={20} className="animate-spin" />

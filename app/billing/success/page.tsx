@@ -57,11 +57,11 @@ function BillingSuccessContent() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
         <div className="text-center">
           <Loader2
             size={48}
-            className="text-[#6ea8ff] animate-spin mx-auto mb-4"
+            className="text-[#3b82f6] animate-spin mx-auto mb-4"
           />
           <p className="text-lg text-white">Verifying your payment...</p>
         </div>
@@ -71,16 +71,16 @@ function BillingSuccessContent() {
 
   if (status === "error") {
     return (
-      <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-[#1c202a] border border-[#2a303c] rounded-xl p-8 text-center">
+      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-[#141419] border border-[#26262e] rounded-xl p-8 text-center">
           <XCircle size={48} className="text-[#ef4444] mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">
             Payment verification failed
           </h1>
-          <p className="text-[#8f9db1] mb-6">{errorMessage}</p>
+          <p className="text-[#a1a1aa] mb-6">{errorMessage}</p>
           <button
             onClick={verifyPayment}
-            className="px-6 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+            className="px-6 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
           >
             Retry Verification
           </button>
@@ -90,45 +90,45 @@ function BillingSuccessContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-[#1c202a] border border-[#2a303c] rounded-xl p-8">
+    <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-[#141419] border border-[#26262e] rounded-xl p-8">
         {/* Success Icon */}
         <div className="text-center mb-6">
-          <CheckCircle size={64} className="text-[#6ea8ff] mx-auto mb-4" />
+          <CheckCircle size={64} className="text-[#3b82f6] mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-white mb-2">
             Welcome to Pro! 🎉
           </h1>
-          <p className="text-[#8f9db1]">Your account has been upgraded.</p>
+          <p className="text-[#a1a1aa]">Your account has been upgraded.</p>
         </div>
 
         {/* Features Unlocked */}
-        <div className="bg-[#14171d] border border-[#6ea8ff]/30 rounded-lg p-4 mb-6">
+        <div className="bg-[#0a0a0b] border border-[#3b82f6]/30 rounded-lg p-4 mb-6">
           <h2 className="text-sm font-semibold text-white mb-3">
             Pro Features Unlocked:
           </h2>
           <ul className="space-y-2">
-            <li className="flex items-center gap-2 text-sm text-[#8f9db1]">
-              <CheckCircle size={14} className="text-[#6ea8ff]" />
+            <li className="flex items-center gap-2 text-sm text-[#a1a1aa]">
+              <CheckCircle size={14} className="text-[#3b82f6]" />
               Unlimited invoices
             </li>
-            <li className="flex items-center gap-2 text-sm text-[#8f9db1]">
-              <CheckCircle size={14} className="text-[#6ea8ff]" />
+            <li className="flex items-center gap-2 text-sm text-[#a1a1aa]">
+              <CheckCircle size={14} className="text-[#3b82f6]" />
               Unlimited contracts
             </li>
-            <li className="flex items-center gap-2 text-sm text-[#8f9db1]">
-              <CheckCircle size={14} className="text-[#6ea8ff]" />
+            <li className="flex items-center gap-2 text-sm text-[#a1a1aa]">
+              <CheckCircle size={14} className="text-[#3b82f6]" />
               0% platform fee — keep 100%
             </li>
-            <li className="flex items-center gap-2 text-sm text-[#8f9db1]">
-              <CheckCircle size={14} className="text-[#6ea8ff]" />
+            <li className="flex items-center gap-2 text-sm text-[#a1a1aa]">
+              <CheckCircle size={14} className="text-[#3b82f6]" />
               Custom branding
             </li>
-            <li className="flex items-center gap-2 text-sm text-[#8f9db1]">
-              <CheckCircle size={14} className="text-[#6ea8ff]" />
+            <li className="flex items-center gap-2 text-sm text-[#a1a1aa]">
+              <CheckCircle size={14} className="text-[#3b82f6]" />
               Priority support
             </li>
-            <li className="flex items-center gap-2 text-sm text-[#8f9db1]">
-              <CheckCircle size={14} className="text-[#6ea8ff]" />
+            <li className="flex items-center gap-2 text-sm text-[#a1a1aa]">
+              <CheckCircle size={14} className="text-[#3b82f6]" />
               Tax export
             </li>
           </ul>
@@ -137,7 +137,7 @@ function BillingSuccessContent() {
         {/* CTA */}
         <Link
           href="/dashboard"
-          className="w-full py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors flex items-center justify-center gap-2"
         >
           Go to Dashboard →
         </Link>
@@ -150,11 +150,11 @@ export default function BillingSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#14171d] flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
           <div className="text-center">
             <Loader2
               size={48}
-              className="text-[#6ea8ff] animate-spin mx-auto mb-4"
+              className="text-[#3b82f6] animate-spin mx-auto mb-4"
             />
             <p className="text-lg text-white">Loading...</p>
           </div>

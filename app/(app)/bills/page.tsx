@@ -24,7 +24,7 @@ interface Bill {
 const statusColors: Record<string, string> = {
   unpaid: "bg-[#3d2e00] text-[#e6b566]",
   paid: "bg-[#0c2e26] text-[#57c9b0]",
-  cancelled: "bg-[#2a303c] text-[#6b7280]",
+  cancelled: "bg-[#26262e] text-[#6b7280]",
 };
 
 const tabs = [
@@ -127,13 +127,13 @@ export default function BillsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white">Bills</h1>
-          <p className="text-[#8f9db1] mt-1">
+          <p className="text-[#a1a1aa] mt-1">
             Track what you owe vendors and contractors.
           </p>
         </div>
         <Link
           href="/bills/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
         >
           <Plus size={18} />
           New Bill
@@ -148,8 +148,8 @@ export default function BillsPage() {
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === tab.key
-                ? "bg-[#6ea8ff] text-[#0e1116]"
-                : "bg-[#1c202a] text-[#8f9db1] hover:text-white"
+                ? "bg-[#2563eb] text-[#ffffff]"
+                : "bg-[#141419] text-[#a1a1aa] hover:text-white"
             }`}
           >
             {tab.label}
@@ -159,20 +159,20 @@ export default function BillsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 size={28} className="text-[#6ea8ff] animate-spin" />
+          <Loader2 size={28} className="text-[#3b82f6] animate-spin" />
         </div>
       ) : bills.length === 0 ? (
-        <div className="text-center py-20 bg-[#1c202a] border border-[#2a303c] rounded-xl">
-          <Receipt size={40} className="text-[#8f9db1] mx-auto mb-4" />
+        <div className="text-center py-20 bg-[#141419] border border-[#26262e] rounded-xl">
+          <Receipt size={40} className="text-[#a1a1aa] mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-1">
             No bills yet
           </h3>
-          <p className="text-[#8f9db1] mb-6">
+          <p className="text-[#a1a1aa] mb-6">
             Record what you owe a vendor or contractor to start tracking.
           </p>
           <Link
             href="/bills/new"
-            className="inline-flex items-center gap-2 px-5 py-3 bg-[#6ea8ff] text-[#0e1116] font-medium rounded-lg hover:bg-[#5b93e6] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-[#2563eb] text-[#ffffff] font-medium rounded-lg hover:bg-[#1d4ed8] transition-colors"
           >
             <Plus size={18} />
             New Bill
@@ -181,26 +181,26 @@ export default function BillsPage() {
       ) : (
         <>
           {/* Desktop table */}
-          <div className="hidden md:block bg-[#1c202a] border border-[#2a303c] rounded-xl overflow-hidden">
+          <div className="hidden md:block bg-[#141419] border border-[#26262e] rounded-xl overflow-hidden">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#2a303c] text-left">
-                  <th className="px-6 py-4 text-xs font-medium text-[#8f9db1] uppercase">
+                <tr className="border-b border-[#26262e] text-left">
+                  <th className="px-6 py-4 text-xs font-medium text-[#a1a1aa] uppercase">
                     Bill
                   </th>
-                  <th className="px-6 py-4 text-xs font-medium text-[#8f9db1] uppercase">
+                  <th className="px-6 py-4 text-xs font-medium text-[#a1a1aa] uppercase">
                     Vendor
                   </th>
-                  <th className="px-6 py-4 text-xs font-medium text-[#8f9db1] uppercase">
+                  <th className="px-6 py-4 text-xs font-medium text-[#a1a1aa] uppercase">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-xs font-medium text-[#8f9db1] uppercase">
+                  <th className="px-6 py-4 text-xs font-medium text-[#a1a1aa] uppercase">
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-xs font-medium text-[#8f9db1] uppercase">
+                  <th className="px-6 py-4 text-xs font-medium text-[#a1a1aa] uppercase">
                     Due
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-medium text-[#8f9db1] uppercase">
+                  <th className="px-6 py-4 text-right text-xs font-medium text-[#a1a1aa] uppercase">
                     Actions
                   </th>
                 </tr>
@@ -209,17 +209,17 @@ export default function BillsPage() {
                 {bills.map((bill) => (
                   <tr
                     key={bill.id}
-                    className="border-b border-[#2a303c] last:border-0"
+                    className="border-b border-[#26262e] last:border-0"
                   >
                     <td className="px-6 py-4">
                       <Link
                         href={`/bills/${bill.id}`}
-                        className="text-[#6ea8ff] hover:underline font-medium"
+                        className="text-[#3b82f6] hover:underline font-medium"
                       >
                         {bill.bill_number}
                       </Link>
                       {bill.category && (
-                        <p className="text-xs text-[#8f9db1] mt-0.5">
+                        <p className="text-xs text-[#a1a1aa] mt-0.5">
                           {bill.category}
                         </p>
                       )}
@@ -231,7 +231,7 @@ export default function BillsPage() {
                       <span
                         className={`inline-block px-2 py-1 rounded text-xs font-medium ${
                           statusColors[bill.status] ||
-                          "bg-[#2a303c] text-[#8f9db1]"
+                          "bg-[#26262e] text-[#a1a1aa]"
                         }`}
                       >
                         {bill.status}
@@ -241,7 +241,7 @@ export default function BillsPage() {
                       {getCurrencySymbol(bill.currency)}
                       {Number(bill.total).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 text-sm text-[#8f9db1]">
+                    <td className="px-6 py-4 text-sm text-[#a1a1aa]">
                       {bill.due_date
                         ? new Date(bill.due_date).toLocaleDateString()
                         : "—"}
@@ -250,25 +250,25 @@ export default function BillsPage() {
                       <div className="flex items-center justify-end gap-1">
                         <Link
                           href={`/bills/${bill.id}`}
-                          className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors"
+                          className="p-2 hover:bg-[#26262e] rounded-lg transition-colors"
                           title="View"
                         >
-                          <Eye size={16} className="text-[#8f9db1]" />
+                          <Eye size={16} className="text-[#a1a1aa]" />
                         </Link>
                         {bill.status === "unpaid" && (
                           <button
                             onClick={() => handleMarkPaid(bill.id)}
                             disabled={updating === bill.id}
-                            className="p-2 hover:bg-[#2a303c] rounded-lg transition-colors disabled:opacity-50"
+                            className="p-2 hover:bg-[#26262e] rounded-lg transition-colors disabled:opacity-50"
                             title="Mark as paid"
                           >
                             {updating === bill.id ? (
                               <Loader2
                                 size={16}
-                                className="text-[#8f9db1] animate-spin"
+                                className="text-[#a1a1aa] animate-spin"
                               />
                             ) : (
-                              <CheckCircle size={16} className="text-[#6ea8ff]" />
+                              <CheckCircle size={16} className="text-[#3b82f6]" />
                             )}
                           </button>
                         )}
@@ -294,19 +294,19 @@ export default function BillsPage() {
             {bills.map((bill) => (
               <div
                 key={bill.id}
-                className="bg-[#1c202a] border border-[#2a303c] rounded-xl p-4"
+                className="bg-[#141419] border border-[#26262e] rounded-xl p-4"
               >
                 <div className="flex justify-between items-start mb-3">
                   <Link
                     href={`/bills/${bill.id}`}
-                    className="text-[#6ea8ff] hover:underline font-medium"
+                    className="text-[#3b82f6] hover:underline font-medium"
                   >
                     {bill.bill_number}
                   </Link>
                   <span
                     className={`inline-block px-2 py-1 rounded text-xs font-medium ${
                       statusColors[bill.status] ||
-                      "bg-[#2a303c] text-[#8f9db1]"
+                      "bg-[#26262e] text-[#a1a1aa]"
                     }`}
                   >
                     {bill.status}
@@ -318,18 +318,18 @@ export default function BillsPage() {
                     {getCurrencySymbol(bill.currency)}
                     {Number(bill.total).toLocaleString()}
                   </span>
-                  <span className="text-[#8f9db1] text-sm">
+                  <span className="text-[#a1a1aa] text-sm">
                     {bill.due_date
                       ? `Due: ${new Date(bill.due_date).toLocaleDateString()}`
                       : "No due date"}
                   </span>
                 </div>
-                <div className="flex gap-2 mt-4 pt-4 border-t border-[#2a303c]">
+                <div className="flex gap-2 mt-4 pt-4 border-t border-[#26262e]">
                   {bill.status === "unpaid" && (
                     <button
                       onClick={() => handleMarkPaid(bill.id)}
                       disabled={updating === bill.id}
-                      className="flex-1 py-2 text-center text-sm text-[#6ea8ff] border border-[#2a303c] rounded-lg disabled:opacity-50"
+                      className="flex-1 py-2 text-center text-sm text-[#3b82f6] border border-[#26262e] rounded-lg disabled:opacity-50"
                     >
                       Mark paid
                     </button>
@@ -337,7 +337,7 @@ export default function BillsPage() {
                   {bill.status !== "paid" && (
                     <button
                       onClick={() => setDeleteId(bill.id)}
-                      className="flex-1 py-2 text-center text-sm text-[#ef4444] border border-[#2a303c] rounded-lg"
+                      className="flex-1 py-2 text-center text-sm text-[#ef4444] border border-[#26262e] rounded-lg"
                     >
                       Delete
                     </button>

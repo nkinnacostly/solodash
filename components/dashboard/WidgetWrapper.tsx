@@ -52,7 +52,7 @@ export function WidgetWrapper<T>({
     return (
       <div className={className}>
         {loadingFallback || (
-          <div className="animate-pulse bg-[#1c202a] border border-[#2a303c] rounded-xl h-32" />
+          <div className="animate-pulse bg-[#141419] border border-[#26262e] rounded-xl h-32" />
         )}
       </div>
     );
@@ -61,16 +61,16 @@ export function WidgetWrapper<T>({
   if (error) {
     return (
       <div className={className}>
-        <div className="bg-[#1c202a] border border-[#ef4444]/30 rounded-xl p-6">
+        <div className="bg-[#141419] border border-[#ef4444]/30 rounded-xl p-6">
           <div className="flex items-start gap-3">
             <div className="text-[#ef4444] text-lg leading-none">⚠</div>
             <div className="flex-1">
               <p className="text-sm font-medium text-[#fca5a5]">{errorTitle}</p>
-              <p className="text-xs text-[#8f9db1] mt-1">{error}</p>
+              <p className="text-xs text-[#a1a1aa] mt-1">{error}</p>
               <button
                 type="button"
                 onClick={load}
-                className="mt-3 text-xs px-3 py-1.5 rounded-md bg-[#2a303c] hover:bg-[#3a4353] text-[#8f9db1] border border-[#2a303c] transition-colors"
+                className="mt-3 text-xs px-3 py-1.5 rounded-md bg-[#26262e] hover:bg-[#3a4353] text-[#a1a1aa] border border-[#26262e] transition-colors"
               >
                 Retry
               </button>
