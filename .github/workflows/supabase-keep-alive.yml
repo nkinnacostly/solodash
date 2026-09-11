@@ -1,0 +1,59 @@
+name: Supabase keep-alive
+
+# Supabase pauses Free-plan projects after 7 days with no activity.
+# This hits PostgREST directly (not the Vercel app), so it keeps the project
+# awake even if a deploy is broken or the site is down.
+
+on:
+  schedule:
+    # 06:17 UTC daily. Off-the-hour on purpose: GitHub drops scheduled runs
+    # when the :00 queue is congested, and a daily cadence leaves plenty of
+    # margin inside the 7-day window even if a few runs are skipped.
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+# Never let two pings overlap, and don't cancel one that's mid-flight.
+concurrency:
+  group: supabase-keep-alive
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    name: Ping Supabase
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query the database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -uo pipefail
+
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_ANON_KEY}" ]; then
+            echo "::error::Missing repo secrets SUPABASE_URL and/or SUPABASE_ANON_KEY."
+            exit 1
+          fi
+
+          # RLS returns an empty array for an anonymous caller, which is fine:
+          # the query still executes in Postgres, and that is what counts as
+          # activity. No rows are selected beyond the id column.
+          code=$(curl -sS \
+            -o response.txt \
+            -w '%{http_code}' \
+            --max-time 30 \
+            --retry 3 \
+            --retry-delay 15 \
+            --retry-all-errors \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -H "Accept: application/json" \
+            "${SUPABASE_URL}/rest/v1/profiles?select=id&limit=1") || code="000"
+
+          if [ "${code}" != "200" ]; then
+            echo "::error::Keep-alive query failed (HTTP ${code}). The project may be paused."
+            sed -n '1,20p' response.txt || true
+            exit 1
+          fi
+
+          echo "Supabase responded 200 — project is awake."
