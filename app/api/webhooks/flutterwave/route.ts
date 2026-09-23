@@ -30,6 +30,10 @@ export async function POST(request: Request) {
         request.headers.get("verif-hash") ?? "",
       );
     }
+    // mydomainshub (domain-reseller repo) orders → its own webhook
+    if (txRef.startsWith("MDH-")) {
+      return forwardToDomainsHub(body, request.headers.get("verif-hash") ?? "");
+    }
     // Subscription payments are verified via /api/billing/verify
     if (txRef.startsWith("PAIDLY-SUB-")) {
       return NextResponse.json({ status: "success" });
@@ -187,6 +191,39 @@ async function forwardToSmsApp(payload: unknown) {
     }
   } catch (err) {
     console.error("Error forwarding to SMS app:", errorMessage(err));
+  }
+
+  return NextResponse.json({ status: "success" });
+}
+
+/**
+ * mydomainshub shares this Flutterwave account. It re-verifies every
+ * transaction itself and records it idempotently, so a retry is harmless —
+ * which is why a failed forward returns 502 here (Flutterwave retries) rather
+ * than success (the notice would be lost).
+ */
+async function forwardToDomainsHub(payload: unknown, verifHash: string) {
+  const webhookUrl =
+    process.env.DOMAINS_HUB_WEBHOOK_URL ??
+    "https://mydomainshub.vercel.app/api/webhooks/flutterwave";
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "verif-hash": verifHash,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to forward to mydomainshub:", res.status);
+      return NextResponse.json({ error: "Forward failed" }, { status: 502 });
+    }
+  } catch (err) {
+    console.error("Error forwarding to mydomainshub:", errorMessage(err));
+    return NextResponse.json({ error: "Forward failed" }, { status: 502 });
   }
 
   return NextResponse.json({ status: "success" });
