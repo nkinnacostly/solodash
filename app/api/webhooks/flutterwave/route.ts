@@ -34,6 +34,13 @@ export async function POST(request: Request) {
     if (txRef.startsWith("MDH-")) {
       return forwardToDomainsHub(body, request.headers.get("verif-hash") ?? "");
     }
+    // myestateaccess (resident-app repo) estate dues → its own webhook
+    if (txRef.startsWith("dues-")) {
+      return forwardToEstateAccess(
+        body,
+        request.headers.get("verif-hash") ?? "",
+      );
+    }
     // Subscription payments are verified via /api/billing/verify
     if (txRef.startsWith("PAIDLY-SUB-")) {
       return NextResponse.json({ status: "success" });
@@ -252,6 +259,36 @@ async function forwardToTradepad(payload: unknown, verifHash: string) {
 
   return NextResponse.json({ status: "success" });
 }
+async function forwardToEstateAccess(payload: unknown, verifHash: string) {
+  try {
+    const estateWebhookUrl =
+      "https://iglwvlaojdmnkqyvhyvp.supabase.co/functions/v1/dues-webhook";
+
+    const res = await fetch(estateWebhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "verif-hash": verifHash,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to forward to myestateaccess:", res.status);
+    }
+  } catch (err) {
+    console.error("Error forwarding to myestateaccess:", errorMessage(err));
+  }
+
+  // Success is reported to Flutterwave even if the forward failed, matching the
+  // other routes here. That is safe for this one specifically: myestateaccess
+  // runs its own reconciliation sweep every ten minutes that re-queries
+  // Flutterwave for any payment still pending, so a dropped forward is
+  // recovered there rather than relying on a retry that this router has already
+  // acknowledged away.
+  return NextResponse.json({ status: "success" });
+}
+
 async function forwardToTradepadSubscription(
   payload: unknown,
   verifHash: string,
