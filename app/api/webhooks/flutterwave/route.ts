@@ -34,6 +34,13 @@ export async function POST(request: Request) {
     if (txRef.startsWith("MDH-")) {
       return forwardToDomainsHub(body, request.headers.get("verif-hash") ?? "");
     }
+    // MyDomainsHub Mail (domain-reseller repo, apps/mail) plan payments → its billing webhook
+    if (txRef.startsWith("MDM-")) {
+      return forwardToDomainsHubMail(
+        body,
+        request.headers.get("verif-hash") ?? "",
+      );
+    }
     // myestateaccess (resident-app repo) estate dues → its own webhook
     if (txRef.startsWith("dues-")) {
       return forwardToEstateAccess(
@@ -230,6 +237,41 @@ async function forwardToDomainsHub(payload: unknown, verifHash: string) {
     }
   } catch (err) {
     console.error("Error forwarding to mydomainshub:", errorMessage(err));
+    return NextResponse.json({ error: "Forward failed" }, { status: 502 });
+  }
+
+  return NextResponse.json({ status: "success" });
+}
+
+/**
+ * MyDomainsHub Mail (domain-reseller repo, apps/mail) bills its monthly plans
+ * through this Flutterwave account with `MDM-` references. Like the shop, it
+ * re-reads every transaction from Flutterwave itself, records it idempotently
+ * on Flutterwave's transaction id, and answers 503 when it could not settle —
+ * so a failed forward returns 502 here (Flutterwave retries) rather than
+ * success (the payment would be lost).
+ */
+async function forwardToDomainsHubMail(payload: unknown, verifHash: string) {
+  const webhookUrl =
+    process.env.DOMAINS_HUB_MAIL_WEBHOOK_URL ??
+    "https://emails.mydomainshub.com/api/billing/flutterwave";
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "verif-hash": verifHash,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to forward to MyDomainsHub Mail:", res.status);
+      return NextResponse.json({ error: "Forward failed" }, { status: 502 });
+    }
+  } catch (err) {
+    console.error("Error forwarding to MyDomainsHub Mail:", errorMessage(err));
     return NextResponse.json({ error: "Forward failed" }, { status: 502 });
   }
 
