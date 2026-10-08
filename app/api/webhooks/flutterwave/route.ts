@@ -48,6 +48,10 @@ export async function POST(request: Request) {
         request.headers.get("verif-hash") ?? "",
       );
     }
+    // Biro Fight (biro-fight repo) coin purchases → its own webhook
+    if (txRef.startsWith("bf_")) {
+      return forwardToBiroFight(body, request.headers.get("verif-hash") ?? "");
+    }
     // Subscription payments are verified via /api/billing/verify
     if (txRef.startsWith("PAIDLY-SUB-")) {
       return NextResponse.json({ status: "success" });
@@ -272,6 +276,33 @@ async function forwardToDomainsHubMail(payload: unknown, verifHash: string) {
     }
   } catch (err) {
     console.error("Error forwarding to MyDomainsHub Mail:", errorMessage(err));
+    return NextResponse.json({ error: "Forward failed" }, { status: 502 });
+  }
+
+  return NextResponse.json({ status: "success" });
+}
+
+async function forwardToBiroFight(payload: unknown, verifHash: string) {
+  const webhookUrl =
+    process.env.BIRO_FIGHT_WEBHOOK_URL ??
+    "https://biro-fight.onrender.com/api/flw/webhook";
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "verif-hash": verifHash,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to forward to Biro Fight:", res.status);
+      return NextResponse.json({ error: "Forward failed" }, { status: 502 });
+    }
+  } catch (err) {
+    console.error("Error forwarding to Biro Fight:", errorMessage(err));
     return NextResponse.json({ error: "Forward failed" }, { status: 502 });
   }
 
