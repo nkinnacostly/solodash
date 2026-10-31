@@ -18,10 +18,10 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22"
-      # Inlined at build time: change it and redeploy if Render gives the
-      # service another address.
+      # Inlined at build time. getpaidly.co and www point here (Cloudflare
+      # DNS, 31 Oct 2026); www is canonical, as it was on Vercel.
       - key: NEXT_PUBLIC_APP_URL
-        value: https://solodash.onrender.com
+        value: https://www.getpaidly.co
       - key: NEXT_PUBLIC_SUPABASE_URL
         value: https://jkichlmfeyhnvlyuiqlv.supabase.co
       # Vercel Cron sent this. Nothing on Render calls the cron routes (the
