@@ -1,0 +1,51 @@
+# Render Blueprint for Paidly. Moved off Vercel when the Hobby team was paused
+# for CPU on 31 Oct 2026. Flutterwave's one webhook URL points at
+# /api/webhooks/flutterwave here, and this app forwards the other apps'
+# payments (MDH-, MDM-, dues-, bf_, topup_) on to them, so it must stay up.
+services:
+  - type: web
+    name: solodash
+    runtime: node
+    # The closest Render region to Nigeria.
+    region: frankfurt
+    # Free sleeps after 15 idle minutes and takes about a minute to wake, which
+    # a webhook may not wait for. Starter stays up.
+    plan: free
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Inlined at build time: change it and redeploy if Render gives the
+      # service another address.
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://solodash.onrender.com
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: https://jkichlmfeyhnvlyuiqlv.supabase.co
+      # Vercel Cron sent this. Nothing on Render calls the cron routes (the
+      # Supabase keep-alive runs from GitHub Actions), so a fresh value will do.
+      - key: CRON_SECRET
+        generateValue: true
+      # Entered in the Render dashboard, never committed.
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: NEXT_PUBLIC_FLW_PUBLIC_KEY
+        sync: false
+      - key: FLW_SECRET_KEY
+        sync: false
+      # Must equal the secret hash in Flutterwave's webhook settings.
+      - key: FLW_WEBHOOK_SECRET
+        sync: false
+      # The same value as on Vercel, or every payment link already sent breaks.
+      - key: PAIDLY_LINK_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        sync: false
+      - key: SMS_APP_WEBHOOK_URL
+        sync: false
